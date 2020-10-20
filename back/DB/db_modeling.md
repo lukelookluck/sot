@@ -12,14 +12,14 @@
 
 ## 테이블 목차
 
-- [학교별 커뮤니티(Community)](#Community)
-- [커뮤니티에 속한 게시판(Board)](#Board)
-- [게시판에 속한 게시글(Article)](#Article)
-- [게시글에 속한 댓글(Comment)](#Comment)
-- [게시글 좋아요(ArticleLike)](#ArticleLike)
-- [댓글 좋아요(CommentLike)](#CommentLike)
-- [유저정보(UserInfo)](#UserInfo)
-- [유저개인알림(UserNotice)](#UserNotice)
+- [학교별 커뮤니티(Community)](#community)
+- [커뮤니티에 속한 게시판(Board)](#board)
+- [게시판에 속한 게시글(Article)](#article)
+- [게시글에 속한 댓글(Comment)](#comment)
+- [게시글 좋아요(ArticleLike)](#articlelike)
+- [댓글 좋아요(CommentLike)](#commentlike)
+- [유저정보(UserInfo)](#userinfo)
+- [유저개인알림(UserNotice)](#usernotice)
 
 >  전체공지사항(notice)과 문의하기(qna) 테이블은 따로 만들지 않고 id가 1인 커뮤니티를 활용하기로 함. 에브리타임도 1번째 학교(주소 1/v/~~~~)를 공지사항 게시판으로 활용중
 
