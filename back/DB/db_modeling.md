@@ -1,4 +1,4 @@
-# DB 모델링
+﻿# DB 모델링
 
 > My SQL 사용
 >
@@ -18,7 +18,7 @@
 - [게시글에 속한 댓글(Comment)](#comment)
 - [게시글 좋아요(ArticleLike)](#articlelike)
 - [댓글 좋아요(CommentLike)](#commentlike)
-- [유저정보(UserInfo)](#userinfo)
+- [유저정보(User)](#user)
 - [유저개인알림(UserNotice)](#usernotice)
 
 >  전체공지사항(notice)과 문의하기(qna) 테이블은 따로 만들지 않고 id가 1인 커뮤니티를 활용하기로 함. 에브리타임도 1번째 학교(주소 1/v/~~~~)를 공지사항 게시판으로 활용중
@@ -97,7 +97,7 @@
 
 
 
-## UserInfo
+## User
 
 > id
 >
