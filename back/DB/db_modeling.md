@@ -129,3 +129,14 @@
 >
 > read - 읽으면 True로 바꿔주고 유저알림 목록에서는 읽음표시 띄워주면 될듯
 
+## Ranking
+
+> id
+>
+> name
+>
+> user_id (FK)
+>
+> score
+>
+> community_id (FK)
