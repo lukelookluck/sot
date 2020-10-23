@@ -104,5 +104,16 @@ create table `usernotice` (
     PRIMARY KEY (`id`),
     FOREIGN KEY (`article_id`) REFERENCES `article` (`id`) ON DELETE CASCADE,
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
-)
+);
 
+drop table if exists ranking;
+create table `ranking` (
+	`id` int NOT NULL AUTO_INCREMENT,
+	`user_id` int NOT NULL,
+    `score` int NOT NULL,
+    `community_id` int NOT NULL,
+    
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`community_id`) REFERENCES `community` (`id`) ON DELETE CASCADE
+);
