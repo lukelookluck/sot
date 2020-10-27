@@ -5,7 +5,7 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
-import com.ssafy.switonandon.dto.UserInfoDTO;
+//import com.ssafy.sto.dto.UserInfoDTO;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
