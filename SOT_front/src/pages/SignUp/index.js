@@ -11,8 +11,8 @@ const SignUp = ({navigation}) => {
 
     const [Search, setSearch] = useState("");
 
-    const onSearchHandler = (Search) => {
-        setSearch({Search});
+    const onSearchHandler = (text) => {
+        setSearch(text);
     }
 
     return (
@@ -22,7 +22,8 @@ const SignUp = ({navigation}) => {
             <TextInput placeholder="비밀번호" secureTextEntry={true}></TextInput>
             <SearchBar placeholder="학교명 검색" onChangeText={onSearchHandler} value={Search} lightTheme={true}></SearchBar>
 
-            <Button title="메인으로" onPress={() => navigation.navigate('Start') }></Button>
+            <Button title="뒤로가기" onPress={() => navigation.navigate('Start') }></Button>
+            <Button title="회원가입" onPress={() => navigation.navigate('Start') }></Button>
         </View>
     );
 };

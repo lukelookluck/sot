@@ -9,6 +9,7 @@
 import React, {Component} from 'react';
 import Start from './src/pages/Start';
 import SignUp from './src/pages/SignUp';
+import Main from './src/pages/Main';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -19,6 +20,7 @@ function MyStack() {
     <Stack.Navigator>
       <Stack.Screen name="Start" options={{headerShown: false}} component={Start} />
       <Stack.Screen name="SignUp" options={{headerShown: false}} component={SignUp} />
+      <Stack.Screen name="Main" options={{headerShown: false}} component={Main} />
     </Stack.Navigator>
   );
 }

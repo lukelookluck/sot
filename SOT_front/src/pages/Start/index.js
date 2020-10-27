@@ -19,7 +19,7 @@ const Start = ({navigation}) => {
             </View>
             <View>
                 <Button title="회원가입" onPress={ () => navigation.navigate('SignUp') }></Button>
-                <Button title="로그인"></Button>
+                <Button title="로그인" onPress={ () => navigation.navigate('Main') }></Button>
             </View>
             
         </View>
