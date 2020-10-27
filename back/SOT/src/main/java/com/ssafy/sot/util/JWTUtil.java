@@ -5,7 +5,7 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
-//import com.ssafy.sto.dto.UserInfoDTO;
+import com.ssafy.sot.dto.UserInfoDTO;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -52,10 +52,6 @@ public class JWTUtil {
 		return this.key;
 	}
 	
-//	public Authentication getAuthentication(String token) {
-//		User user = userService.search(this.getUserPK(token));
-//		return 
-//	}
 	
 	public int getUserPK(String token) {
 		return Integer.parseInt(Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject());
