@@ -10,7 +10,7 @@ export default function Home() {
         style={{position: 'absolute', top: 0, height: 30}}
       />
       <View style={{marginTop: 30}}>
-        <Text>아아아아아asdasd</Text>
+        <Text>키킼ㅋ키키키키킼ㅋ</Text>
       </View>
     </View>
   );
