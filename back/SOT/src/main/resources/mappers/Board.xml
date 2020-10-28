@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mappers/Board.xml -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	<select id="selectBoardByCommId" resultType="BoardDTO">
+		select id, name, community_id as communityId
+		from board
+		where community_id = #{communityId}
+	</select>
+</mapper>

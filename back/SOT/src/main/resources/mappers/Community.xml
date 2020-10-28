@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mappers/Community.xml -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="community">
+	<select id="selectList" resultType="communityDTO">
+		select id, name
+		from community
+	</select>
+	
+	<select id="searchCommunity" resultType="communityDTO">
+		select id, name
+		from community
+		where name like #{keyword}
+	</select>
+</mapper>

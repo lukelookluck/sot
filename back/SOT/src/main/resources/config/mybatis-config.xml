@@ -3,9 +3,11 @@
    "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
    <typeAliases>
-<package name="com.ssafy.switon.dto"/>
+<package name="com.ssafy.sot.dto"/>
    </typeAliases>
    <mappers>
       <mapper resource="mappers/Article.xml" />
+      <mapper resource="mappers/Board.xml" />
+      <mapper resource="mappers/Community.xml" />
    </mappers>
 </configuration>
