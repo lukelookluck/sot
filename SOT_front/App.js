@@ -15,6 +15,7 @@ import Home from './src/pages/Home';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const Stack = createStackNavigator();
 
@@ -61,10 +62,43 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={({route}) => ({
+          tabBarIcon: ({focused, color, size}) => {
+            if (route.name === '홈') {
+              return (
+                <Icon
+                  name={focused ? 'home' : 'home-outline'}
+                  size={size}
+                  color={color}
+                />
+              );
+            } else if (route.name === '게시판 목록') {
+              return (
+                <Icon
+                  name={focused ? 'newspaper' : 'newspaper-outline'}
+                  size={size}
+                  color={color}
+                />
+              );
+            } else if (route.name === '게임') {
+              return (
+                <Icon
+                  name={focused ? 'game-controller' : 'game-controller-outline'}
+                  size={size}
+                  color={color}
+                />
+              );
+            }
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: 'tomato',
+          inactiveTintColor: 'gray',
+        }}>
         <Tab.Screen name="홈" component={Home} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-        <Tab.Screen name="Setting1s" component={SettingsScreen} />
+        <Tab.Screen name="게시판 목록" component={SettingsScreen} />
+        <Tab.Screen name="게임" component={HomeScreen} />
       </Tab.Navigator>
       {/* <MyStack /> */}
     </NavigationContainer>
