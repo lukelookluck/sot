@@ -5,7 +5,7 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
-import com.ssafy.sot.dto.UserInfoDTO;
+import com.ssafy.sot.dto.UserDTO;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -30,12 +30,12 @@ public class JWTUtil {
 //		return jws;
 //	}
 	
-	public String createToken(UserInfoDTO user) {
+	public String createToken(UserDTO user) {
 		Claims claims = Jwts.claims().setSubject(Integer.toString(user.getId()));
 		String jws = Jwts.builder()
 				.setClaims(claims)
 				.claim("id", user.getId())
-				.claim("name", user.getName())
+				.claim("nickname", user.getNickname())
 				.claim("email", user.getEmail())
 				.setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 60 * 6))) // 6시간?
 				.signWith(key)
