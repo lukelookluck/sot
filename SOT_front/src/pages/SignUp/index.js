@@ -22,25 +22,33 @@ const SignUp = ({navigation}) => {
       style={styles.page}
       scrollEnabled={true}
       contentContainerStyle={styles.screen}>
+      
       <View style={styles.box}>
-        <View>
-          <Input placeholder="아이디"></Input>
-          <Input placeholder="비밀번호" secureTextEntry={true}></Input>
-          <Input placeholder="비밀번호 확인" secureTextEntry={true}></Input>
-        </View>
+        <Input placeholder="ex) sot2020" label="아이디를 입력해주세요"></Input>
+        <Input placeholder="비밀번호" label="비밀번호를 입력해주세요" secureTextEntry={true}></Input>
+        <Input placeholder="비밀번호 확인" label="비밀번호를 다시 입력해주세요" secureTextEntry={true}></Input>
+      </View>
 
+      <View style={styles.box2}>
         <SearchBar
           placeholder="학교명 검색"
           onChangeText={onSearchHandler}
           value={Search}
-          lightTheme={true}></SearchBar>
+          style={styles.searchbar}
+          containerStyle={styles.search}
+          inputContainerStyle={styles.search2}
+          inputStyle={styles.search3}
+          ></SearchBar>
 
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => navigation.navigate('Start')}>
-          <Text style={styles.btntext}>회원가입</Text>
-        </TouchableOpacity>
+        <View style={styles.btnbox}>
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => navigation.navigate('Start')}>
+            <Text style={styles.btntext}>회원가입</Text>
+          </TouchableOpacity>
+        </View>
       </View>
+
     </KeyboardAwareScrollView>
   );
 };
@@ -69,18 +77,37 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 
-  input: {
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 10,
-    marginBottom: 10,
-    backgroundColor: '#FFFFFA',
-    width: 350,
+  btnbox: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 50,
   },
 
   box: {
-    width: 350
+    width: 320,
   },
+  box2: {
+    width: 300,
+    marginTop: 20,
+  },
+
+  search: {
+    backgroundColor: '#FFFFE0',
+    borderWidth: 0,
+    borderRadius: 5,
+    borderColor: 'gray'
+  },
+
+  search2: {
+    backgroundColor: '#FFFFE0',
+  },
+
+  search3: {
+    backgroundColor: '#FFFFE0',
+  },
+
+
 
 });
 

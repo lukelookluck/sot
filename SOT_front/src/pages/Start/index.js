@@ -15,7 +15,7 @@ const Start = ({navigation}) => {
       style={styles.page}
       scrollEnabled={true}
       contentContainerStyle={styles.screen}>
-      <View style={styles.box}>
+      <View>
         <View style={styles.loginbox}>
           <Text style={styles.title}>SOT</Text>
 
@@ -67,12 +67,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 1,
     textShadowOffset: {width: 3, height: 3},
   },
-  box: {
-    flex: 1,
-    flexDirection: 'row',
-  },
   loginbox: {
-    flex: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
