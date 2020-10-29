@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, TouchableHighlight } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-export default function PartBoard(props) {
+export default function Single(props) {
   const onPress = () => console.log('1');
   return (
     <TouchableHighlight
@@ -19,7 +19,7 @@ export default function PartBoard(props) {
           <Text style={{ fontSize: 13 }}>게시글 OOO</Text>
         </View>
         <View>
-          <Text style={{ backgroundColor: '#b73b31', color: '#ffffff', paddingHorizontal: 3.5, borderRadius: 4, fontSize: 10, fontWeight: '700' }}>
+          <Text style={{ backgroundColor: '#ff8000', color: '#ffffff', paddingHorizontal: 3.5, borderRadius: 4, fontSize: 10, fontWeight: '700' }}>
             N
         </Text>
         </View>
