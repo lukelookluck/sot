@@ -11,6 +11,8 @@ import {Text, View} from 'react-native';
 import Start from './src/pages/Start';
 import SignUp from './src/pages/SignUp';
 import Home from './src/pages/Home';
+import Game from './src/pages/Game';
+import List from './src/pages/List';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -40,22 +42,6 @@ function MyStack() {
   );
 }
 
-function HomeScreen() {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>아아아ㅏ아아아</Text>
-    </View>
-  );
-}
-
-function SettingsScreen() {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
-
 const Tab = createBottomTabNavigator();
 
 const TabsScreen = () => (
@@ -70,18 +56,18 @@ const TabsScreen = () => (
               color={color}
             />
           );
-        } else if (route.name === '게시판 목록') {
-          return (
-            <Icon
-              name={focused ? 'newspaper' : 'newspaper-outline'}
-              size={size}
-              color={color}
-            />
-          );
         } else if (route.name === '게임') {
           return (
             <Icon
               name={focused ? 'game-controller' : 'game-controller-outline'}
+              size={size}
+              color={color}
+            />
+          );
+        } else if (route.name === '게시판 목록') {
+          return (
+            <Icon
+              name={focused ? 'newspaper' : 'newspaper-outline'}
               size={size}
               color={color}
             />
@@ -94,8 +80,8 @@ const TabsScreen = () => (
       inactiveTintColor: 'gray',
     }}>
     <Tab.Screen name="홈" component={Home} />
-    <Tab.Screen name="게시판 목록" component={SettingsScreen} />
-    <Tab.Screen name="게임" component={HomeScreen} />
+    <Tab.Screen name="게임" component={Game} />
+    <Tab.Screen name="게시판 목록" component={List} />
   </Tab.Navigator>
 );
 
