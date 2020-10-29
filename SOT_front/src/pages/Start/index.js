@@ -1,15 +1,21 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import 'react-native-gesture-handler';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const Start = ({navigation}) => {
   return (
-    <View style={{flex: 1}}>
-      <View style={styles.top}></View>
-
+    <KeyboardAwareScrollView
+      style={styles.page}
+      scrollEnabled={true}
+      contentContainerStyle={styles.screen}>
       <View style={styles.box}>
-        <View style={styles.verti}></View>
-
         <View style={styles.loginbox}>
           <Text style={styles.title}>SOT</Text>
 
@@ -24,28 +30,37 @@ const Start = ({navigation}) => {
           </View>
 
           <View style={styles.btnbox}>
-            <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('SignUp')}>
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => navigation.navigate('SignUp')}>
               <Text style={styles.btntext}>회원가입</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Main')}>
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => navigation.navigate('Main')}>
               <Text style={styles.btntext}>로그인</Text>
             </TouchableOpacity>
           </View>
         </View>
-
-        <View style={styles.verti}></View>
       </View>
-
-      <View style={styles.top}></View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  top: {
-    height: 30,
-    backgroundColor: '#FACA0F',
+  page: {
+    backgroundColor: '#FFFFE0',
+  },
+  help: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  screen: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     color: '#FACA0F',
@@ -53,14 +68,13 @@ const styles = StyleSheet.create({
     fontSize: 85,
     marginBottom: 30,
     fontFamily: 'Lemonada-SemiBold',
+    textShadowColor: '#F14E23',
+    textShadowRadius: 1,
+    textShadowOffset: {width: 3, height: 3},
   },
   box: {
     flex: 1,
     flexDirection: 'row',
-  },
-  verti: {
-    flex: 1,
-    backgroundColor: '#FACA0F',
   },
   loginbox: {
     flex: 10,
@@ -78,6 +92,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 5,
     marginBottom: 5,
+    backgroundColor: '#FFFFFA',
   },
 
   btnbox: {
@@ -86,7 +101,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 280,
     marginTop: 20,
-    marginBottom: 10
+    marginBottom: 10,
   },
 
   btn: {
@@ -104,7 +119,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white',
   },
-
 });
 
 export default Start;
