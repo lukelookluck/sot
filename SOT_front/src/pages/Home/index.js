@@ -16,7 +16,10 @@ export default function Home() {
       <View
 
       >
-        <PartBoard />
+        <PartBoard PartName='즐겨찾는 게시판' />
+        <PartBoard PartName='실시간 인기 글' />
+        <PartBoard PartName='HOT 게시글' />
+
       </View>
     </View>
   );
