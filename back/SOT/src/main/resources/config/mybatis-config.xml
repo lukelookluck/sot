@@ -8,6 +8,6 @@
    <mappers>
       <mapper resource="mappers/Article.xml" />
       <mapper resource="mappers/Board.xml" />
-      <mapper resource="mappers/Community.xml" />
+      <mapper resource="mappers/School.xml" />
 	</mappers>
 </configuration>

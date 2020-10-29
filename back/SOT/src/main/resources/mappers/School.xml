@@ -4,13 +4,13 @@
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="selectList">
+<mapper namespace="school">
 	<select id="selectList" resultType="schoolDTO">
 		select id, sido, name
 		from school
 	</select>
 	
-	<select id="searchSchool" resultType="schoolDTO">
+	<select id="searchWithKeyword" resultType="schoolDTO">
 		select id, sido, name
 		from school
 		where name like #{keyword}
