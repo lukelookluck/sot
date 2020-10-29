@@ -12,17 +12,20 @@ const Start = ({navigation}) => {
         <View style={styles.loginbox}>
           <Text style={styles.title}>SOT</Text>
 
-          <View style={styles.inputbox}>
-            <TextInput placeholder="아이디"></TextInput>
-            <TextInput placeholder="비밀번호" secureTextEntry={true}></TextInput>
-          </View>
           <View>
-            <Button
-              title="회원가입"
-              onPress={() => navigation.navigate('SignUp')}></Button>
-            <Button
-              title="로그인"
-              onPress={() => navigation.navigate('Main')}></Button>
+            <View style={styles.inputbox}>
+              <TextInput style={styles.textinput} placeholder="아이디"></TextInput>
+              <TextInput style={styles.textinput}  placeholder="비밀번호" secureTextEntry={true}></TextInput>
+            </View>
+            
+            <View>
+              <Button
+                title="회원가입"
+                onPress={() => navigation.navigate('SignUp')}></Button>
+              <Button
+                title="로그인"
+                onPress={() => navigation.navigate('Main')}></Button>
+            </View>
           </View>
         </View>
     
@@ -44,7 +47,7 @@ const styles = StyleSheet.create({
     color: '#FACA0F',
     textAlign: 'center',
     fontSize: 85,
-    marginTop: 55,
+    marginTop: 10,
     fontFamily: 'Lemonada-SemiBold',
   },
   box: {
@@ -57,11 +60,20 @@ const styles = StyleSheet.create({
   },
   loginbox: {
     flex: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   inputbox: {
+    width: 280,
+  },
 
-  }
+  textinput: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginTop: 5,
+    marginBottom: 5,
+  },
   
 });
 
