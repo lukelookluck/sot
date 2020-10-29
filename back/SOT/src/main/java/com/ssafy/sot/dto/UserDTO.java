@@ -4,22 +4,12 @@ import io.swagger.annotations.ApiParam;
 
 public class UserDTO {
 	
-	@ApiParam(value = "유저 id (PK)", required = false, hidden = true)
 	int id;
-	@ApiParam(value = "유저 닉네임")
-	String name;
-	@ApiParam(value = "유저 아이디(이메일)", required = false, hidden = true)
+	String nickname;
 	String email;
-	@ApiParam(value = "유저 비밀번호")
 	String password;
-	@ApiParam(value = "유저 소갯말")
-	String introduce;
-	@ApiParam(value = "유저 프로필 이미지")
-	String profile_image;
-	@ApiParam(value = "유저 관심 카테고리(소카테고리) id (FK)")
-	String interests;
-	@ApiParam(value = "유저 탈퇴시 닉네임 백업", required = false, hidden = true)
-	String name_legacy;
+	int schoolId;
+	int isAdmin;
 	
 	public int getId() {
 		return id;
@@ -27,11 +17,11 @@ public class UserDTO {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
+	public String getNickname() {
+		return nickname;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	public String getEmail() {
 		return email;
@@ -45,35 +35,23 @@ public class UserDTO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getIntroduce() {
-		return introduce;
+	public int getSchoolId() {
+		return schoolId;
 	}
-	public void setIntroduce(String introduce) {
-		this.introduce = introduce;
+	public void setSchoolId(int schoolId) {
+		this.schoolId = schoolId;
 	}
-	public String getProfile_image() {
-		return profile_image;
+	public int getIsAdmin() {
+		return isAdmin;
 	}
-	public void setProfile_image(String profile_image) {
-		this.profile_image = profile_image;
-	}
-	public String getInterests() {
-		return interests;
-	}
-	public void setInterests(String interests) {
-		this.interests = interests;
-	}
-	public String getName_legacy() {
-		return name_legacy;
-	}
-	public void setName_legacy(String name_legacy) {
-		this.name_legacy = name_legacy;
+	public void setIsAdmin(int isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 	
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", introduce="
-				+ introduce + ", profile_image=" + profile_image + ", interests=" + interests
-				+ ", name_legacy=" + name_legacy + "]";
+		return "UserDTO [id=" + id + ", nickname=" + nickname + ", email=" + email + ", password=" + password
+				+ ", schoolId=" + schoolId + ", isAdmin=" + isAdmin + "]";
 	}
+
 }
