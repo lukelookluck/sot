@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mappers/School.xml -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="selectList">
+	<select id="selectList" resultType="schoolDTO">
+		select id, sido, name
+		from school
+	</select>
+	
+	<select id="searchSchool" resultType="schoolDTO">
+		select id, sido, name
+		from school
+		where name like #{keyword}
+	</select>
+</mapper>

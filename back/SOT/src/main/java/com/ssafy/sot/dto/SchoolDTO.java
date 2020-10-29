@@ -1,6 +1,6 @@
 package com.ssafy.sot.dto;
 
-public class CommunityDTO {
+public class SchoolDTO {
 	
 	int id;
 	String name;
@@ -18,9 +18,6 @@ public class CommunityDTO {
 	}
 	@Override
 	public String toString() {
-		return "CommunityDTO [id=" + id + ", name=" + name + "]";
+		return "SchoolDTO [id=" + id + ", name=" + name + "]";
 	}
-	
-	
-
 }

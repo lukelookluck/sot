@@ -4,7 +4,7 @@ public class BoardDTO {
 	
 	int id;
 	String name;
-	int community_id;
+	int schoolId;
 	
 	public int getId() {
 		return id;
@@ -22,17 +22,18 @@ public class BoardDTO {
 		this.name = name;
 	}
 
-	public int getCommunity_id() {
-		return community_id;
+	public int getSchoolId() {
+		return schoolId;
 	}
 
-	public void setCommunity_id(int community_id) {
-		this.community_id = community_id;
+	public void setSchoolId(int schoolId) {
+		this.schoolId = schoolId;
 	}
 
 	@Override
 	public String toString() {
-		return "BoardDTO [id=" + id + ", name=" + name + ", community_id=" + community_id + "]";
+		return "BoardDTO [id=" + id + ", name=" + name + ", schoolId=" + schoolId + "]";
 	}
+
 
 }
