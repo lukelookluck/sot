@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mappers/Article.xml -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="article">
+
+	<select id="selectList" resultType="ArticleDTO">
+		select id,
+			title,
+			content,
+			board_id as boardId,
+			user_id as userId,
+			created_at,
+			updated_at
+		from article
+	</select>
+	
+	<select id="selectArticleById" resultType="ArticleDTO">
+		select id,
+			title,
+			content,
+			board_id as boardId,
+			user_id as userId,
+			created_at,
+			updated_at
+		from article
+		where id = #{id}
+	</select>
+	
+	<insert id="insertArticle" parameterType="ArticleDTO">
+		insert into article(title, content, board_id, user_id)
+		values(#{title},
+				#{content},
+				#{board_id}
+				#{user_id}
+			)
+	</insert>
+	
+	<update id="updateArticle" parameterType="ArticleDTO">
+		update article
+		set title=#{title},
+			content=#{content}
+			updated_at = now()
+		where id = #{id}
+	</update>
+	
+	<delete id="deleteArticle">
+		delete from article
+		where id = #{id}
+	</delete>
+
+</mapper>
