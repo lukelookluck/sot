@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, Button, StyleSheet} from 'react-native';
+import {View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
 import 'react-native-gesture-handler';
 
 const Start = ({navigation}) => {
@@ -23,19 +23,20 @@ const Start = ({navigation}) => {
               secureTextEntry={true}></TextInput>
           </View>
 
-          <View>
-            <Button
-              title="회원가입"
-              onPress={() => navigation.navigate('SignUp')}></Button>
-            <Button
-              title="로그인"
-              onPress={() => navigation.navigate('Main')}></Button>
+          <View style={styles.btnbox}>
+            <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('SignUp')}>
+              <Text style={styles.btntext}>회원가입</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Main')}>
+              <Text style={styles.btntext}>로그인</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
         <View style={styles.verti}></View>
       </View>
-      
+
       <View style={styles.top}></View>
     </View>
   );
@@ -44,15 +45,13 @@ const Start = ({navigation}) => {
 const styles = StyleSheet.create({
   top: {
     height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#FACA0F',
   },
   title: {
     color: '#FACA0F',
     textAlign: 'center',
     fontSize: 85,
-    marginTop: 10,
+    marginBottom: 30,
     fontFamily: 'Lemonada-SemiBold',
   },
   box: {
@@ -71,6 +70,7 @@ const styles = StyleSheet.create({
 
   inputbox: {
     width: 280,
+    marginBottom: 10,
   },
 
   textinput: {
@@ -79,6 +79,32 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
   },
+
+  btnbox: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 280,
+    marginTop: 20,
+    marginBottom: 10
+  },
+
+  btn: {
+    width: 120,
+    height: 40,
+    backgroundColor: '#F14E23',
+    marginLeft: 20,
+    marginRight: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+  },
+
+  btntext: {
+    fontSize: 20,
+    color: 'white',
+  },
+
 });
 
 export default Start;
