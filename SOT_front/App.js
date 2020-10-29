@@ -29,7 +29,7 @@ function MyStack() {
         component={Start}
       />
       <Stack.Screen
-        name="SignUp"
+        name="회원가입"
         options={{ headerShown: true }}
         component={SignUp}
       />

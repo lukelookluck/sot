@@ -32,7 +32,7 @@ const Start = ({navigation}) => {
           <View style={styles.btnbox}>
             <TouchableOpacity
               style={styles.btn}
-              onPress={() => navigation.navigate('SignUp')}>
+              onPress={() => navigation.navigate('회원가입')}>
               <Text style={styles.btntext}>회원가입</Text>
             </TouchableOpacity>
 
