@@ -6,16 +6,16 @@
  * @flow strict-local
  */
 
-import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import React, { Component } from 'react';
+import { Text, View } from 'react-native';
 import Start from './src/pages/Start';
 import SignUp from './src/pages/SignUp';
 import Home from './src/pages/Home';
 import Game from './src/pages/Game';
 import List from './src/pages/List';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const Stack = createStackNavigator();
@@ -25,17 +25,17 @@ function MyStack() {
     <Stack.Navigator>
       <Stack.Screen
         name="Start"
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
         component={Start}
       />
       <Stack.Screen
         name="SignUp"
-        options={{headerShown: true}}
+        options={{ headerShown: true }}
         component={SignUp}
       />
       <Stack.Screen
         name="Main"
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
         component={TabsScreen}
       />
     </Stack.Navigator>
@@ -46,8 +46,8 @@ const Tab = createBottomTabNavigator();
 
 const TabsScreen = () => (
   <Tab.Navigator
-    screenOptions={({route}) => ({
-      tabBarIcon: ({focused, color, size}) => {
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ focused, color, size }) => {
         if (route.name === '홈') {
           return (
             <Icon
@@ -88,7 +88,7 @@ const TabsScreen = () => (
 export default function App() {
   return (
     <NavigationContainer>
-      
+
       <MyStack />
 
     </NavigationContainer>

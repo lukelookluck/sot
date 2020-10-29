@@ -6,31 +6,36 @@ const Start = ({navigation}) => {
   return (
     <View style={{flex: 1}}>
       <View style={styles.top}></View>
+
       <View style={styles.box}>
         <View style={styles.verti}></View>
 
         <View style={styles.loginbox}>
           <Text style={styles.title}>SOT</Text>
 
+          <View style={styles.inputbox}>
+            <TextInput
+              style={styles.textinput}
+              placeholder="아이디"></TextInput>
+            <TextInput
+              style={styles.textinput}
+              placeholder="비밀번호"
+              secureTextEntry={true}></TextInput>
+          </View>
+
           <View>
-            <View style={styles.inputbox}>
-              <TextInput style={styles.textinput} placeholder="아이디"></TextInput>
-              <TextInput style={styles.textinput}  placeholder="비밀번호" secureTextEntry={true}></TextInput>
-            </View>
-            
-            <View>
-              <Button
-                title="회원가입"
-                onPress={() => navigation.navigate('SignUp')}></Button>
-              <Button
-                title="로그인"
-                onPress={() => navigation.navigate('Main')}></Button>
-            </View>
+            <Button
+              title="회원가입"
+              onPress={() => navigation.navigate('SignUp')}></Button>
+            <Button
+              title="로그인"
+              onPress={() => navigation.navigate('Main')}></Button>
           </View>
         </View>
-    
+
         <View style={styles.verti}></View>
       </View>
+      
       <View style={styles.top}></View>
     </View>
   );
@@ -74,7 +79,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
   },
-  
 });
 
 export default Start;
