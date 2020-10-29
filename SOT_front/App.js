@@ -30,7 +30,10 @@ function MyStack() {
       />
       <Stack.Screen
         name="회원가입"
-        options={{ headerShown: true }}
+        options={{ headerShown: true, headerTintColor: 'white', headerStyle: {
+          backgroundColor: '#FACA0F',
+        },}}
+        
         component={SignUp}
       />
       <Stack.Screen

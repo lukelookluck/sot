@@ -52,11 +52,6 @@ const styles = StyleSheet.create({
   page: {
     backgroundColor: '#FFFFE0',
   },
-  help: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   screen: {
     flex: 1,
     justifyContent: 'center',
