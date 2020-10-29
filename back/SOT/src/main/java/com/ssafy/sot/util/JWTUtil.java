@@ -19,16 +19,16 @@ public class JWTUtil {
 	private String secretString = "DksSud+SkDkRkvkEkrahsSkwl+sGhkAhtGo=DNpWlRka";
 	private Key key;
 	
-	public String createEmailToken(String email) {
-		Claims claims = Jwts.claims().setSubject(email);
-		String jws = Jwts.builder()
-				.setClaims(claims)
-				.claim("email", email)
-				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 1))
-				.signWith(key)
-				.compact();
-		return jws;
-	}
+//	public String createEmailToken(String email) {
+//		Claims claims = Jwts.claims().setSubject(email);
+//		String jws = Jwts.builder()
+//				.setClaims(claims)
+//				.claim("email", email)
+//				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 1))
+//				.signWith(key)
+//				.compact();
+//		return jws;
+//	}
 	
 	public String createToken(UserInfoDTO user) {
 		Claims claims = Jwts.claims().setSubject(Integer.toString(user.getId()));
