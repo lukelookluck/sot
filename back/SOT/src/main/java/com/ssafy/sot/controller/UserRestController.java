@@ -34,7 +34,7 @@ public class UserRestController {
 		try {
 			if (userService.createUser(user)) {
 				System.out.println("회원가입 성공!!!");
-				// 회원가입 성공하면 바로 로그인 시도
+				// 회원가입 성공하면 바로 로그인 시도     
 				UserLoginDTO loginDTO = new UserLoginDTO(user.getEmail(), user.getPassword());
 				UserDTO uservo = userService.login(loginDTO);
 				if(uservo != null) {
