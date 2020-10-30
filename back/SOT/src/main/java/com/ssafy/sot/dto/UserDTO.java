@@ -4,11 +4,17 @@ import io.swagger.annotations.ApiParam;
 
 public class UserDTO {
 	
+	@ApiParam(value = "유저 id (PK), 회원가입시 미사용, 수정시 필수", required = false)
 	int id;
+	@ApiParam(value = "유저 닉네임", required = true)
 	String nickname;
+	@ApiParam(value = "유저 아이디", required = true)
 	String email;
+	@ApiParam(value = "유저 비밀번호", required = true)
 	String password;
+	@ApiParam(value = "학교 id (FK)", required = true)
 	int schoolId;
+	@ApiParam(value = "어드민 여부", required = false, hidden = true)
 	int isAdmin;
 	
 	public int getId() {

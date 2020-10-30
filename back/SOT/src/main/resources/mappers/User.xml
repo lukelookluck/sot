@@ -12,7 +12,7 @@
 			nickname,
 			email,
 			password,
-			school_id,
+			school_id as schoolId,
 			is_admin
 		from user
 	</select>
@@ -23,7 +23,7 @@
 			nickname,
 			email,
 			password,
-			school_id,
+			school_id as schoolId,
 			is_admin
 		from user
 		where id = #{id}
@@ -35,8 +35,6 @@
 		values (#{nickname}, #{email}, #{password}, #{schoolId})
 	</insert>
 	
-	
-
 	<!-- 유저 정보 수정 -->
 	<update id="updateUser" parameterType="UserDTO">
 		update user
@@ -46,5 +44,17 @@
 			school_id = #{schoolId}
 		where id = #{id}
 	</update>
+	
+	<!-- 유저 로그인 -->
+	<select id="login" parameterType="UserLoginDTO" resultType="UserDTO">
+		select id,
+			nickname,
+			email,
+			school_id as schoolId,
+			is_admin
+		from user
+		where email = #{email}
+		and password = #{password}
+	</select>
 
 </mapper>

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.sot.dao.UserDAO;
 import com.ssafy.sot.dto.UserDTO;
+import com.ssafy.sot.dto.UserLoginDTO;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -32,6 +33,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean updateUser(UserDTO user) {
 		return userDAO.updateUser(user)==1;
+	}
+
+	@Override
+	public UserDTO login(UserLoginDTO loginDTO) {
+		return userDAO.login(loginDTO);
 	}
 
 }
