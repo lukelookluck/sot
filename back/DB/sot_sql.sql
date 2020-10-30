@@ -13,6 +13,12 @@ create table `school` (
     PRIMARY KEY (`id`)
 );
 
+insert into school (sido, `name`) values ("서울", "개포고등학교");
+insert into school (sido, `name`) values ("서울", "경기고등학교");
+insert into school (sido, `name`) values ("제주", "제주여자고등학교");
+insert into school (sido, `name`) values ("제주", "서귀포고등학교");
+insert into school (sido, `name`) values ("경남", "거창중앙고등학교");
+
 drop table if exists `user`;
 create table `user` (
 	`id` int NOT NULL AUTO_INCREMENT,
@@ -41,6 +47,13 @@ create table `board` (
     PRIMARY KEY (`id`),
     FOREIGN KEY (`school_id`) REFERENCES school (`id`) ON DELETE CASCADE
 );
+
+insert into `board` (`name`, school_id) values ("익명게시판", 1);
+insert into `board` (`name`, school_id) values ("자유게시판", 1);
+insert into `board` (`name`, school_id) values ("1학년게시판", 1);
+insert into `board` (`name`, school_id) values ("2학년게시판", 1);
+insert into `board` (`name`, school_id) values ("3학년게시판", 1);
+insert into `board` (`name`, school_id) values ("묻고답해요", 1);
 
 create table `article` (
 	`id` int NOT NULL AUTO_INCREMENT,

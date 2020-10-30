@@ -3,6 +3,7 @@ package com.ssafy.sot.service;
 import java.util.List;
 
 import com.ssafy.sot.dto.UserDTO;
+import com.ssafy.sot.dto.UserLoginDTO;
 
 public interface UserService {
 
@@ -14,5 +15,6 @@ public interface UserService {
 	boolean createUser(UserDTO user);
 	// 회원 정보 수정
 	boolean updateUser(UserDTO user);
-	
+	// 로그인
+	UserDTO login(UserLoginDTO loginDTO);
 }
