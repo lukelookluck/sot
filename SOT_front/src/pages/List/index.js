@@ -14,6 +14,12 @@ const styles = StyleSheet.create({
 });
 
 const List = () => {
+
+  const goBoard = (key) => {
+    const message = key + "입니다!";
+    alert(message);
+  }
+
   return (
     <View>
       <Text>게시판 목록 탭</Text>
@@ -26,9 +32,8 @@ const List = () => {
           {key: '3학년 게시판'},
         ]}
         renderItem={({item}) => (
-          <Text style={styles.item}>{item.key}</Text>
+          <Text style={styles.item} onPress={() => goBoard(item.key)}>{item.key}</Text>
         )}></FlatList>
-        
     </View>
   );
 };
