@@ -59,7 +59,7 @@ public class UserRestController {
 		
 		try {
 			if(userService.updateUser(user)) {
-				System.out.println("유저정보 수정 성공!!!!!");
+				System.out.println("유저정보 수정 성공!!!");
 				return new ResponseEntity<>(user, HttpStatus.OK);
 			} else {
 				System.out.println("유저정보 수정 실패...");
