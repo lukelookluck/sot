@@ -31,7 +31,7 @@ export default function SingleArticle(props) {
               name="person"
               color='#77a6b7'
             />
-            <Text style={{ fontSize: 13, fontWeight: '700' }}>유저명</Text>
+            <Text style={{ fontSize: 13, fontWeight: '700' }}>닉네임</Text>
           </View>
           <Text style={{ fontSize: 12, color: '#9f9f9f', }}>날짜</Text>
         </View>
