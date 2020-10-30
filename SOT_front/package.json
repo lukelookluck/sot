@@ -19,11 +19,8 @@
     "react-native-cli": "^2.0.1",
     "react-native-elements": "^3.0.0-alpha.1",
     "react-native-gesture-handler": "^1.8.0",
-<<<<<<< HEAD
     "react-native-linear-gradient": "^2.5.6",
-=======
     "react-native-keyboard-aware-scroll-view": "^0.9.3",
->>>>>>> bef2592689e53ebbcb6f1ef26826ed33866e04f5
     "react-native-reanimated": "^1.13.1",
     "react-native-responsive-screen": "^1.4.1",
     "react-native-safe-area-context": "^3.1.8",
