@@ -13,11 +13,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const List = () => {
+const List = ({navigation}) => {
 
   const goBoard = (key) => {
     const message = key + "입니다!";
-    alert(message);
+    navigation.navigate('Board');
+    // alert(message);
   }
 
   return (

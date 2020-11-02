@@ -53,7 +53,7 @@ const Game = () => {
             </DataTable.Row>
 
             {/* <DataTable.Pagination
-              page={0}
+              page={1}
               numberOfPages={3}
               onPageChange={(page) => {
                 console.log(page);
