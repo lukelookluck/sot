@@ -30,7 +30,7 @@
 > 현재 고등학교를 대상으로 하고있으며, 향후 중학교와 초등학교까지 범위를 넓힐 예정입니다. 
 
 ## 기술 스택
-> - React-Native
+> - React-Native 
 > - Spring
 > - MySQL
 > - Unity
