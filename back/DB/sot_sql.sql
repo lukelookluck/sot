@@ -34,6 +34,8 @@ create table `user` (
     FOREIGN KEY (`school_id`) REFERENCES school (`id`)
 );
 
+insert into `user`(nickname, email, `password`, school_id) values("토마토", "tomato", "tomato", 1);
+insert into `user`(nickname, email, `password`, school_id) values("김싸피", "ssafy", "ssafy", 1);
 
 drop table if exists `comment`;
 drop table if exists article;
@@ -48,8 +50,8 @@ create table `board` (
     FOREIGN KEY (`school_id`) REFERENCES school (`id`) ON DELETE CASCADE
 );
 
-insert into `board` (`name`, school_id) values ("익명게시판", 1);
 insert into `board` (`name`, school_id) values ("자유게시판", 1);
+insert into `board` (`name`, school_id) values ("익명게시판", 1);
 insert into `board` (`name`, school_id) values ("1학년게시판", 1);
 insert into `board` (`name`, school_id) values ("2학년게시판", 1);
 insert into `board` (`name`, school_id) values ("3학년게시판", 1);
@@ -69,6 +71,11 @@ create table `article` (
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 );
 
+insert into article (title, content, board_id, user_id)
+	values ("제목", "내용입니다. 내용입니다. 내용입니다. 내용입니다. 내용입니다. 내용입니다. 내용입니다. 내용입니다. 내용입니다. 내용입니다. 내용입니다. 내용입니다.", 1, 1);
+insert into article (title, content, board_id, user_id)
+	values ("테스트", "잘 되나요?", 1, 2);
+
 create table `comment` (
 	`id` int NOT NULL AUTO_INCREMENT,
     `content` text NOT NULL,
@@ -82,6 +89,10 @@ create table `comment` (
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 );
 
+insert into comment (content, article_id, user_id)
+	values("좋은 글 감사합니다.", 1, 2);
+insert into comment (content, article_id, user_id)
+    values("글 많이 남겨주세요.", 1, 1);
 
 drop table if exists articlelike;
 drop table if exists commentlike;
