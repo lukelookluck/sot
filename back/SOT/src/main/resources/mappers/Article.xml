@@ -6,42 +6,50 @@
 
 <mapper namespace="article">
 
-	<select id="selectList" resultType="ArticleDTO">
-		select id,
-			title,
-			content,
-			board_id as boardId,
-			user_id as userId,
-			created_at,
-			updated_at
+	<select id="selectArticles" resultType="ArticleDTO">
+		select article.id,
+			article.title,
+			article.content,
+			article.board_id as boardId,
+			article.user_id as userId,
+			user.nickname as nickname,
+			article.created_at,
+			article.updated_at,
+			(select count(id) from comment where comment.article_id = article.id) as commentsCnt
 		from article
+		join user
+		on article.user_id = user.id
+		where board_id = #{boardId}
 	</select>
 	
 	<select id="selectArticleById" resultType="ArticleDTO">
-		select id,
-			title,
-			content,
-			board_id as boardId,
-			user_id as userId,
-			created_at,
-			updated_at
+		select article.id,
+			article.title,
+			article.content,
+			article.board_id as boardId,
+			article.user_id as userId,
+			user.nickname as nickname,
+			article.created_at,
+			article.updated_at
 		from article
-		where id = #{id}
+		join user
+		on article.user_id = user.id
+		where article.id = #{id}
 	</select>
 	
 	<insert id="insertArticle" parameterType="ArticleDTO">
 		insert into article(title, content, board_id, user_id)
 		values(#{title},
 				#{content},
-				#{board_id}
-				#{user_id}
+				#{boardId},
+				#{userId}
 			)
 	</insert>
 	
 	<update id="updateArticle" parameterType="ArticleDTO">
 		update article
-		set title=#{title},
-			content=#{content}
+		set title = #{title},
+			content = #{content},
 			updated_at = now()
 		where id = #{id}
 	</update>

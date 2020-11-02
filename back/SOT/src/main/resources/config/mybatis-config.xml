@@ -10,5 +10,6 @@
       <mapper resource="mappers/Article.xml" />
       <mapper resource="mappers/Board.xml" />
       <mapper resource="mappers/School.xml" />
+      <mapper resource="mappers/Comment.xml" />
 	</mappers>
 </configuration>

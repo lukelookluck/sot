@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mappers/Article.xml -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="comment">
+
+	<select id="showComments" resultType="CommentDTO">
+		select comment.id,
+			comment.content,
+			comment.user_id as userId,
+			user.nickname as nickname,
+			comment.created_at,
+			comment.updated_at
+		from comment
+		join user
+		on comment.user_id = user.id
+		where article_id = #{articleId}
+	</select>
+	
+	<insert id="insertComment" parameterType="CommentDTO">
+		insert into comment(content, article_id, user_id)
+		values(#{content},
+				#{articleId},
+				#{userId}
+			)
+	</insert>
+	
+	<update id="updateComment" parameterType="CommentDTO">
+		update comment
+		set content=#{content}
+			updated_at = now()
+		where id = #{id}
+	</update>
+	
+	<delete id="deleteComment">
+		delete from comment
+		where id = #{id}
+	</delete>
+
+</mapper>

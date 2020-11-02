@@ -1,29 +1,19 @@
 package com.ssafy.sot.dto;
 
 import java.sql.Timestamp;
+import java.util.List;
 
-import io.swagger.annotations.ApiParam;
-
-public class ArticleDTO {
-	@ApiParam(value = "게시글 id (PK), 게시글 작성시 미사용, 수정시 필수", required = false, hidden = true)
-	int id;
-	@ApiParam(value = "제목", required = true)
-	String title;
-	@ApiParam(value = "내용", required = true)
-	String content;
-	@ApiParam(value = "게시판 id (FK)", required = false, hidden = true)
-	int boardId;
-	@ApiParam(value = "유저 id (FK)", required = true)
-	int userId;
-	@ApiParam(value = "유저 닉네임", required = false, hidden = true)
-	String nickname;
-	@ApiParam(value = "작성 시간", required = false, hidden = true)
-	Timestamp created_at;
-	@ApiParam(value = "수정 시간", required = false, hidden = true)
-	Timestamp updated_at;
-	@ApiParam(value = "댓글 수", required = false, hidden = true)
-	int commentsCnt;
+public class ArticleWithComment {
 	
+	int id;
+	String title;
+	String content;
+	int boardId;
+	int userId;
+	String nickname;
+	Timestamp created_at;
+	Timestamp updated_at;
+	List<CommentDTO> comments;
 	public int getId() {
 		return id;
 	}
@@ -72,19 +62,30 @@ public class ArticleDTO {
 	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
 	}
-	
-	public int getCommentsCnt() {
-		return commentsCnt;
+	public List<CommentDTO> getComments() {
+		return comments;
 	}
-	
-	public void setCommentsCnt(int commentsCnt) {
-		this.commentsCnt = commentsCnt;
+	public void setComments(List<CommentDTO> comments) {
+		this.comments = comments;
 	}
-	
 	@Override
 	public String toString() {
-		return "ArticleDTO [id=" + id + ", title=" + title + ", content=" + content + ", boardId=" + boardId
+		return "ArticleWithComment [id=" + id + ", title=" + title + ", content=" + content + ", boardId=" + boardId
 				+ ", userId=" + userId + ", nickname=" + nickname + ", created_at=" + created_at + ", updated_at="
-				+ updated_at + ", commentsCnt=" + commentsCnt + "]";
+				+ updated_at + ", comments=" + comments + "]";
 	}
+	public ArticleWithComment(ArticleDTO article, List<CommentDTO> comments) {
+		this.id = article.getId();
+		this.title = article.getTitle();
+		this.content = article.getContent();
+		this.boardId = article.getBoardId();
+		this.userId = article.getUserId();
+		this.nickname = article.getNickname();
+		this.created_at = article.getCreated_at();
+		this.updated_at = article.getUpdated_at();
+		this.comments = comments;
+	}
+	
+	
+
 }
