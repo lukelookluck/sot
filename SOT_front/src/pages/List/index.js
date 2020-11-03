@@ -3,23 +3,23 @@ import {Text, View, FlatList, StyleSheet} from 'react-native';
 
 const boardList = [
   {
-    'id': 1,
+    'key': '1',
     'name': '자유게시판'
   },
   {
-    'id': 2,
+    'key': '2',
     'name': '1학년 게시판'
   },
   {
-    'id': 3,
+    'key': '3',
     'name': '2학년 게시판'
   },
   {
-    'id': 4,
+    'key': '4',
     'name': '3학년 게시판'
   },
   {
-    'id': 5,
+    'key': '5',
     'name': '모의고사 게시판'
   }
 ];
@@ -38,18 +38,16 @@ const styles = StyleSheet.create({
 
 const List = ({navigation}) => {
 
-  const goBoard = (b_name) => {
-    navigation.navigate('Board', {name: b_name});
+  const goBoard = (b_name, b_key) => {
+    navigation.navigate('Board', {name: b_name, key: b_key});
   }
 
   return (
     <View>
-      <Text>게시판 목록 탭</Text>
-
       <FlatList
         data={boardList}
         renderItem={({item}) => (
-          <Text style={styles.item} onPress={() => goBoard(item.name)}>{item.name}</Text>
+          <Text style={styles.item} onPress={() => goBoard(item.name, item.key)}>{item.name}</Text>
         )}></FlatList>
     </View>
   );
