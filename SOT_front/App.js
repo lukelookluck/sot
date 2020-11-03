@@ -43,14 +43,15 @@ function MyStack() {
       />
       <Stack.Screen
         name="Board"
-        options={{ headerShown: true, headerTintColor: 'white', headerStyle: {
-          backgroundColor: '#FACA0F',
-        },}}
+        options={
+          ({ route }) => ({ title: route.params.name, headerShown: true, headerTintColor: 'white', headerStyle: {
+            backgroundColor: '#FACA0F',}})
+          }
         component={Board}
       />
       <Stack.Screen
         name="WritePost"
-        options={{ headerShown: true, headerTintColor: 'white', headerStyle: {
+        options={{ title: "글 쓰기",headerShown: true, headerTintColor: 'white', headerStyle: {
           backgroundColor: '#FACA0F',
         },}}
         component={WritePost}

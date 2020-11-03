@@ -1,6 +1,29 @@
 import React from 'react';
 import {Text, View, FlatList, StyleSheet} from 'react-native';
 
+const boardList = [
+  {
+    'id': 1,
+    'name': '자유게시판'
+  },
+  {
+    'id': 2,
+    'name': '1학년 게시판'
+  },
+  {
+    'id': 3,
+    'name': '2학년 게시판'
+  },
+  {
+    'id': 4,
+    'name': '3학년 게시판'
+  },
+  {
+    'id': 5,
+    'name': '모의고사 게시판'
+  }
+];
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -15,10 +38,8 @@ const styles = StyleSheet.create({
 
 const List = ({navigation}) => {
 
-  const goBoard = (key) => {
-    const message = key + "입니다!";
-    navigation.navigate('Board');
-    // alert(message);
+  const goBoard = (b_name) => {
+    navigation.navigate('Board', {name: b_name});
   }
 
   return (
@@ -26,14 +47,9 @@ const List = ({navigation}) => {
       <Text>게시판 목록 탭</Text>
 
       <FlatList
-        data={[
-          {key: '자유 게시판'},
-          {key: '1학년 게시판'},
-          {key: '2학년 게시판'},
-          {key: '3학년 게시판'},
-        ]}
+        data={boardList}
         renderItem={({item}) => (
-          <Text style={styles.item} onPress={() => goBoard(item.key)}>{item.key}</Text>
+          <Text style={styles.item} onPress={() => goBoard(item.name)}>{item.name}</Text>
         )}></FlatList>
     </View>
   );
