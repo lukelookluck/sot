@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.sot.dto.ArticleDTO;
+import com.ssafy.sot.dto.CommentDTO;
 import com.ssafy.sot.dto.ReturnMsg;
 import com.ssafy.sot.service.ArticleService;
 import com.ssafy.sot.service.BoardService;
+import com.ssafy.sot.service.CommentService;
 import com.ssafy.sot.service.SchoolService;
 
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +36,9 @@ public class SchoolRestController {
 	
 	@Autowired
 	ArticleService articleService;
+	
+	@Autowired
+	CommentService commentService;
 	
 	@ApiOperation(value = "학교 검색, keyword 파라미터에 넣어서 보내면 검색함")
 	@GetMapping("/search")
@@ -81,6 +86,31 @@ public class SchoolRestController {
 	public Object deleteArticle(@PathVariable("boardId") int boardId,
 								@PathVariable("articleId") int articleId) {
 		return new ResponseEntity<>(articleService.deleteArticle(articleId), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "댓글 작성, (created_at, updated_at 같은 것들은 무시하고 필수값만 넣으면 됨)")
+	public Object createComment(@PathVariable("boardId") int boardId,
+								@PathVariable("articleId") int articleId, CommentDTO commentDTO) {
+		commentDTO.setArticleId(articleId);
+		return new ResponseEntity<>(commentService.createComment(commentDTO), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "댓글 수정, (created_at, updated_at 같은 것들은 무시하고 필수값만 넣으면 됨)")
+	@PutMapping("/board/{boardId}/{articleId}/{commentId}")
+	public Object updateComment(@PathVariable("boardId") int boardId,
+								@PathVariable("articleId") int articleId,
+								@PathVariable("commentId") int commentId, CommentDTO commentDTO) {
+		commentDTO.setArticleId(articleId);
+		commentDTO.setId(commentId);
+		return new ResponseEntity<>(commentService.updateComment(commentDTO), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "댓글 삭제")
+	@DeleteMapping("/board/{boardId}/{articleId}/{commentId}")
+	public Object deleteComment(@PathVariable("boardId") int boardId,
+								@PathVariable("articleId") int articleId,
+								@PathVariable("commentId") int commentId) {
+		return new ResponseEntity<>(commentService.deleteComment(commentId), HttpStatus.OK);
 	}
 	
 }

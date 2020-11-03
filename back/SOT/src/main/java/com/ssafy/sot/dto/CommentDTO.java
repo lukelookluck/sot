@@ -2,14 +2,23 @@ package com.ssafy.sot.dto;
 
 import java.sql.Timestamp;
 
+import io.swagger.annotations.ApiParam;
+
 public class CommentDTO {
 	
+	@ApiParam(value = "댓글 id (PK), 댓글 작성시 미사용, 수정시 컨트롤러에서 입력해줌", required = false, hidden = true)
 	int id;
+	@ApiParam(value = "내용", required = true)
 	String content;
+	@ApiParam(value = "게시글 id (FK)", required = false, hidden = true)
 	int articleId;
+	@ApiParam(value = "유저 id (FK)", required = true)
 	int userId;
+	@ApiParam(value = "유저 닉네임", required = false, hidden = true)
 	String nickname;
+	@ApiParam(value = "작성 시간", required = false, hidden = true)
 	Timestamp created_at;
+	@ApiParam(value = "수정 시간", required = false, hidden = true)
 	Timestamp updated_at;
 	public int getId() {
 		return id;

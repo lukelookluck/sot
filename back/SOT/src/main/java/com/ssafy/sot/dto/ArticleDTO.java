@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import io.swagger.annotations.ApiParam;
 
 public class ArticleDTO {
-	@ApiParam(value = "게시글 id (PK), 게시글 작성시 미사용, 수정시 필수", required = false, hidden = true)
+	@ApiParam(value = "게시글 id (PK), 게시글 작성시 미사용, 수정시 컨트롤러에서 입력해줌", required = false, hidden = true)
 	int id;
 	@ApiParam(value = "제목", required = true)
 	String title;

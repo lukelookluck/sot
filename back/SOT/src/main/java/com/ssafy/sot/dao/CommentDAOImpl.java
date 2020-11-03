@@ -19,4 +19,19 @@ public class CommentDAOImpl implements CommentDAO {
 		return sqlSession.selectList("comment.showComments", articleId);
 	}
 
+	@Override
+	public int insertComment(CommentDTO commentDTO) {
+		return sqlSession.insert("comment.insertComment", commentDTO);
+	}
+
+	@Override
+	public int updateComment(CommentDTO commentDTO) {
+		return sqlSession.update("comment.updateComment", commentDTO);
+	}
+
+	@Override
+	public int deleteComment(int id) {
+		return sqlSession.delete("comment.deleteComment", id);
+	}
+
 }
