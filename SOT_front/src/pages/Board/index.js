@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import {
   View,
   Text,
@@ -11,70 +12,40 @@ import {
 import 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-const boardList = [
-  {
-    key: '1',
-    name: '자유게시판',
-
-    list: [
-      {
-        id: '14',
-        title: 'help',
-        detail: 'help help help help !!!!!! help help help!!!!!!',
-      },
-      {
-        id: '15',
-        title: 'kill',
-        detail: 'kill kill help kill !!!!!! help kill help!!!!!!',
-      },
-    ],
-  },
-  {
-    key: '2',
-    name: '1학년 게시판',
-
-    list: [
-      {
-        id: '16',
-        title: '괴로워어어ㅓ',
-        detail: '살려주세요 인공지능이 지배하려고 해요',
-      },
-      {
-        id: '17',
-        title: '집에 가고싶다',
-        detail: '격렬하게 집에 가고싶다!',
-      },
-      {
-        id: '18',
-        title: 'hey soul sister',
-        detail: 'help me!',
-      },
-    ],
-  },
-  {
-    key: '3',
-    name: '2학년 게시판',
-  },
-  {
-    key: '4',
-    name: '3학년 게시판',
-  },
-  {
-    key: '5',
-    name: '모의고사 게시판',
-  },
-];
-
 const Board = ({navigation, route}) => {
 
-  const postList = boardList[1].list;
+  const [postList, setPostList] = useState([]);
+
+  useEffect(() => {
+    refreshList();
+  }, []);
+
+  function refreshList() {
+    axios.get(`http://10.0.2.2:8080/board/${route.params.id}`, {
+      // headers: {
+      //   Authorization: `JWT ${user.token}`,
+      // },
+      // params: {
+      //   id : 1 // user의 schoolId 받아서 넣기
+      // },
+    })
+      .then((response) => {
+        console.log('here????');
+        console.log(response.data);
+        setPostList(response.data);
+      })
+      .catch((error) => {
+        console.log('why???');
+        console.log(error);
+      });
+  }
+
   return (
-    // <View style={styles.box}>
-    <ScrollView style={styles.container}>
-      <Text>{route.params.key}</Text>
+    <View style={styles.box}>
 
       <FlatList
         data={postList}
+        keyExtractor = {(item, index) => index.toString()}
         renderItem={({item}) => (
           <View>
             <Text
@@ -85,18 +56,23 @@ const Board = ({navigation, route}) => {
             <Text
               style={styles.item}
               >
-              {item.detail}
+              {item.content}
+            </Text>
+            <Text
+              style={styles.item}
+              >
+              {item.nickname}
             </Text>
           </View>
         )}></FlatList>
 
       <TouchableOpacity
         style={styles.writeBtn}
-        onPress={() => navigation.navigate('WritePost')}>
+        onPress={() => navigation.navigate('WritePost', {boardid: route.params.id})}>
         <Text style={{color: 'white', fontSize: 15}}>글작성</Text>
       </TouchableOpacity>
-    </ScrollView>
-    // </View>
+    
+    </View>
   );
 };
 
@@ -107,7 +83,6 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    // position: 'absolute',
     // flex: 1,
     // backgroundColor: 'gray',
   },
@@ -119,12 +94,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 50,
-    // position: 'relative',
-
-    // position: 'absolute',
-    // left: '40%',
-    // top: '40%',
-    // overflow: 'visible'
   },
 });
 
