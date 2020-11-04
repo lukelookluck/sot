@@ -23,6 +23,8 @@ public class ArticleDTO {
 	Timestamp updated_at;
 	@ApiParam(value = "댓글 수", required = false, hidden = true)
 	int commentsCnt;
+	@ApiParam(value = "좋아요 수", required = false, hidden = true)
+	int likesCnt;
 	
 	public int getId() {
 		return id;
@@ -81,10 +83,18 @@ public class ArticleDTO {
 		this.commentsCnt = commentsCnt;
 	}
 	
+	public int getLikesCnt() {
+		return likesCnt;
+	}
+	public void setLikesCnt(int likesCnt) {
+		this.likesCnt = likesCnt;
+	}
+	
 	@Override
 	public String toString() {
 		return "ArticleDTO [id=" + id + ", title=" + title + ", content=" + content + ", boardId=" + boardId
 				+ ", userId=" + userId + ", nickname=" + nickname + ", created_at=" + created_at + ", updated_at="
-				+ updated_at + ", commentsCnt=" + commentsCnt + "]";
+				+ updated_at + ", commentsCnt=" + commentsCnt + ", likesCnt=" + likesCnt + "]";
 	}
+	
 }

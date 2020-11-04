@@ -16,5 +16,16 @@
 		where comment_id = #{commentId}
 		and user_id = #{userId}
 	</delete>
+	
+	<insert id="likeArticle" parameterType="ArticleLikeDTO">
+		insert into articlelike(article_id, user_id)
+		values(#{articleId}, #{userId})
+	</insert>
+
+	<delete id="deleteArticleLike" parameterType="ArticleLikeDTO">
+		delete from articlelike
+		where article_id = #{articleId}
+		and user_id = #{userId}
+	</delete>
 
 </mapper>

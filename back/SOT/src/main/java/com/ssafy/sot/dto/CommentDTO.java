@@ -21,7 +21,7 @@ public class CommentDTO {
 	@ApiParam(value = "수정 시간", required = false, hidden = true)
 	Timestamp updated_at;
 	@ApiParam(value = "좋아요 수", required = false, hidden = true)
-	int likeCnt;
+	int likesCnt;
 	
 	public int getId() {
 		return id;
@@ -67,16 +67,16 @@ public class CommentDTO {
 	}
 	
 	public int getLikes() {
-		return likeCnt;
+		return likesCnt;
 	}
 	public void setLikes(int likeCnt) {
-		this.likeCnt = likeCnt;
+		this.likesCnt = likeCnt;
 	}
 	@Override
 	public String toString() {
 		return "CommentDTO [id=" + id + ", content=" + content + ", articleId=" + articleId + ", userId=" + userId
-				+ ", nickname=" + nickname + ", created_at=" + created_at + ", updated_at=" + updated_at + ", likes="
-				+ likeCnt + "]";
+				+ ", nickname=" + nickname + ", created_at=" + created_at + ", updated_at=" + updated_at + ", likesCnt="
+				+ likesCnt + "]";
 	}
 	
 }

@@ -13,7 +13,7 @@
 			user.nickname as nickname,
 			comment.created_at,
 			comment.updated_at,
-			(select count(id) from commentlike where commentlike.comment_id = comment.id) as likeCnt
+			(select count(id) from commentlike where commentlike.comment_id = comment.id) as likesCnt
 		from comment
 		join user
 		on comment.user_id = user.id

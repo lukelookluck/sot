@@ -136,7 +136,7 @@ public class SchoolRestController {
 	
 	@ApiOperation(value = "댓글 좋아요 취소 (로그인 필요)")
 	@DeleteMapping("/board/{boardId}/{articleId}/{commentId}/like")
-	public Object cancellikeComment(@PathVariable("boardId") int boardId,
+	public Object cancelLikeComment(@PathVariable("boardId") int boardId,
 							@PathVariable("articleId") int articleId,
 							@PathVariable("commentId") int commentId,
 							HttpServletRequest request) {
@@ -145,6 +145,30 @@ public class SchoolRestController {
 			return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
 		}
 		return new ResponseEntity<>(likeService.cancelLikeComment(commentId, userId), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "게시글 좋아요 (로그인 필요)")
+	@PostMapping("/board/{boardId}/{articleId}/like")
+	public Object likeArticle(@PathVariable("boardId") int boardId,
+							@PathVariable("articleId") int articleId,
+							HttpServletRequest request) {
+		int userId = getUserPK(request);
+		if(userId == -1) {
+			return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<>(likeService.likeArticle(articleId, userId), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "게시글 좋아요 취소 (로그인 필요)")
+	@DeleteMapping("/board/{boardId}/{articleId}/like")
+	public Object cancelLikeArticle(@PathVariable("boardId") int boardId,
+							@PathVariable("articleId") int articleId,
+							HttpServletRequest request) {
+		int userId = getUserPK(request);
+		if(userId == -1) {
+			return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<>(likeService.cancelLikeArticle(articleId, userId), HttpStatus.OK);
 	}
 	
 	// JWT 토큰에서 userId(PK) 가져오는 메소드
