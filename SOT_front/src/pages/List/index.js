@@ -43,14 +43,15 @@ const List = ({navigation}) => {
   }
 
 
-  const goBoard = (b_name, b_key) => {
-    navigation.navigate('Board', {name: b_name, key: b_key});
+  const goBoard = (b_name, b_id) => {
+    navigation.navigate('Board', {name: b_name, id: b_id});
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <FlatList
         data={boardList}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (
           <Text style={styles.item} onPress={() => goBoard(item.name, item.id)}>{item.name}</Text>
         )}></FlatList>
