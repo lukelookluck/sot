@@ -3,7 +3,11 @@ import {Text, View, TouchableHighlight} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function Header(props) {
-  const onPress = () => console.log('1');
+  const onPress = () => {
+    props.setPressed(false);
+    props.setMyloading(false);
+    props.setTemp(null);
+  };
 
   return (
     <View

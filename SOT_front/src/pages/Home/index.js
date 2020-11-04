@@ -39,6 +39,17 @@ export default function Home() {
       name: '모의고사 게시판',
     },
   ];
+  function initHeader(data) {
+    if (temp === data.name) {
+      setTemp(null);
+      setPressed(false);
+      setMyloading(false);
+    } else {
+      setTemp(data.name);
+      setPressed(true);
+      setMyloading(false);
+    }
+  }
 
   const a = data.map((data) => {
     return (
@@ -46,15 +57,7 @@ export default function Home() {
         <TouchableHighlight
           onPress={() => {
             // alert(data.name);
-            if (temp === data.name) {
-              setTemp(null);
-              setPressed(false);
-              setMyloading(false);
-            } else {
-              setTemp(data.name);
-              setPressed(true);
-              setMyloading(false);
-            }
+            initHeader(data);
           }}
           activeOpacity={0.6}
           underlayColor="#dfdfdf">
@@ -108,7 +111,13 @@ export default function Home() {
     <View>
       {(temp === null,
       pressed === false && <Header name="경북대학교" pressed={pressed} />) || (
-        <Header name={temp} pressed={pressed} />
+        <Header
+          name={temp}
+          pressed={pressed}
+          setTemp={setTemp}
+          setPressed={setPressed}
+          setMyloading={setMyloading}
+        />
       )}
 
       {/* 무한스크롤 = Flatlist 인듯, 따라서 ScrollView를 Flatlist로 바꿔야함 */}
