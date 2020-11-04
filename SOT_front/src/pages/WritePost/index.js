@@ -27,23 +27,17 @@ const WritePost = ({navigation, route}) => {
 
   const addPost = () => {
 
-    console.log('try add');
-
     axios.post(`http://10.0.2.2:8080/board/${route.params.boardid}`, {
-        boardId : route.params.boardid,
+        // boardId : route.params.boardid,
         content: content,
         title: title,
         userId: 3, // user의 id 받아서 넣기
     })
       .then((response) => {
-        console.log('here????');
         console.log(response.data);
         navigation.goBack();
       })
       .catch((error) => {
-
-        console.log(route.params.boardid);
-        console.log('why???');
         console.log(error);
       });
   };
@@ -53,7 +47,7 @@ const WritePost = ({navigation, route}) => {
       <KeyboardAwareScrollView
         scrollEnabled={true}
         contentContainerStyle={styles.screen}>
-        <View>
+        <View style={styles.titlebox}>
           <TextInput placeholder="제목" onChangeText={titleHandler} value={title}></TextInput>
         </View>
 
@@ -74,8 +68,27 @@ const WritePost = ({navigation, route}) => {
 
 const styles = StyleSheet.create({
 
+  screen: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  titlebox: {
+    marginTop: 30,
+    marginBottom: 30,
+    width: "90%",
+    borderColor: 'gray',
+    borderStyle: "solid",
+    borderWidth: 1,
+  },
+
   detailbox: {
     height: 300,
+    width: "90%",
+    borderColor: 'gray',
+    borderStyle: "solid",
+    borderWidth: 1,
+    marginBottom: 30,
   },
 
   btn: {
