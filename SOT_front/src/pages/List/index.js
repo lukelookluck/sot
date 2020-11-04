@@ -45,7 +45,7 @@ const List = ({navigation}) => {
 
   const goBoard = (b_name, b_key) => {
     navigation.navigate('Board', {name: b_name, key: b_key});
-  }
+  };
 
   return (
     <View>
