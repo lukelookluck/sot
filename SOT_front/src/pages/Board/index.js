@@ -68,7 +68,7 @@ const Board = ({navigation, route}) => {
 
       <TouchableOpacity
         style={styles.writeBtn}
-        onPress={() => navigation.navigate('WritePost')}>
+        onPress={() => navigation.navigate('WritePost', {boardid: route.params.id})}>
         <Text style={{color: 'white', fontSize: 15}}>글작성</Text>
       </TouchableOpacity>
     
