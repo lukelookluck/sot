@@ -7,12 +7,13 @@
  */
 
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
 import Start from './src/pages/Start';
 import SignUp from './src/pages/SignUp';
 import Home from './src/pages/Home';
 import Game from './src/pages/Game';
 import List from './src/pages/List';
+import WritePost from './src/pages/WritePost';
+import Board from './src/pages/Board';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -33,13 +34,27 @@ function MyStack() {
         options={{ headerShown: true, headerTintColor: 'white', headerStyle: {
           backgroundColor: '#FACA0F',
         },}}
-        
         component={SignUp}
       />
       <Stack.Screen
         name="Main"
         options={{ headerShown: false }}
         component={TabsScreen}
+      />
+      <Stack.Screen
+        name="Board"
+        options={
+          ({ route }) => ({ title: route.params.name, headerShown: true, headerTintColor: 'white', headerStyle: {
+            backgroundColor: '#FACA0F',}})
+          }
+        component={Board}
+      />
+      <Stack.Screen
+        name="WritePost"
+        options={{ title: "글 쓰기",headerShown: true, headerTintColor: 'white', headerStyle: {
+          backgroundColor: '#FACA0F',
+        },}}
+        component={WritePost}
       />
     </Stack.Navigator>
   );
