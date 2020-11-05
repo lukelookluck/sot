@@ -50,9 +50,19 @@ public class SchoolRestController {
 	@Autowired
 	JWTUtil jwtUtil;
 	
+	
+	@ApiOperation(value = "시도 리스트 (없는 학교 신청시 시도 선택용)")
+	@GetMapping("/sido")
+	public Object sidoList() {
+		return new ResponseEntity<>(schoolService.showSidoList(), HttpStatus.OK);
+	}
+	
 	@ApiOperation(value = "학교 검색, keyword 파라미터에 넣어서 보내면 검색함")
 	@GetMapping("/search")
 	public Object searchSchool(@RequestParam(value="keyword") String keyword) {
+		if(keyword == null || keyword == "") {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}
 		return new ResponseEntity<>(schoolService.searchSchool(keyword), HttpStatus.OK);
 	}
 	
@@ -71,7 +81,7 @@ public class SchoolRestController {
 	
 	@ApiOperation(value = "게시판의 게시글 리스트 읽기")
 	@GetMapping("/board/{boardId}")
-	public Object articleList(@PathVariable("boardId") int boardId) {
+	public Object articleList(@PathVariable("boardId") int boardId, HttpServletRequest request) {
 		return new ResponseEntity<>(articleService.showArticles(boardId), HttpStatus.OK);
 	}
 	
@@ -92,7 +102,7 @@ public class SchoolRestController {
 	@ApiOperation(value = "게시글 수정, (created_at, updated_at 같은 것들은 무시하고 필수값만 넣으면 됨)")
 	@PutMapping("/board/{boardId}/{articleId}")
 	public Object modifyArticle(@PathVariable("boardId") int boardId,
-								@PathVariable("articleId") int articleId, ArticleDTO articleDTO) {
+								@PathVariable("articleId") int articleId, @RequestBody ArticleDTO articleDTO) {
 		articleDTO.setBoardId(boardId);
 		articleDTO.setId(articleId);
 		return new ResponseEntity<>(articleService.updateArticle(articleDTO), HttpStatus.CREATED);
@@ -135,11 +145,8 @@ public class SchoolRestController {
 	public Object likeComment(@PathVariable("boardId") int boardId,
 							@PathVariable("articleId") int articleId,
 							@PathVariable("commentId") int commentId,
-							HttpServletRequest request) {
-		int userId = getUserPK(request);
-		if(userId == -1) {
-			return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
-		}
+//							HttpServletRequest request,
+							@RequestParam("userId") int userId) {
 		return new ResponseEntity<>(likeService.likeComment(commentId, userId), HttpStatus.OK);
 	}
 	
@@ -148,11 +155,8 @@ public class SchoolRestController {
 	public Object cancelLikeComment(@PathVariable("boardId") int boardId,
 							@PathVariable("articleId") int articleId,
 							@PathVariable("commentId") int commentId,
-							HttpServletRequest request) {
-		int userId = getUserPK(request);
-		if(userId == -1) {
-			return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
-		}
+//							HttpServletRequest request,
+							@RequestParam("userId") int userId) {
 		return new ResponseEntity<>(likeService.cancelLikeComment(commentId, userId), HttpStatus.OK);
 	}
 	
@@ -160,11 +164,8 @@ public class SchoolRestController {
 	@PostMapping("/board/{boardId}/{articleId}/like")
 	public Object likeArticle(@PathVariable("boardId") int boardId,
 							@PathVariable("articleId") int articleId,
-							HttpServletRequest request) {
-		int userId = getUserPK(request);
-		if(userId == -1) {
-			return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
-		}
+//							HttpServletRequest request,
+							@RequestParam("userId") int userId) {
 		return new ResponseEntity<>(likeService.likeArticle(articleId, userId), HttpStatus.OK);
 	}
 	
@@ -172,13 +173,16 @@ public class SchoolRestController {
 	@DeleteMapping("/board/{boardId}/{articleId}/like")
 	public Object cancelLikeArticle(@PathVariable("boardId") int boardId,
 							@PathVariable("articleId") int articleId,
-							HttpServletRequest request) {
-		int userId = getUserPK(request);
-		if(userId == -1) {
-			return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
-		}
+//							HttpServletRequest request,
+							@RequestParam("userId") int userId) {
+		
+//		int userId = getUserPK(request);
+//		if(userId == -1) {
+//			return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+//		}
 		return new ResponseEntity<>(likeService.cancelLikeArticle(articleId, userId), HttpStatus.OK);
 	}
+
 	
 	// JWT 토큰에서 userId(PK) 가져오는 메소드
 	private int getUserPK(HttpServletRequest request) {

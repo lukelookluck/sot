@@ -8,5 +8,6 @@ public interface SchoolDAO {
 	
 	List<SchoolDTO> searchAll();
 	List<SchoolDTO> searchWithKeyword(String keyword);
+	List<String> selectSidos();
 
 }

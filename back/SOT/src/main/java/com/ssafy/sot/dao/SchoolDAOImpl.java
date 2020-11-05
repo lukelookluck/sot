@@ -25,4 +25,9 @@ public class SchoolDAOImpl implements SchoolDAO {
 		return sqlSession.selectList("school.searchWithKeyword", keyword);
 	}
 
+	@Override
+	public List<String> selectSidos() {
+		return sqlSession.selectList("school.selectSidoList");
+	}
+
 }

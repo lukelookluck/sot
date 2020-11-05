@@ -8,5 +8,6 @@ public interface SchoolService {
 	
 	List<SchoolDTO> showSchoolList();
 	List<SchoolDTO> searchSchool(String keyword);
-
+	List<String> showSidoList();
+	
 }

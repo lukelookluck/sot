@@ -30,9 +30,10 @@ public class UserRestController {
 	JWTUtil jwtUtil;
 
 	@PostMapping("/")
-	public Object register(UserDTO user) {
+	public Object register(@RequestBody UserDTO user) {
 		System.out.println("회원가입 시작");
 		try {
+			System.out.println(user);
 			if (userService.createUser(user)) {
 				System.out.println("회원가입 성공!!!");
 				// 회원가입 성공하면 바로 로그인 시도     
@@ -52,6 +53,7 @@ public class UserRestController {
 						HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("***서버 에러***");
 			return new ResponseEntity<>(new ReturnMsg("회원가입에 실패했습니다. 시스템 관리자에게 문의해주세요."),
 					HttpStatus.INTERNAL_SERVER_ERROR);
