@@ -21,7 +21,7 @@ const SignUp = ({navigation, route}) => {
   const [userPw, setUserPw] = useState('');
   const [userSchoolId, setUserSchoolId] = useState('');
 
-  const {serverUrl} = useContext(CommonContext);
+  const {serverUrl, user, setUser} = useContext(CommonContext);
   // const [userConPw, setUserConPw] = useState('');
 
   const userIdHandler = (id) => {
@@ -38,11 +38,11 @@ const SignUp = ({navigation, route}) => {
 
   const userSchoolIdHandler = () => {
     setUserSchoolId(route.params.s_id);
-  }
+  };
 
   const goSchoolSearch = () => {
-    navigation.navigate("schoolsearch");
-  }
+    navigation.navigate('schoolsearch');
+  };
 
   const signUpHandler = () => {
     console.log('클릭했어요!!!');
@@ -56,8 +56,9 @@ const SignUp = ({navigation, route}) => {
       })
       .then(function (response) {
         console.log('제대로간겨??');
-        console.log(response);
-        navigation.navigate('Start');
+        console.log(response.data);
+        setUser({...response.data});
+        navigation.navigate('Main');
       })
       .catch(function (error) {
         console.log('에러난겨??');
@@ -71,6 +72,27 @@ const SignUp = ({navigation, route}) => {
         style={styles.page}
         scrollEnabled={true}
         contentContainerStyle={styles.screen}>
+        <View
+          style={{
+            flexDirection: 'row',
+            width: 320,
+            justifyContent: 'center',
+          }}>
+          {route.params.s_name == '' ? (
+            <View style={styles.s_input}>
+              <Input placeholder="학교를 검색해주세요" disabled="true"></Input>
+            </View>
+          ) : (
+            <View style={styles.s_input}>
+              <Input onChangeText={userSchoolIdHandler} placeholder={route.params.s_name} disabled="true" disabledInputStyle={{opacity: 1}}></Input>
+            </View>
+          )}
+
+          <TouchableOpacity onPress={goSchoolSearch} style={styles.s_btn}>
+            <Text style={{color: 'white', fontSize: 20}}>학교 찾기</Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.box}>
           <Input
             placeholder="아이디"
@@ -91,19 +113,6 @@ const SignUp = ({navigation, route}) => {
           {/* <Input placeholder="비밀번호 확인" label="비밀번호를 다시 입력해주세요" secureTextEntry={true}></Input> */}
         </View>
 
-        {route.params.s_name == "" 
-        ? (<Text>undefined!</Text>) 
-        : (<Text onChangeText={userSchoolIdHandler}>{route.params.s_name}</Text>)}
-
-        <View>
-          <TouchableOpacity
-            onPress={goSchoolSearch}
-            style={styles.s_btn}
-          >
-            <Text style={{color: 'white', fontSize: 20}}>학교명 검색</Text>
-          </TouchableOpacity>
-        </View>
-
         <View style={styles.btnbox}>
           <TouchableOpacity style={styles.btn} onPress={signUpHandler}>
             <Text style={styles.btntext}>회원가입</Text>
@@ -117,21 +126,37 @@ const SignUp = ({navigation, route}) => {
 const styles = StyleSheet.create({
   page: {
     backgroundColor: '#FFFFE0',
-    marginTop: 40,
+    marginTop: 50,
     marginBottom: 40,
-    // flex: 1,
   },
   screen: {
-    // flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
 
+  s_input: {
+    width: 220,
+  },
+
   s_btn: {
-    backgroundColor: '#F14E23',
+    backgroundColor: 'gray',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
+    width: 100,
+    height: 40,
+  },
+
+  s_text: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 200,
+    height: 40,
+    borderBottomWidth: 1.2,
+    borderBottomColor: 'lightslategray',
+    fontSize: 20,
+    textAlignVertical: 'center',
+    // marginRight: 5,
   },
 
   btn: {
@@ -152,15 +177,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: 20,
   },
 
   box: {
     width: 320,
-  },
-  box2: {
-    width: 300,
-    marginTop: 20,
   },
 
   search: {
@@ -177,8 +198,6 @@ const styles = StyleSheet.create({
   search3: {
     backgroundColor: '#FFFFE0',
   },
-
-  list: {},
 });
 
 export default SignUp;

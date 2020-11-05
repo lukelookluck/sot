@@ -19,7 +19,7 @@ const List = ({navigation}) => {
 
   const [boardList, setBoardList] = useState([]);
 
-  const { serverUrl } = useContext(CommonContext);
+  const { serverUrl, user, setUser } = useContext(CommonContext);
 
   useEffect(() => {
     refreshList();
@@ -31,7 +31,7 @@ const List = ({navigation}) => {
       //   Authorization: `JWT ${user.token}`,
       // },
       params: {
-        id : 12 // user의 schoolId 받아서 넣기
+        id : user.schoolId // user의 schoolId 받아서 넣기
       },
     })
       .then((response) => {
@@ -44,7 +44,6 @@ const List = ({navigation}) => {
         console.log(error);
       });
   }
-
 
   const goBoard = (b_name, b_id) => {
     navigation.navigate('Board', {name: b_name, id: b_id});

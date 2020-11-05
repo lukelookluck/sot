@@ -38,6 +38,7 @@ const Start = ({navigation}) => {
       .then((response) => {
         console.log('here????');
         console.log(response.data);
+        setUser({ ...response.data });
         navigation.navigate('Main');
       })
       .catch((error) => {
