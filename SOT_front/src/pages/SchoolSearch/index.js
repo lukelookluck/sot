@@ -43,7 +43,7 @@ const SchoolSearch = ({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#FFFFE0',}}>
+    <View style={{flex: 1, backgroundColor: '#FFFFE0', alignItems: 'center'}}>
       <FlatList
         ListHeaderComponent={
           <View style={{marginTop: 40,}}>
@@ -51,73 +51,34 @@ const SchoolSearch = ({navigation}) => {
               placeholder="학교명 검색"
               onChangeText={onSearchHandler}
               value={key}
-              style={styles.searchbar}
               containerStyle={styles.search}
               inputContainerStyle={styles.search2}
-              inputStyle={styles.search3}></SearchBar>
+            ></SearchBar>
           </View>
         }
-        style={styles.list}
         data={searchList}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (
-          <Text style={styles.item} onPress={() => navigation.navigate("회원가입", {s_name: item.name, s_id: item.id})}>{item.name}</Text>
+          <View style={styles.s_box}>
+            <Text style={styles.item} onPress={() => navigation.navigate("회원가입", {s_name: item.name, s_id: item.id})}>{item.name}</Text>
+          </View>
         )}></FlatList>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  searchbar: {
-    
-  },
-
-  page: {
-    backgroundColor: '#FFFFE0',
-    marginTop: 40,
-    marginBottom: 40,
-    // flex: 1,
-  },
-  screen: {
-    // flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  btn: {
-    width: 180,
-    height: 40,
-    backgroundColor: '#F14E23',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
-  },
-
-  btntext: {
-    fontSize: 20,
-    color: 'white',
-  },
-
-  btnbox: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 50,
-  },
-
-  box: {
-    width: 320,
-  },
-  box2: {
-    width: 300,
-    marginTop: 20,
-  },
-
   search: {
     backgroundColor: '#FFFFE0',
-    borderWidth: 0,
-    borderRadius: 5,
-    borderColor: 'gray',
+    borderBottomColor: 'darkgray',
+    borderBottomWidth: 1,
+    borderTopColor: 'darkgray',
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderLeftColor: "darkgray",
+    borderRightWidth: 1,
+    borderRightColor: "darkgray",
+    width: 320,
   },
 
   search2: {
@@ -128,7 +89,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFE0',
   },
 
-  list: {},
+  item: {
+    fontSize: 20,
+    marginLeft: 10,
+  },
+  s_box : {
+    justifyContent: 'center',
+    height: 50,
+    borderBottomWidth: 1,
+    borderBottomColor: 'silver',
+    borderLeftWidth: 1,
+    borderLeftColor: "silver",
+    borderRightColor: "silver",
+    borderRightWidth: 1,
+    backgroundColor: 'white',
+  }
 });
 
 export default SchoolSearch;

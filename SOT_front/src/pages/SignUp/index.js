@@ -80,11 +80,11 @@ const SignUp = ({navigation, route}) => {
           }}>
           {route.params.s_name == '' ? (
             <View style={styles.s_input}>
-              <Input placeholder="학교를 검색해주세요" disabled="true"></Input>
+              <Input placeholder="학교를 검색해주세요" disabled={true}></Input>
             </View>
           ) : (
             <View style={styles.s_input}>
-              <Input onChangeText={userSchoolIdHandler} placeholder={route.params.s_name} disabled="true" disabledInputStyle={{opacity: 1}}></Input>
+              <Input onChangeText={userSchoolIdHandler} placeholder={route.params.s_name} disabled={true} disabledInputStyle={{opacity: 1}}></Input>
             </View>
           )}
 
