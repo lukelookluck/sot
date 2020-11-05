@@ -4,28 +4,34 @@ use sot;
 SET foreign_key_checks = 0;
 
 drop table if exists community;
-create table `community` (
+drop table if exists school;
+create table `school` (
 	`id` int NOT NULL AUTO_INCREMENT,
+    `sido` varchar(20) NOT NULL,
     `name` varchar(100) NOT NULL,
     
-    PRIMARY KEY (`id`),
-    UNIQUE KEY (`name`)
+    PRIMARY KEY (`id`)
 );
+
+insert into school (sido, `name`) values ("서울", "개포고등학교");
+insert into school (sido, `name`) values ("서울", "경기고등학교");
+insert into school (sido, `name`) values ("제주", "제주여자고등학교");
+insert into school (sido, `name`) values ("제주", "서귀포고등학교");
+insert into school (sido, `name`) values ("경남", "거창중앙고등학교");
 
 drop table if exists `user`;
 create table `user` (
 	`id` int NOT NULL AUTO_INCREMENT,
-    `name` varchar(20) NOT NULL,
+    `nickname` varchar(20) NOT NULL,
     `email` varchar(100) NOT NULL,
     `password` varchar(100) NOT NULL,
-    `year` int NOT NULL,
-    `community_id` int NOT NULL,
+    `school_id` int NOT NULL,
     `is_admin` boolean default false,
     
     PRIMARY KEY (`id`),
-    UNIQUE KEY (`name`),
+    UNIQUE KEY (`nickname`),
     UNIQUE KEY (`email`),
-    FOREIGN KEY (`community_id`) REFERENCES community (`id`)
+    FOREIGN KEY (`school_id`) REFERENCES school (`id`)
 );
 
 
@@ -36,11 +42,18 @@ drop table if exists board;
 create table `board` (
 	`id` int NOT NULL AUTO_INCREMENT,
     `name` varchar(100) NOT NULL,
-    `community_id` int NOT NULL,
+    `school_id` int NOT NULL,
     
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`community_id`) REFERENCES community (`id`) ON DELETE CASCADE
+    FOREIGN KEY (`school_id`) REFERENCES school (`id`) ON DELETE CASCADE
 );
+
+insert into `board` (`name`, school_id) values ("익명게시판", 1);
+insert into `board` (`name`, school_id) values ("자유게시판", 1);
+insert into `board` (`name`, school_id) values ("1학년게시판", 1);
+insert into `board` (`name`, school_id) values ("2학년게시판", 1);
+insert into `board` (`name`, school_id) values ("3학년게시판", 1);
+insert into `board` (`name`, school_id) values ("묻고답해요", 1);
 
 create table `article` (
 	`id` int NOT NULL AUTO_INCREMENT,
@@ -111,9 +124,9 @@ create table `ranking` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`user_id` int NOT NULL,
     `score` int NOT NULL,
-    `community_id` int NOT NULL,
+    `school_id` int NOT NULL,
     
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`community_id`) REFERENCES `community` (`id`) ON DELETE CASCADE
+    FOREIGN KEY (`school_id`) REFERENCES `school` (`id`) ON DELETE CASCADE
 );
