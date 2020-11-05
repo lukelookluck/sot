@@ -36,6 +36,7 @@ const Start = ({navigation}) => {
       },
     })
       .then((response) => {
+        console.log('here????');
         console.log(response.data);
         navigation.navigate('Main');
       })
@@ -74,7 +75,7 @@ const Start = ({navigation}) => {
           <View style={styles.btnbox}>
             <TouchableOpacity
               style={styles.btn}
-              onPress={() => navigation.navigate('회원가입')}>
+              onPress={() => navigation.navigate('회원가입', {s_name: "", s_id: ""})}>
               <Text style={styles.btntext}>회원가입</Text>
             </TouchableOpacity>
 

@@ -6,6 +6,7 @@ import Game from './src/pages/Game';
 import List from './src/pages/List';
 import WritePost from './src/pages/WritePost';
 import Board from './src/pages/Board';
+import SchoolSearch from './src/pages/SchoolSearch';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -29,6 +30,13 @@ function MyStack() {
           backgroundColor: '#FACA0F',
         },}}
         component={SignUp}
+      />
+      <Stack.Screen
+        name="schoolsearch"
+        options={{ title: "학교명 검색", headerShown: true, headerTintColor: 'white', headerStyle: {
+          backgroundColor: '#FACA0F',
+        },}}
+        component={SchoolSearch}
       />
       <Stack.Screen
         name="Main"
