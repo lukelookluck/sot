@@ -3,6 +3,7 @@ package com.ssafy.sot.dao;
 import java.util.List;
 
 import com.ssafy.sot.dto.UserDTO;
+import com.ssafy.sot.dto.UserInfoDTO;
 import com.ssafy.sot.dto.UserLoginDTO;
 
 public interface UserDAO {
@@ -16,5 +17,5 @@ public interface UserDAO {
 	// 회원정보 수정
 	int updateUser(UserDTO user);
 	// 로그인
-	UserDTO login(UserLoginDTO loginDTO);
+	UserInfoDTO login(UserLoginDTO loginDTO);
 }

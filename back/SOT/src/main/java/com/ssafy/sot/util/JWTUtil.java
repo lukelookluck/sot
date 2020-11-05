@@ -6,6 +6,7 @@ import java.util.Date;
 import org.springframework.stereotype.Component;
 
 import com.ssafy.sot.dto.UserDTO;
+import com.ssafy.sot.dto.UserInfoDTO;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -30,7 +31,7 @@ public class JWTUtil {
 //		return jws;
 //	}
 	
-	public String createToken(UserDTO user) {
+	public String createToken(UserInfoDTO user) {
 		Claims claims = Jwts.claims().setSubject(Integer.toString(user.getId()));
 		String jws = Jwts.builder()
 				.setClaims(claims)

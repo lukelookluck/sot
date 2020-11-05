@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.sot.dto.ReturnMsg;
 import com.ssafy.sot.dto.UserDTO;
+import com.ssafy.sot.dto.UserInfoDTO;
 import com.ssafy.sot.dto.UserLoginDTO;
-import com.ssafy.sot.dto.UserWithToken;
+import com.ssafy.sot.dto.UserInfoWithToken;
 import com.ssafy.sot.service.UserService;
 import com.ssafy.sot.util.JWTUtil;
 
@@ -38,11 +39,11 @@ public class UserRestController {
 				System.out.println("회원가입 성공!!!");
 				// 회원가입 성공하면 바로 로그인 시도     
 				UserLoginDTO loginDTO = new UserLoginDTO(user.getEmail(), user.getPassword());
-				UserDTO uservo = userService.login(loginDTO);
+				UserInfoDTO uservo = userService.login(loginDTO);
 				if(uservo != null) {
 					String token = jwtUtil.createToken(uservo);
 					System.out.println(uservo.getNickname() + " 유저 토큰 발행 : " + token);
-					UserWithToken userWithToken = new UserWithToken(uservo, token);
+					UserInfoWithToken userWithToken = new UserInfoWithToken(uservo, token);
 					return new ResponseEntity<>(userWithToken, HttpStatus.OK);
 				} else {
 					return new ResponseEntity<>(new ReturnMsg("아이디 또는 비밀번호가 일치하지 않습니다. 다시 한번 확인해주세요."), HttpStatus.I_AM_A_TEAPOT);
@@ -98,11 +99,11 @@ public class UserRestController {
 	public Object login(@RequestParam String email, @RequestParam String password) {
 		try {
 			UserLoginDTO loginDTO = new UserLoginDTO(email, password);
-			UserDTO uservo = userService.login(loginDTO);
+			UserInfoDTO uservo = userService.login(loginDTO);
 			if(uservo != null) {
 				String token = jwtUtil.createToken(uservo);
 				System.out.println(uservo.getNickname() + " 유저 토큰 발행 : " + token);
-				UserWithToken userWithToken = new UserWithToken(uservo, token);
+				UserInfoWithToken userWithToken = new UserInfoWithToken(uservo, token);
 				return new ResponseEntity<>(userWithToken, HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(new ReturnMsg("아이디 또는 비밀번호가 일치하지 않습니다. 다시 한번 확인해주세요."), HttpStatus.I_AM_A_TEAPOT);
