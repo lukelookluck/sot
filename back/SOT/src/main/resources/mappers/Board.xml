@@ -10,4 +10,9 @@
 		from board
 		where school_id = #{schoolId}
 	</select>
+	
+	<insert id="insertNewBoard" >
+		insert into board(name, school_id)
+		values(#{name}, #{schoolId})
+	</insert>
 </mapper>

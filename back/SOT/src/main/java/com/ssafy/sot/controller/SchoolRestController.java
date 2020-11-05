@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.sot.dto.ArticleDTO;
+import com.ssafy.sot.dto.BoardNewDTO;
 import com.ssafy.sot.dto.CommentDTO;
 import com.ssafy.sot.dto.ReturnMsg;
 import com.ssafy.sot.service.ArticleService;
@@ -60,6 +62,13 @@ public class SchoolRestController {
 		return new ResponseEntity<>(boardService.showSchoolBoards(id), HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "새로운 게시판 생성")
+	@PostMapping("/board")
+	public Object createNewBoard(@RequestBody BoardNewDTO boardNewDTO) {
+		// 일단 관리자 동의 없이 새 게시판 생성
+		return new ResponseEntity<>(boardService.createNewBoard(boardNewDTO), HttpStatus.OK);
+	}
+	
 	@ApiOperation(value = "게시판의 게시글 리스트 읽기")
 	@GetMapping("/board/{boardId}")
 	public Object articleList(@PathVariable("boardId") int boardId) {
@@ -73,9 +82,9 @@ public class SchoolRestController {
 		return new ResponseEntity<>(articleService.showArticle(articleId), HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "게시글 생성, created_at, updated_at 같은 것들은 무시하고 필수값만 넣으면 됨")
+	@ApiOperation(value = "게시글 생성, 필요값: title, content, boardId,")
 	@PostMapping("/board/{boardId}")
-	public Object writeArticle(@PathVariable("boardId") int boardId, ArticleDTO articleDTO) {
+	public Object writeArticle(@PathVariable("boardId") int boardId, @RequestBody ArticleDTO articleDTO) {
 		articleDTO.setBoardId(boardId);
 		return new ResponseEntity<>(articleService.createArticle(articleDTO), HttpStatus.CREATED);
 	}
@@ -173,7 +182,7 @@ public class SchoolRestController {
 	
 	// JWT 토큰에서 userId(PK) 가져오는 메소드
 	private int getUserPK(HttpServletRequest request) {
-		String token = request.getHeader("Authentication");
+		String token = request.getHeader("Authorization");
 		if(token == null) {
 			return -1;
 		}

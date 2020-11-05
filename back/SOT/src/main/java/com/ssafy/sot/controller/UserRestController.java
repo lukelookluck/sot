@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.sot.dto.ReturnMsg;
@@ -91,9 +92,10 @@ public class UserRestController {
 		}
 	}
 	
-	@PostMapping("login")
-	public Object login(@RequestBody UserLoginDTO loginDTO) {
+	@GetMapping("login")
+	public Object login(@RequestParam String email, @RequestParam String password) {
 		try {
+			UserLoginDTO loginDTO = new UserLoginDTO(email, password);
 			UserDTO uservo = userService.login(loginDTO);
 			if(uservo != null) {
 				String token = jwtUtil.createToken(uservo);
