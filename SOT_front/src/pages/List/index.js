@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import {Text, View, FlatList, StyleSheet} from 'react-native';
+import { CommonContext } from "../../context/CommonContext";
 
 const styles = StyleSheet.create({
   container: {
@@ -18,12 +19,14 @@ const List = ({navigation}) => {
 
   const [boardList, setBoardList] = useState([]);
 
+  const { serverUrl } = useContext(CommonContext);
+
   useEffect(() => {
     refreshList();
   }, []);
 
   function refreshList() {
-    axios.get(`http://10.0.2.2:8080/boards`, {
+    axios.get(`${serverUrl}/boards`, {
       // headers: {
       //   Authorization: `JWT ${user.token}`,
       // },

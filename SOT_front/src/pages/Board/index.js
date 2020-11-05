@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import axios from 'axios';
 import {
   View,
@@ -11,8 +11,11 @@ import {
 } from 'react-native';
 import 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { CommonContext } from "../../context/CommonContext";
 
 const Board = ({navigation, route}) => {
+
+  const { serverUrl } = useContext(CommonContext);
 
   const [postList, setPostList] = useState([]);
 
@@ -21,7 +24,7 @@ const Board = ({navigation, route}) => {
   }, []);
 
   function refreshList() {
-    axios.get(`http://10.0.2.2:8080/board/${route.params.id}`, {
+    axios.get(`${serverUrl}/board/${route.params.id}`, {
       // headers: {
       //   Authorization: `JWT ${user.token}`,
       // },

@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React, { Component } from 'react';
 import Start from './src/pages/Start';
 import SignUp from './src/pages/SignUp';
@@ -18,6 +10,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {CommonContext} from "./src/context/CommonContext";
+// import { useLocalStorageSetState } from "./common/CommonHooks";
+
 
 const Stack = createStackNavigator();
 
@@ -104,11 +99,34 @@ const TabsScreen = () => (
 );
 
 export default function App() {
+
+  // const [user, setUser] = useLocalStorageSetState(
+  //   {
+  //     token: "",
+  //     user: {
+  //       id: "",
+  //       username: "",
+  //       email: "",
+  //       like_articles: "",
+  //     },
+  //   },
+  //   "user"
+  // );
+
+  const HOST = "192.168.100.72:8080";
+  const serverUrl = `http://${HOST}`;
+
   return (
-    <NavigationContainer>
-
-      <MyStack />
-
-    </NavigationContainer>
+    <CommonContext.Provider
+      value={{
+        serverUrl,
+        // user,
+        // setUser,
+      }}
+    >
+      <NavigationContainer>
+        <MyStack />
+      </NavigationContainer>
+    </CommonContext.Provider>
   );
 }

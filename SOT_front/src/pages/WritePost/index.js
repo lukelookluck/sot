@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import axios from 'axios';
 import {
   View,
@@ -10,8 +10,11 @@ import {
 } from 'react-native';
 import 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {CommonContext} from "../../context/CommonContext";
 
 const WritePost = ({navigation, route}) => {
+
+  const { serverUrl } = useContext(CommonContext);
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -27,11 +30,10 @@ const WritePost = ({navigation, route}) => {
 
   const addPost = () => {
 
-    axios.post(`http://10.0.2.2:8080/board/${route.params.boardid}`, {
-        // boardId : route.params.boardid,
+    axios.post(`${serverUrl}/board/${route.params.boardid}`, {
         content: content,
         title: title,
-        userId: 3, // user의 id 받아서 넣기
+        userId: 2, // user의 id 받아서 넣기
     })
       .then((response) => {
         console.log(response.data);
