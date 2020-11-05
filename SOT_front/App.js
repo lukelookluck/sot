@@ -11,8 +11,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {CommonContext} from "./src/context/CommonContext";
-// import { useLocalStorageSetState } from "./common/CommonHooks";
-
+import { useLocalStorageSetState } from "./src/common/CommonHooks";
 
 const Stack = createStackNavigator();
 
@@ -100,18 +99,19 @@ const TabsScreen = () => (
 
 export default function App() {
 
-  // const [user, setUser] = useLocalStorageSetState(
-  //   {
-  //     token: "",
-  //     user: {
-  //       id: "",
-  //       username: "",
-  //       email: "",
-  //       like_articles: "",
-  //     },
-  //   },
-  //   "user"
-  // );
+  const [user, setUser] = useLocalStorageSetState(
+    {
+      token: "",
+      user: {
+        id: "",
+        email: "",
+        nickname: "",
+        password: "",
+        schoolId: "",
+      },
+    },
+    "user"
+  );
 
   const HOST = "192.168.100.72:8080";
   const serverUrl = `http://${HOST}`;
@@ -120,8 +120,8 @@ export default function App() {
     <CommonContext.Provider
       value={{
         serverUrl,
-        // user,
-        // setUser,
+        user,
+        setUser,
       }}
     >
       <NavigationContainer>

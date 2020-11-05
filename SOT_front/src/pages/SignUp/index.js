@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import axios from 'axios';
 import {
   View,
@@ -11,12 +11,15 @@ import {
 import {SearchBar, Input} from 'react-native-elements';
 import 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { CommonContext } from "../../context/CommonContext";
 
 const SignUp = ({navigation}) => {
   const [Search, setSearch] = useState('');
   const [userId, setUserId] = useState('');
   const [userNick, setUserNick] = useState('');
   const [userPw, setUserPw] = useState('');
+  const [userSchoolId, setUserSchoolId] = useState('');
+  const { serverUrl } = useContext(CommonContext);
   // const [userConPw, setUserConPw] = useState('');
 
   const userIdHandler = (id) => {
@@ -33,17 +36,38 @@ const SignUp = ({navigation}) => {
 
   const onSearchHandler = (text) => {
     setSearch(text);
+
+    axios.get(`${serverUrl}/search`, {
+      headers: {
+        Authorization: `JWT ${user.token}`,
+      },
+      params: {
+        email : email,
+        password : pw,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+        navigation.navigate('Main');
+      })
+      .catch((error) => {
+        alert("아이디와 비밀번호를 확인해주세요!");
+        setEmail("");
+        setPw("");
+        console.log(error);
+      });
+
   };
 
   const signUpHandler = () => {
 
     console.log("클릭했어요!!!");
 
-    axios.post('http://localhost:8080/user/register/', {
+    axios.post(`${serverUrl}/user/register/`, {
       email: userId,
       nickname: userNick,
       password: userPw,
-      schoolId: 2,
+      schoolId: userSchoolId,
     })
     .then(function (response) {
       console.log("제대로간겨??");
