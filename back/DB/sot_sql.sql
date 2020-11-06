@@ -172,15 +172,30 @@ create table `ranking` (
     FOREIGN KEY (`school_id`) REFERENCES `school` (`id`) ON DELETE CASCADE
 );
 
-select * from school;
+drop table if exists boardfav;
+create table `boardfav` (
+	`id` int NOT NULL AUTO_INCREMENT,
+    `board_id` int not null,
+    `user_id` int not null,
+    
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`board_id`) REFERENCES `board` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+);
 
-select user.id,
-			user.nickname,
-			user.email,
-			user.school_id as schoolId,
-			school.name as schoolName,
-			user.is_admin
-		from user
-		join school
-		on user.school_id = school.id
-		where user.email = 'tomato';
+insert into boardfav(board_id, user_id) values(3, 1);
+
+drop table if exists boardcreator;
+create table `boardcreator` (
+	`id` int NOT NULL AUTO_INCREMENT,
+    `school_id` int not null,
+    `name` varchar(50),
+    `user_id` int not null,
+    `description` text,
+    
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`school_id`) REFERENCES `school` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+);
+
+select * from boardcreator;
