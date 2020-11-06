@@ -15,5 +15,6 @@ public interface BoardDAO {
 	int insertBoardFav(BoardFavDTO boardFavDTO);
 	int deleteBoardFav(BoardFavDTO boardFavDTO);
 	boolean alreadyFaved(BoardFavDTO boardFavDTO);
+	int insertBoardCreator(BoardNewDTO boardNewDTO);
 
 }

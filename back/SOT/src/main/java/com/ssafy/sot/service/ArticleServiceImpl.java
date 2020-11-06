@@ -22,7 +22,7 @@ public class ArticleServiceImpl implements ArticleService {
 	CommentDAO commentDAO;
 	
 	@Override
-	public List<ArticleDTO> showArticles(int boardId) {
+	public List<ArticleFullInfo> showArticles(int boardId) {
 		return articleDAO.selectArticlesByBoardId(boardId);
 	}
 
@@ -63,7 +63,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<ArticleDTO> showBestArticles(int boardId) {
+	public List<ArticleFullInfo> showBestArticles(int boardId) {
 		return articleDAO.selectBestArticlesByBoardId(boardId);
 	}
 

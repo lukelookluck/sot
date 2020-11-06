@@ -7,7 +7,7 @@
 <mapper namespace="article">
 
 	<!-- 특정 학교의 전체 게시글 불러오기 (최신글 순) -->
-	<select id="selectArticlesBySchoolId" resultType="ArticleDTO">
+	<select id="selectArticlesBySchoolId" resultType="ArticleFullInfo">
 		select article.id,
 			article.title,
 			article.content,
@@ -29,7 +29,7 @@
 	</select>
 	
 	<!-- 특정 학교의 베스트 게시글 불러오기 (최신글 순) -->
-	<select id="selectBestArticlesBySchoolId" resultType="ArticleDTO">
+	<select id="selectBestArticlesBySchoolId" resultType="ArticleFullInfo">
 		select article.id,
 			article.title,
 			article.content,
@@ -52,11 +52,12 @@
 	</select>
 
 	<!-- 특정 게시판의 전체 글 불러오기(최신글 순) -->
-	<select id="selectArticlesByBoardId" resultType="ArticleDTO">
+	<select id="selectArticlesByBoardId" resultType="ArticleFullInfo">
 		select article.id,
 			article.title,
 			article.content,
 			article.board_id as boardId,
+			board.name as boardName,
 			article.user_id as userId,
 			user.nickname as nickname,
 			article.created_at,
@@ -66,16 +67,19 @@
 		from article
 		join user
 		on article.user_id = user.id
+		join board
+		on article.board_id = board.id
 		where board_id = #{boardId}
 		order by id desc
 	</select>
 	
 	<!-- 특정 게시판의 베스트 글 불러오기(최신글 순) -->
-	<select id="selectBestArticlesByBoardId" resultType="ArticleDTO">
+	<select id="selectBestArticlesByBoardId" resultType="ArticleFullInfo">
 		select article.id,
 			article.title,
 			article.content,
 			article.board_id as boardId,
+			board.name as boardName,
 			article.user_id as userId,
 			user.nickname as nickname,
 			article.created_at,
@@ -85,6 +89,8 @@
 		from article
 		join user
 		on article.user_id = user.id
+		join board
+		on article.board_id = board.id
 		where board_id = #{boardId}
 		and (select count(id) from articlelike where articlelike.article_id = article.id) > 2
 		order by id desc

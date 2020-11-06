@@ -24,7 +24,10 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public boolean createNewBoard(BoardNewDTO boardNewDTO) {
-		return boardDAO.insertBoard(boardNewDTO) == 1;
+		if(boardDAO.insertBoard(boardNewDTO) == 1) {
+			return boardDAO.insertBoardCreator(boardNewDTO) == 1;
+		}
+		return false;
 	}
 
 	@Override

@@ -45,4 +45,9 @@
 		where user_id = #{userId}
 		and board_id = #{boardId}
 	</delete>
+	
+	<insert id="insertBoardCreator" parameterType="BoardNewDTO">
+		insert into boardcreator(school_id, name, user_id, description)
+		values(#{schoolId}, #{name}, #{userId}, #{description})
+	</insert>
 </mapper>

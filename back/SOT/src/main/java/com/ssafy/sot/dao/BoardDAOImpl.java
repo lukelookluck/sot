@@ -46,4 +46,9 @@ public class BoardDAOImpl implements BoardDAO {
 	public boolean alreadyFaved(BoardFavDTO boardFavDTO) {
 		return sqlSession.selectOne("board.selectBoardFav", boardFavDTO) != null;
 	}
+
+	@Override
+	public int insertBoardCreator(BoardNewDTO boardNewDTO) {
+		return sqlSession.insert("board.insertBoardCreator", boardNewDTO);
+	}
 }

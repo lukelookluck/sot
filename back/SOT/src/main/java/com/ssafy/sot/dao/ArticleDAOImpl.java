@@ -16,7 +16,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 	SqlSession sqlSession;
 	
 	@Override
-	public List<ArticleDTO> selectArticlesByBoardId(int boardId) {
+	public List<ArticleFullInfo> selectArticlesByBoardId(int boardId) {
 		return sqlSession.selectList("article.selectArticlesByBoardId", boardId);
 	}
 
@@ -51,7 +51,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public List<ArticleDTO> selectBestArticlesByBoardId(int boardId) {
+	public List<ArticleFullInfo> selectBestArticlesByBoardId(int boardId) {
 		return sqlSession.selectList("article.selectBestArticlesByBoardId", boardId);
 	}
 
