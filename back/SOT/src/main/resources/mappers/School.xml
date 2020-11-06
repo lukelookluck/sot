@@ -16,7 +16,7 @@
 		where name like #{keyword}
 	</select>
 	
-	<insert id="AddNewSchool" parameterType="schoolDTO">
+	<insert id="addNewSchool" parameterType="schoolDTO">
 		insert into school(sido, name)
 		values(#{sido}, #{name})
 	</insert>

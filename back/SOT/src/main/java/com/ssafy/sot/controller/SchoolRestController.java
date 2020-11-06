@@ -19,6 +19,7 @@ import com.ssafy.sot.dto.ArticleDTO;
 import com.ssafy.sot.dto.BoardNewDTO;
 import com.ssafy.sot.dto.CommentDTO;
 import com.ssafy.sot.dto.ReturnMsg;
+import com.ssafy.sot.dto.SchoolDTO;
 import com.ssafy.sot.service.ArticleService;
 import com.ssafy.sot.service.BoardService;
 import com.ssafy.sot.service.CommentService;
@@ -55,6 +56,12 @@ public class SchoolRestController {
 	@GetMapping("/sido")
 	public Object sidoList() {
 		return new ResponseEntity<>(schoolService.showSidoList(), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "새로운 학교 추가")
+	@PostMapping("/school")
+	public Object newSchool(@RequestBody SchoolDTO schoolDTO) {
+		return new ResponseEntity<>(schoolService.addNewSchool(schoolDTO), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "학교 검색, keyword 파라미터에 넣어서 보내면 검색함")

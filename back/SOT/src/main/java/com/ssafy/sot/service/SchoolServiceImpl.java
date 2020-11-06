@@ -29,4 +29,9 @@ public class SchoolServiceImpl implements SchoolService {
 		return schoolDao.selectSidos();
 	}
 
+	@Override
+	public boolean addNewSchool(SchoolDTO schoolDTO) {
+		return schoolDao.insertNewSchool(schoolDTO) == 1;
+	}
+
 }
