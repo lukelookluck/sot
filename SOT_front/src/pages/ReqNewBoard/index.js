@@ -12,7 +12,7 @@ import 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {CommonContext} from "../../context/CommonContext";
 
-const WritePost = ({navigation, route}) => {
+const ReqNewBoard = ({navigation, route}) => {
 
   const { serverUrl, user, setUser } = useContext(CommonContext);
 
@@ -29,14 +29,15 @@ const WritePost = ({navigation, route}) => {
 
   const addPost = () => {
 
-    axios.post(`${serverUrl}/board/${route.params.boardid}`, {
-        content: content,
-        title: title,
+    axios.post(`${serverUrl}/board`, {
+        name: title,
+        description: content,
         userId: user.id, // user의 id 받아서 넣기
+        schoolId: user.schoolId,
     })
       .then((response) => {
         console.log(response.data);
-        navigation.navigate('Board', {name: route.params.boardname, id: route.params.boardid});
+        navigation.navigate('Main');
       })
       .catch((error) => {
         console.log(error);
@@ -49,16 +50,16 @@ const WritePost = ({navigation, route}) => {
         scrollEnabled={true}
         contentContainerStyle={styles.screen}>
         <View style={styles.titlebox}>
-          <TextInput placeholder="제목" onChangeText={titleHandler} value={title}></TextInput>
+          <TextInput placeholder="게시판 이름" onChangeText={titleHandler} value={title}></TextInput>
         </View>
 
         <View style={styles.detailbox}>
-          <TextInput placeholder="내용" onChangeText={contentHandler} value={content}></TextInput>
+          <TextInput placeholder="신청 사유" onChangeText={contentHandler} value={content}></TextInput>
         </View>
 
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity onPress={addPost} style={styles.btn}>
-            <Text style={{fontSize: 18, color: 'white'}}>글 작성</Text>
+            <Text style={{fontSize: 18, color: 'white'}}>신청하기</Text>
           </TouchableOpacity>
         </View>
 
@@ -102,4 +103,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default WritePost;
+export default ReqNewBoard;

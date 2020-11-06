@@ -49,11 +49,18 @@ const List = ({navigation}) => {
     navigation.navigate('Board', {name: b_name, id: b_id});
   };
 
+  const goReqNewBoard = () => {
+    navigation.navigate('ReqNewBoard');
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
         data={boardList}
         keyExtractor={(item, index) => index.toString()}
+        ListFooterComponent={
+          <Text style={styles.item} onPress={() => goReqNewBoard()}>게시판 신청하기</Text>
+        }
         renderItem={({item}) => (
           <Text style={styles.item} onPress={() => goBoard(item.name, item.id)}>{item.name}</Text>
         )}></FlatList>
