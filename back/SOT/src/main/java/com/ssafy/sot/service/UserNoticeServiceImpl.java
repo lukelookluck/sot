@@ -30,7 +30,7 @@ public class UserNoticeServiceImpl implements UserNoticeService {
 	}
 
 	@Override
-	public boolean updqteReadByUserId(int userId) {
+	public boolean updateReadByUserId(int userId) {
 		return usernoticeDAO.updateReadByUserId(userId)==1;
 	}
 

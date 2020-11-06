@@ -9,6 +9,6 @@ public interface UserNoticeService {
 	List<UserNoticeDTO> showAll();
 	UserNoticeDTO showUserNoticeByUserId(int userId);
 	boolean createUserNotice(UserNoticeDTO usernotice);
-	boolean updqteReadByUserId(int userId);
+	boolean updateReadByUserId(int userId);
 	boolean deleteUserNotice(int id);
 }
