@@ -27,6 +27,29 @@
 		where board_id in (select id from board where school_id = #{schoolId})
 		order by id desc
 	</select>
+	
+	<!-- 특정 학교의 베스트 게시글 불러오기 (최신글 순) -->
+	<select id="selectBestArticlesBySchoolId" resultType="ArticleDTO">
+		select article.id,
+			article.title,
+			article.content,
+			article.board_id as boardId,
+			board.name as boardName,
+			article.user_id as userId,
+			user.nickname as nickname,
+			article.created_at,
+			article.updated_at,
+			(select count(id) from comment where comment.article_id = article.id) as commentsCnt,
+			(select count(id) from articlelike where articlelike.article_id = article.id) as likesCnt
+		from article
+		join user
+		on article.user_id = user.id
+		join board
+		on article.board_id = board.id
+		where board_id in (select id from board where school_id = #{schoolId})
+		and (select count(id) from articlelike where articlelike.article_id = article.id) > 2
+		order by id desc
+	</select>
 
 	<!-- 특정 게시판의 전체 글 불러오기(최신글 순) -->
 	<select id="selectArticlesByBoardId" resultType="ArticleDTO">
@@ -44,6 +67,26 @@
 		join user
 		on article.user_id = user.id
 		where board_id = #{boardId}
+		order by id desc
+	</select>
+	
+	<!-- 특정 게시판의 베스트 글 불러오기(최신글 순) -->
+	<select id="selectBestArticlesByBoardId" resultType="ArticleDTO">
+		select article.id,
+			article.title,
+			article.content,
+			article.board_id as boardId,
+			article.user_id as userId,
+			user.nickname as nickname,
+			article.created_at,
+			article.updated_at,
+			(select count(id) from comment where comment.article_id = article.id) as commentsCnt,
+			(select count(id) from articlelike where articlelike.article_id = article.id) as likesCnt
+		from article
+		join user
+		on article.user_id = user.id
+		where board_id = #{boardId}
+		and (select count(id) from articlelike where articlelike.article_id = article.id) > 2
 		order by id desc
 	</select>
 	

@@ -92,6 +92,24 @@ public class SchoolRestController {
 		return new ResponseEntity<>(boardService.showFavBoards(userId), HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "전체 게시글 가져오기")
+	@GetMapping("/board/all")
+	public Object allArticles(@RequestParam("schoolId") int schoolId) {
+		return new ResponseEntity<>(articleService.showAllArticles(schoolId), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "전체 베스트 게시글 가져오기")
+	@GetMapping("/board/all/best")
+	public Object allBestArticles(@RequestParam("schoolId") int schoolId) {
+		return new ResponseEntity<>(articleService.showAllBestArticles(schoolId), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "특정 게시판 베스트 게시글 가져오기")
+	@GetMapping("/board/{boardId}/best")
+	public Object boardBestArticles(@PathVariable("boardId") int boardId) {
+		return new ResponseEntity<>(articleService.showBestArticles(boardId), HttpStatus.OK);
+	}
+	
 	@ApiOperation(value = "게시판 즐겨찾기")
 	@PostMapping("/board/{boardId}/fav")
 	public Object favBoard(@PathVariable("boardId") int boardId, @RequestBody int userId) {

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.ssafy.sot.dao.ArticleDAO;
 import com.ssafy.sot.dao.CommentDAO;
 import com.ssafy.sot.dto.ArticleDTO;
+import com.ssafy.sot.dto.ArticleFullInfo;
 import com.ssafy.sot.dto.ArticleWithComment;
 import com.ssafy.sot.dto.CommentDTO;
 
@@ -49,6 +50,21 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public boolean deleteArticle(int id) {
 		return articleDAO.deleteArticle(id) == 1;
+	}
+
+	@Override
+	public List<ArticleFullInfo> showAllArticles(int schoolId) {
+		return articleDAO.selectArticlesBySchoolId(schoolId);
+	}
+
+	@Override
+	public List<ArticleFullInfo> showAllBestArticles(int schoolId) {
+		return articleDAO.selectBestArticlesBySchoolId(schoolId);
+	}
+
+	@Override
+	public List<ArticleDTO> showBestArticles(int boardId) {
+		return articleDAO.selectBestArticlesByBoardId(boardId);
 	}
 
 }
