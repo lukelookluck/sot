@@ -72,7 +72,7 @@ public class SchoolRestController {
 		}
 		return new ResponseEntity<>(schoolService.searchSchool(keyword), HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "학교id로 게시판 목록 가져오기")
 	@GetMapping("/boards")
 	public Object boardList(@RequestParam(value="id") int id) {
@@ -84,6 +84,24 @@ public class SchoolRestController {
 	public Object createNewBoard(@RequestBody BoardNewDTO boardNewDTO) {
 		// 일단 관리자 동의 없이 새 게시판 생성
 		return new ResponseEntity<>(boardService.createNewBoard(boardNewDTO), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "즐겨찾기한 게시판 목록 가져오기")
+	@GetMapping("/board/fav")
+	public Object showBoardFavs(@RequestParam int userId) {
+		return new ResponseEntity<>(boardService.showFavBoards(userId), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "게시판 즐겨찾기")
+	@PostMapping("/board/{boardId}/fav")
+	public Object favBoard(@PathVariable("boardId") int boardId, @RequestBody int userId) {
+		return new ResponseEntity<>(boardService.favBoard(boardId, userId), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "게시판 즐겨찾기 취소")
+	@DeleteMapping("/board/{boardId}/fav")
+	public Object unfavBoard(@PathVariable("boardId") int boardId, @RequestBody int userId) {
+		return new ResponseEntity<>(boardService.unfavBoard(boardId, userId), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "게시판의 게시글 리스트 읽기")
