@@ -11,11 +11,10 @@ import {
 } from 'react-native';
 import 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import { CommonContext } from "../../context/CommonContext";
+import {CommonContext} from '../../context/CommonContext';
 
 const Board = ({navigation, route}) => {
-
-  const { serverUrl } = useContext(CommonContext);
+  const {serverUrl} = useContext(CommonContext);
 
   const [postList, setPostList] = useState([]);
 
@@ -24,14 +23,15 @@ const Board = ({navigation, route}) => {
   }, []);
 
   function refreshList() {
-    axios.get(`${serverUrl}/board/${route.params.id}`, {
-      // headers: {
-      //   Authorization: `JWT ${user.token}`,
-      // },
-      // params: {
-      //   id : 1 // user의 schoolId 받아서 넣기
-      // },
-    })
+    axios
+      .get(`${serverUrl}/board/${route.params.id}`, {
+        // headers: {
+        //   Authorization: `JWT ${user.token}`,
+        // },
+        // params: {
+        //   id : 1 // user의 schoolId 받아서 넣기
+        // },
+      })
       .then((response) => {
         console.log('here????');
         console.log(response.data);
@@ -45,36 +45,24 @@ const Board = ({navigation, route}) => {
 
   return (
     <View style={styles.box}>
-
       <FlatList
         data={postList}
-        keyExtractor = {(item, index) => index.toString()}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (
           <View>
-            <Text
-              style={styles.item}
-              >
-              {item.title}
-            </Text>
-            <Text
-              style={styles.item}
-              >
-              {item.content}
-            </Text>
-            <Text
-              style={styles.item}
-              >
-              {item.nickname}
-            </Text>
+            <Text style={styles.item}>{item.title}</Text>
+            <Text style={styles.item}>{item.content}</Text>
+            <Text style={styles.item}>{item.nickname}</Text>
           </View>
         )}></FlatList>
 
       <TouchableOpacity
         style={styles.writeBtn}
-        onPress={() => navigation.navigate('WritePost', {boardid: route.params.id})}>
+        onPress={() =>
+          navigation.navigate('WritePost', {boardid: route.params.id})
+        }>
         <Text style={{color: 'white', fontSize: 15}}>글작성</Text>
       </TouchableOpacity>
-    
     </View>
   );
 };
