@@ -7,6 +7,7 @@ import List from './src/pages/List';
 import WritePost from './src/pages/WritePost';
 import Board from './src/pages/Board';
 import SchoolSearch from './src/pages/SchoolSearch';
+import ReqNewBoard from './src/pages/ReqNewBoard';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -57,6 +58,13 @@ function MyStack() {
           backgroundColor: '#FACA0F',
         },}}
         component={WritePost}
+      />
+      <Stack.Screen
+        name="ReqNewBoard"
+        options={{ title: "게시판 신청",headerShown: true, headerTintColor: 'white', headerStyle: {
+          backgroundColor: '#FACA0F',
+        },}}
+        component={ReqNewBoard}
       />
     </Stack.Navigator>
   );
@@ -122,7 +130,7 @@ export default function App() {
     "user"
   );
 
-  const HOST = "192.168.100.72:8080";
+  const HOST = "118.45.110.147:8090";
   const serverUrl = `http://${HOST}`;
 
   return (
