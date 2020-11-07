@@ -1,4 +1,12 @@
 import React, {Component} from 'react';
+import {
+  StyleSheet,
+  Text,
+  Button,
+  TouchableHighlight,
+  FlatList,
+  View,
+} from 'react-native';
 import Start from './src/pages/Start';
 import SignUp from './src/pages/SignUp';
 import Home from './src/pages/Home';
@@ -10,7 +18,10 @@ import ArticleDisplay from './src/pages/ArticleDisplay';
 import SchoolSearch from './src/pages/SchoolSearch';
 import ReqNewBoard from './src/pages/ReqNewBoard';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {CommonContext} from './src/context/CommonContext';
@@ -80,8 +91,21 @@ function MyStack() {
       />
       <Stack.Screen
         name="ArticleDisplay"
-        options={({route}) => ({
-          headerShown: false,
+        options={({navigation}) => ({
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          headerShown: true,
+          headerRight: () => (
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Button
+                onPress={() => navigation.navigate('WritePost')}
+                title="글쓰기로 감(임시)"
+              />
+              <Icon
+                name="ellipsis-vertical"
+                style={{fontSize: 22.5, marginHorizontal: 10}}
+              />
+            </View>
+          ),
         })}
         component={ArticleDisplay}
       />

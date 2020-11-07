@@ -80,7 +80,11 @@ export default function PartBoard(props) {
                 </TouchableHighlight>
                 {props.certainArticleList.map((article) => (
                   <View key={article.id}>
-                    <SingleArticle article={article} pressed={props.pressed} />
+                    <SingleArticle
+                      article={article}
+                      pressed={props.pressed}
+                      navigation={props.navigation}
+                    />
                   </View>
                 ))}
               </View>
@@ -88,7 +92,11 @@ export default function PartBoard(props) {
               <View>
                 {props.wholeArticleList.map((article) => (
                   <View key={article.id}>
-                    <SingleArticle article={article} pressed={props.pressed} />
+                    <SingleArticle
+                      article={article}
+                      pressed={props.pressed}
+                      navigation={props.navigation}
+                    />
                   </View>
                 ))}
               </View>

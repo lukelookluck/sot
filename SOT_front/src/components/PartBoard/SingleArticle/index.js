@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function SingleArticle(props) {
   function onPress() {
-    console.log(props.article);
+    props.navigation.navigate('ArticleDisplay', {article: props.article});
   }
 
   console.log(props.article);
