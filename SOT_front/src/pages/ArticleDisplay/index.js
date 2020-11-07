@@ -43,14 +43,15 @@ export default function ({route}) {
   }
 
   return (
-    <View style={{backgroundColor: 'grey'}}>
+    <View style={{backgroundColor: 'grey', paddingHorizontal: 10}}>
+      {/* 게시글 상단 */}
       <View
         style={{
           backgroundColor: 'yellow',
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-          paddingHorizontal: 10,
+          paddingVertical: 5,
         }}>
         <View style={{flexDirection: 'row'}}>
           <Icon name="person-circle" style={{fontSize: 40}} />
@@ -65,11 +66,20 @@ export default function ({route}) {
         </View>
         <Icon name="ellipsis-vertical" style={{fontSize: 22.5}} />
       </View>
-      <View style={{backgroundColor: 'green'}}>
-        <Text>{article.title}</Text>
-        <Text>{article.content}</Text>
+      {/* 게시글 중단(제목, 내용) */}
+      <View style={{backgroundColor: 'green', paddingVertical: 10}}>
+        <Text style={{fontSize: 17.5, fontWeight: '700', marginVertical: 10}}>
+          {article.title}
+        </Text>
+        <Text style={{fontSize: 14}}>{article.content}</Text>
       </View>
-      <View style={{backgroundColor: 'skyblue', flexDirection: 'row'}}>
+      {/* 게시글 하단(좋아요, 댓글) */}
+      <View
+        style={{
+          backgroundColor: 'skyblue',
+          flexDirection: 'row',
+          paddingVertical: 5,
+        }}>
         <View
           style={{
             flexDirection: 'row',
@@ -78,8 +88,11 @@ export default function ({route}) {
           <Icon
             name="heart-outline"
             color="#ff8000"
-            style={{fontSize: 15, marginRight: 2}}></Icon>
-          <Text style={{fontSize: 11, color: '#ff8000'}}>
+            style={{
+              fontSize: 25,
+              marginHorizontal: 5,
+            }}></Icon>
+          <Text style={{fontSize: 17.5, color: '#ff8000'}}>
             {article.likesCnt}
           </Text>
         </View>
@@ -90,12 +103,13 @@ export default function ({route}) {
           <Icon
             name="chatbubbles-outline"
             color="#058AB3"
-            style={{fontSize: 15, marginRight: 2}}></Icon>
-          <Text style={{fontSize: 11, color: '#058AB3'}}>
+            style={{fontSize: 25, marginHorizontal: 5}}></Icon>
+          <Text style={{fontSize: 17.5, color: '#058AB3'}}>
             {article.commentsCnt}
           </Text>
         </View>
       </View>
+      {/* 게시글 최하단(댓글) */}
       <View style={{backgroundColor: 'orange'}}>
         <Text>댓글</Text>
       </View>
