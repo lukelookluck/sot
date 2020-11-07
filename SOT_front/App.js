@@ -92,6 +92,7 @@ function MyStack() {
       <Stack.Screen
         name="ArticleDisplay"
         options={({navigation}) => ({
+          title: '',
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           headerShown: true,
           headerRight: () => (

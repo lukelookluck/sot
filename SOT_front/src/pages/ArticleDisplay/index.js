@@ -44,10 +44,26 @@ export default function ({route}) {
 
   return (
     <View style={{backgroundColor: 'grey'}}>
-      <View style={{backgroundColor: 'yellow'}}>
-        <Icon name="person-circle" style={{fontSize: 30}} />
-        <Text>{article.nickname}</Text>
-        <Text>{getTime(article.created_at)}</Text>
+      <View
+        style={{
+          backgroundColor: 'yellow',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingHorizontal: 10,
+        }}>
+        <View style={{flexDirection: 'row'}}>
+          <Icon name="person-circle" style={{fontSize: 40}} />
+          <View style={{marginLeft: 10, justifyContent: 'center'}}>
+            <Text style={{fontSize: 15, fontWeight: '700'}}>
+              {article.nickname}
+            </Text>
+            <Text style={{fontSize: 13, fontWeight: '500', color: '#6b6b6b'}}>
+              {getTime(article.created_at)}
+            </Text>
+          </View>
+        </View>
+        <Icon name="ellipsis-vertical" style={{fontSize: 22.5}} />
       </View>
       <View style={{backgroundColor: 'green'}}>
         <Text>{article.title}</Text>
