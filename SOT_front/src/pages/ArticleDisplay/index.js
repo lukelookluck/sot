@@ -1,10 +1,35 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {Text, View, TouchableHighlight} from 'react-native';
+import axios from 'axios';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import {CommonContext} from '../../context/CommonContext';
+
 export default function ({route}) {
-  console.log('정보!!', route.params.article);
+  const {serverUrl, user, setUser} = useContext(CommonContext);
+  const [article2, setArticle2] = useState([]);
+
   const article = route.params.article;
+
+  useEffect(() => {
+    getArticleInfo();
+  }, []);
+
+  function getArticleInfo() {
+    axios
+      .get(
+        `${serverUrl}/board/${route.params.article.boardId}/${route.params.article.id}`,
+      )
+      .then((res) => {
+        setArticle2(res.data);
+        console.log('??', res.data);
+        // console.log(article);
+      })
+      .catch((err) => {
+        console.log(err.data);
+      });
+  }
 
   function getTime(myTime) {
     let theTime = null;
@@ -40,6 +65,11 @@ export default function ({route}) {
       }
     }
     return theTime;
+  }
+
+  function onPress() {
+    console.log('좋아요1!');
+    console.log('정보!!', article2);
   }
 
   return (
@@ -78,33 +108,70 @@ export default function ({route}) {
         style={{
           backgroundColor: 'skyblue',
           flexDirection: 'row',
-          paddingVertical: 5,
+          alignItems: 'center',
+          paddingVertical: 2.5,
         }}>
         <View
           style={{
             flexDirection: 'row',
-            marginRight: 7,
+            alignItems: 'center',
+            marginHorizontal: 2,
           }}>
-          <Icon
-            name="heart-outline"
-            color="#ff8000"
+          <TouchableHighlight
             style={{
-              fontSize: 25,
-              marginHorizontal: 5,
-            }}></Icon>
-          <Text style={{fontSize: 17.5, color: '#ff8000'}}>
+              borderRadius: 20,
+            }}
+            onPress={() => onPress()}
+            underlayColor="#dfdfdf">
+            <Icon
+              name="heart-outline"
+              color="#ff8000"
+              style={{
+                fontSize: 22.5,
+                paddingVertical: 5,
+                paddingHorizontal: 6,
+                // backgroundColor: 'white',
+                borderRadius: 20,
+              }}
+            />
+          </TouchableHighlight>
+          <Text
+            style={{
+              fontSize: 18,
+              color: '#ff8000',
+            }}>
             {article.likesCnt}
           </Text>
         </View>
         <View
           style={{
             flexDirection: 'row',
+            alignItems: 'center',
+            marginHorizontal: 2,
           }}>
-          <Icon
-            name="chatbubbles-outline"
-            color="#058AB3"
-            style={{fontSize: 25, marginHorizontal: 5}}></Icon>
-          <Text style={{fontSize: 17.5, color: '#058AB3'}}>
+          <TouchableHighlight
+            style={{
+              borderRadius: 20,
+            }}
+            onPress={() => onPress()}
+            underlayColor="#dfdfdf">
+            <Icon
+              name="chatbubbles-outline"
+              color="#058AB3"
+              style={{
+                fontSize: 22.5,
+                paddingVertical: 5,
+                paddingHorizontal: 6,
+                // backgroundColor: 'white',
+                borderRadius: 20,
+              }}
+            />
+          </TouchableHighlight>
+          <Text
+            style={{
+              fontSize: 18,
+              color: '#058AB3',
+            }}>
             {article.commentsCnt}
           </Text>
         </View>
