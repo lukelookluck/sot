@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
-  Modal,
   StyleSheet,
   TextInput,
   View,
@@ -233,21 +232,30 @@ export default function ({route}) {
             </Text>
           </View>
           <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
+            style={{
+              margin: 0,
+            }}
+            animationIn="slideInUp"
+            animationInTiming={500}
+            animationOut="fadeOut"
+            animationOutTiming={500}
+            isVisible={modalVisible}
+            useNativeDriver={true}
+            // hideModalContentWhileAnimating={true}
             onShow={() => {
-              // textInput.blur();
               textInput.focus();
             }}
-            onRequestClose={() => {
+            onBackdropPress={() => {
+              setModalVisible(!modalVisible);
+            }}
+            onBackButtonPress={() => {
               setModalVisible(!modalVisible);
             }}>
             <View
               style={{
                 flex: 1,
                 justifyContent: 'flex-end',
-                backgroundColor: 'rgba(52, 52, 52, 0.5)',
+                // backgroundColor: 'rgba(52, 52, 52, 0.5)',
               }}>
               <View
                 style={{
@@ -264,13 +272,32 @@ export default function ({route}) {
                   }}
                 />
                 <TextInput
+                  multiline={true}
                   placeholder="댓글 작성하기.."
                   ref={(input) => {
                     textInput = input;
                   }}
                   blurOnSubmit={false}
-                  style={{backgroundColor: 'white', color: 'red', fontSize: 15}}
+                  style={{flex: 1, color: 'red', fontSize: 15}}
                 />
+                <TouchableHighlight
+                  style={{
+                    borderRadius: 20,
+                  }}
+                  onPress={() => onPress()}
+                  underlayColor="#dfdfdf">
+                  <Icon
+                    name="paper-plane-outline"
+                    color="#058AB3"
+                    style={{
+                      fontSize: 30,
+                      paddingVertical: 5,
+                      paddingHorizontal: 6,
+                      // backgroundColor: 'white',
+                      borderRadius: 20,
+                    }}
+                  />
+                </TouchableHighlight>
               </View>
             </View>
           </Modal>
