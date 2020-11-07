@@ -159,6 +159,7 @@ public class SchoolRestController {
 	}
 	
 	@ApiOperation(value = "댓글 작성, (created_at, updated_at 같은 것들은 무시하고 필수값만 넣으면 됨)")
+	@PostMapping("/board/{boardId}/{articleId}")
 	public Object createComment(@PathVariable("boardId") int boardId,
 								@PathVariable("articleId") int articleId, CommentDTO commentDTO) {
 		commentDTO.setArticleId(articleId);
