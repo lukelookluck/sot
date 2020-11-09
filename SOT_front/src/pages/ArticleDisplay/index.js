@@ -18,7 +18,7 @@ import {CommonContext} from '../../context/CommonContext';
 
 export default function ({route}) {
   const {serverUrl, user, setUser} = useContext(CommonContext);
-  const [article2, setArticle2] = useState([]);
+  const [article, setArticle] = useState([]);
 
   useEffect(() => {
     getArticleInfo();
@@ -30,7 +30,7 @@ export default function ({route}) {
         `${serverUrl}/board/${route.params.article.boardId}/${route.params.article.id}`,
       )
       .then((res) => {
-        setArticle2(res.data);
+        setArticle(res.data);
         console.log('??', res.data);
         // console.log(article);
       })
@@ -39,8 +39,7 @@ export default function ({route}) {
       });
   }
 
-  const article = route.params.article;
-  const comments = article2.comments || [];
+  const comments = article.comments || [];
 
   function writeReply() {
     Alert.alert(
@@ -62,7 +61,7 @@ export default function ({route}) {
     );
   }
 
-  const comments2 = comments.map((comment) => {
+  const comments2 = comments.reverse().map((comment) => {
     return (
       <View
         style={{
@@ -183,6 +182,7 @@ export default function ({route}) {
         setModalVisible(false);
         setIsReply(false);
         setTextInput2(null);
+        getArticleInfo();
       })
       .catch((err) => {
         console.log(err);
