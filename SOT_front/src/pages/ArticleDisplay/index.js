@@ -37,7 +37,17 @@ export default function ({route}) {
   }
 
   const article = route.params.article;
-  const comments = article2.comments;
+  const comments = article2.comments || [];
+  console.log(comments);
+
+  const comments2 = comments.map((comment) => {
+    return (
+      <View>
+        <Text>dandajks</Text>
+        <Text>{comment.content}</Text>
+      </View>
+    );
+  });
 
   function getTime(myTime) {
     let theTime = null;
@@ -107,7 +117,28 @@ export default function ({route}) {
             </Text>
           </View>
         </View>
-        <Icon name="ellipsis-vertical" style={{fontSize: 22.5}} />
+        <TouchableHighlight
+          style={{
+            borderRadius: 20,
+          }}
+          onPress={() => onPress()}
+          underlayColor="#dfdfdf">
+          {/* <Icon
+                    name="paper-plane-outline"
+                    color="#058AB3"
+                    style={{
+                      fontSize: 30,
+                      paddingVertical: 5,
+                      paddingHorizontal: 6,
+                      // backgroundColor: 'white',
+                      borderRadius: 20,
+                    }}
+                  /> */}
+          <Icon
+            name="ellipsis-vertical"
+            style={{fontSize: 22.5, paddingVertical: 4, paddingHorizontal: 5}}
+          />
+        </TouchableHighlight>
       </View>
       {/* 게시글 중단(제목, 내용) */}
       <View style={{paddingVertical: 10}}>
@@ -242,14 +273,14 @@ export default function ({route}) {
             isVisible={modalVisible}
             useNativeDriver={true}
             // hideModalContentWhileAnimating={true}
-            onShow={() => {
+            onModalShow={() => {
               textInput.focus();
             }}
             onBackdropPress={() => {
-              setModalVisible(!modalVisible);
+              setModalVisible(false);
             }}
             onBackButtonPress={() => {
-              setModalVisible(!modalVisible);
+              setModalVisible(false);
             }}>
             <View
               style={{
@@ -277,7 +308,6 @@ export default function ({route}) {
                   ref={(input) => {
                     textInput = input;
                   }}
-                  blurOnSubmit={false}
                   style={{flex: 1, color: 'red', fontSize: 15}}
                 />
                 <TouchableHighlight
@@ -305,6 +335,7 @@ export default function ({route}) {
       </View>
       {/* 댓글목록 파트 */}
       <Text>댓글목록</Text>
+      {comments2}
     </View>
   );
 }
