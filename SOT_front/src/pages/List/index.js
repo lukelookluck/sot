@@ -11,8 +11,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   text_box: {
-    borderBottomWidth: 0.5,
+    // borderBottomWidth: 0.5,
+    // borderBottomColor: "gray",
     borderTopWidth: 0.5,
+    borderTopColor: "gray",
     justifyContent: 'center',
     height: 50,
   }
