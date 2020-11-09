@@ -12,7 +12,7 @@ import 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {CommonContext} from "../../context/CommonContext";
 
-const WritePost = ({navigation, route}) => {
+const WritePost = ({navigation, route, props}) => {
 
   const { serverUrl, user, setUser } = useContext(CommonContext);
 
@@ -36,7 +36,7 @@ const WritePost = ({navigation, route}) => {
     })
       .then((response) => {
         console.log(response.data);
-        navigation.navigate('Board', {name: route.params.boardname, id: route.params.boardid});
+        navigation.navigate('Board', {name: route.params.boardname, id: route.params.boardid, isRe: 'yes'});
       })
       .catch((error) => {
         console.log(error);
