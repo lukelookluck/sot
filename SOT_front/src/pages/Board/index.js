@@ -28,9 +28,6 @@ const Board = ({navigation, route}) => {
         // headers: {
         //   Authorization: `JWT ${user.token}`,
         // },
-        // params: {
-        //   id : 1 // user의 schoolId 받아서 넣기
-        // },
       })
       .then((response) => {
         console.log('here????');

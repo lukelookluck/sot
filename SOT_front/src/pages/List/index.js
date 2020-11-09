@@ -6,13 +6,16 @@ import { CommonContext } from "../../context/CommonContext";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 22,
   },
   item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
+    fontSize: 20,
   },
+  text_box: {
+    borderBottomWidth: 0.5,
+    borderTopWidth: 0.5,
+    justifyContent: 'center',
+    height: 50,
+  }
 });
 
 const List = ({navigation}) => {
@@ -31,16 +34,14 @@ const List = ({navigation}) => {
       //   Authorization: `JWT ${user.token}`,
       // },
       params: {
-        id : user.schoolId // user의 schoolId 받아서 넣기
+        id : user.schoolId
       },
     })
       .then((response) => {
-        console.log('here????');
         console.log(response.data);
         setBoardList(response.data);
       })
       .catch((error) => {
-        console.log('why???');
         console.log(error);
       });
   }
@@ -59,10 +60,14 @@ const List = ({navigation}) => {
         data={boardList}
         keyExtractor={(item, index) => index.toString()}
         ListFooterComponent={
-          <Text style={styles.item} onPress={() => goReqNewBoard()}>게시판 신청하기</Text>
+          <View style={styles.text_box}>
+            <Text style={styles.item} onPress={() => goReqNewBoard()}>게시판 신청하기</Text>
+          </View>
         }
         renderItem={({item}) => (
-          <Text style={styles.item} onPress={() => goBoard(item.name, item.id)}>{item.name}</Text>
+          <View style={styles.text_box}>
+            <Text style={styles.item} onPress={() => goBoard(item.name, item.id)}>{item.name}</Text>
+          </View>
         )}></FlatList>
     </View>
   );
