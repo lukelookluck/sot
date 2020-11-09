@@ -3,22 +3,59 @@ import {Text, View, TouchableHighlight} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function Header(props) {
+  const onPress = () => {
+    props.setPressed(false);
+    props.setMyloading(false);
+    props.setTemp(null);
+  };
+
   return (
     <View
       style={{
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingHorizontal: 15,
+        paddingRight: 15,
         backgroundColor: '#ff8000',
         borderBottomWidth: 1,
         borderBottomColor: '#df380f',
       }}>
       <View>
-        <Text style={{fontSize: 12, color: 'white'}}>S.O.T</Text>
-        <Text style={{color: 'white', fontWeight: '700', fontSize: 18}}>
-          {props.name}
-        </Text>
+        {(props.pressed === true && (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingLeft: 6.5,
+            }}>
+            <TouchableHighlight
+              style={{padding: 3.5, borderRadius: 25}}
+              onPress={onPress}
+              underlayColor="#dfdfdf">
+              <Icon
+                name="arrow-back-circle-outline"
+                style={{color: 'white'}}
+                size={30}
+              />
+            </TouchableHighlight>
+            <Text
+              style={{
+                paddingLeft: 5,
+                color: 'white',
+                fontWeight: '700',
+                fontSize: 18,
+              }}>
+              {props.name}
+            </Text>
+          </View>
+        )) || (
+          <View style={{paddingLeft: 15}}>
+            <Text style={{fontSize: 12, color: 'white'}}>S.O.T</Text>
+            <Text style={{color: 'white', fontWeight: '700', fontSize: 18}}>
+              {props.name}
+            </Text>
+          </View>
+        )}
       </View>
       <View style={{flexDirection: 'row', marginVertical: 5}}>
         <View style={{marginRight: 15}}>

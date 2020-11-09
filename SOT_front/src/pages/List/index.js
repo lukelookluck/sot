@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
 import {Text, View, FlatList, StyleSheet} from 'react-native';
+import { CommonContext } from "../../context/CommonContext";
 
 const styles = StyleSheet.create({
   container: {
@@ -13,26 +15,54 @@ const styles = StyleSheet.create({
   },
 });
 
-const List = () => {
+const List = ({navigation}) => {
 
-  const goBoard = (key) => {
-    const message = key + "입니다!";
-    alert(message);
+  const [boardList, setBoardList] = useState([]);
+
+  const { serverUrl, user, setUser } = useContext(CommonContext);
+
+  useEffect(() => {
+    refreshList();
+  }, []);
+
+  function refreshList() {
+    axios.get(`${serverUrl}/boards`, {
+      // headers: {
+      //   Authorization: `JWT ${user.token}`,
+      // },
+      params: {
+        id : user.schoolId // user의 schoolId 받아서 넣기
+      },
+    })
+      .then((response) => {
+        console.log('here????');
+        console.log(response.data);
+        setBoardList(response.data);
+      })
+      .catch((error) => {
+        console.log('why???');
+        console.log(error);
+      });
   }
 
-  return (
-    <View>
-      <Text>게시판 목록 탭</Text>
+  const goBoard = (b_name, b_id) => {
+    navigation.navigate('Board', {name: b_name, id: b_id});
+  };
 
+  const goReqNewBoard = () => {
+    navigation.navigate('ReqNewBoard');
+  };
+
+  return (
+    <View style={styles.container}>
       <FlatList
-        data={[
-          {key: '자유 게시판'},
-          {key: '1학년 게시판'},
-          {key: '2학년 게시판'},
-          {key: '3학년 게시판'},
-        ]}
+        data={boardList}
+        keyExtractor={(item, index) => index.toString()}
+        ListFooterComponent={
+          <Text style={styles.item} onPress={() => goReqNewBoard()}>게시판 신청하기</Text>
+        }
         renderItem={({item}) => (
-          <Text style={styles.item} onPress={() => goBoard(item.key)}>{item.key}</Text>
+          <Text style={styles.item} onPress={() => goBoard(item.name, item.id)}>{item.name}</Text>
         )}></FlatList>
     </View>
   );
