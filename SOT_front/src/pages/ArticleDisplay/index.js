@@ -4,7 +4,9 @@ import {
   StyleSheet,
   TextInput,
   View,
+  Alert,
   TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
 
@@ -40,11 +42,97 @@ export default function ({route}) {
   const comments = article2.comments || [];
   console.log(comments);
 
+  function writeReply() {
+    Alert.alert(
+      '답글을 작성하시겠습니까?',
+      '',
+      [
+        {
+          text: '아니요',
+        },
+        {
+          text: '네',
+          onPress: () => {
+            setModalVisible(true);
+            setIsReply(true);
+          },
+        },
+      ],
+      {cancelable: true},
+    );
+  }
+
   const comments2 = comments.map((comment) => {
     return (
-      <View>
-        <Text>dandajks</Text>
-        <Text>{comment.content}</Text>
+      <View
+        style={{
+          paddingVertical: 5,
+          borderBottomWidth: 2,
+          borderBottomColor: '#dbdbdb',
+        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+            }}>
+            <Icon
+              name="person-circle"
+              style={{fontSize: 40, color: '#919191'}}
+            />
+            <View style={{flexDirection: 'column', marginLeft: 5}}>
+              <Text
+                style={{
+                  fontWeight: '700',
+                  fontSize: 12,
+                  color: '#5e5e5e',
+                  paddingTop: 5,
+                  paddingBottom: 2,
+                }}>
+                {comment.nickname}
+              </Text>
+              <Text style={{fontSize: 13}}>{comment.content}</Text>
+              <View style={{flexDirection: 'row', paddingVertical: 5}}>
+                <Text style={{fontSize: 12, color: '#5e5e5e'}}>
+                  {getTime(comment.created_at)}
+                </Text>
+
+                <TouchableOpacity
+                  style={{
+                    marginLeft: 15,
+                  }}
+                  onPress={() => writeReply()}
+                  activeOpacity={1}>
+                  <Text style={{fontSize: 12, color: '#5e5e5e'}}>
+                    답글 달기..
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          <TouchableHighlight
+            style={{
+              borderRadius: 20,
+            }}
+            onPress={() => onPress()}
+            underlayColor="#dfdfdf">
+            <Icon
+              name="heart-outline"
+              color="#ff8000"
+              style={{
+                fontSize: 22.5,
+                paddingVertical: 5,
+                paddingHorizontal: 6,
+                // backgroundColor: 'white',
+                borderRadius: 20,
+              }}
+            />
+          </TouchableHighlight>
+        </View>
       </View>
     );
   });
@@ -89,7 +177,10 @@ export default function ({route}) {
     console.log('좋아요1!');
     console.log('댓글', comments);
   }
+
   const [modalVisible, setModalVisible] = useState(false);
+  const [isReply, setIsReply] = useState(false);
+
   let textInput = '';
 
   return (
@@ -123,17 +214,6 @@ export default function ({route}) {
           }}
           onPress={() => onPress()}
           underlayColor="#dfdfdf">
-          {/* <Icon
-                    name="paper-plane-outline"
-                    color="#058AB3"
-                    style={{
-                      fontSize: 30,
-                      paddingVertical: 5,
-                      paddingHorizontal: 6,
-                      // backgroundColor: 'white',
-                      borderRadius: 20,
-                    }}
-                  /> */}
           <Icon
             name="ellipsis-vertical"
             style={{fontSize: 22.5, paddingVertical: 4, paddingHorizontal: 5}}
@@ -241,6 +321,8 @@ export default function ({route}) {
           alignItems: 'center',
           justifyContent: 'space-between',
           paddingVertical: 5,
+          borderBottomWidth: 2,
+          borderBottomColor: '#dbdbdb',
         }}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Icon name="person-circle" style={{fontSize: 40, color: '#ff8000'}} />
@@ -278,9 +360,11 @@ export default function ({route}) {
             }}
             onBackdropPress={() => {
               setModalVisible(false);
+              setIsReply(false);
             }}
             onBackButtonPress={() => {
               setModalVisible(false);
+              setIsReply(false);
             }}>
             <View
               style={{
@@ -288,6 +372,27 @@ export default function ({route}) {
                 justifyContent: 'flex-end',
                 // backgroundColor: 'rgba(52, 52, 52, 0.5)',
               }}>
+              {isReply === true && (
+                <View
+                  style={{
+                    backgroundColor: '#b0b0b0',
+                    padding: 15,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text style={{fontSize: 14, color: '#414141'}}>
+                    답글 남기는 중...
+                  </Text>
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => {
+                      setIsReply(false);
+                      setModalVisible(false);
+                    }}>
+                    <Text style={{fontSize: 14, color: '#414141'}}>취소</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
               <View
                 style={{
                   backgroundColor: 'white',
@@ -302,14 +407,25 @@ export default function ({route}) {
                     color: '#ff8000',
                   }}
                 />
-                <TextInput
-                  multiline={true}
-                  placeholder="댓글 작성하기.."
-                  ref={(input) => {
-                    textInput = input;
-                  }}
-                  style={{flex: 1, color: 'red', fontSize: 15}}
-                />
+                {(isReply === false && (
+                  <TextInput
+                    multiline={true}
+                    placeholder="댓글 작성하기.."
+                    ref={(input) => {
+                      textInput = input;
+                    }}
+                    style={{flex: 1, color: 'red', fontSize: 15}}
+                  />
+                )) || (
+                  <TextInput
+                    multiline={true}
+                    placeholder="답글 작성하기.."
+                    ref={(input) => {
+                      textInput = input;
+                    }}
+                    style={{flex: 1, color: 'red', fontSize: 15}}
+                  />
+                )}
                 <TouchableHighlight
                   style={{
                     borderRadius: 20,
@@ -334,7 +450,6 @@ export default function ({route}) {
         </View>
       </View>
       {/* 댓글목록 파트 */}
-      <Text>댓글목록</Text>
       {comments2}
     </View>
   );
