@@ -174,20 +174,19 @@ export default function ({route}) {
   }
 
   function goComment() {
-    console.log('좋아요1!');
-    console.log(article.boardId, article.id, user.id, textInput2);
-    // axios
-    //   .post(
-    //     `${serverUrl}/board/${article.boardId}/${article.id}/?content=${textInput2}&userId=${user.id}`,
-    //   )
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     setModalVisible(false);
-    //     setTextInput2(null);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .post(
+        `${serverUrl}/board/${article.boardId}/${article.id}/?content=${textInput2}&userId=${user.id}`,
+      )
+      .then((res) => {
+        console.log(res.data);
+        setModalVisible(false);
+        setIsReply(false);
+        setTextInput2(null);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -197,7 +196,7 @@ export default function ({route}) {
   let textInput = '';
 
   return (
-    <ScrollView>
+    <ScrollView keyboardShouldPersistTaps={'always'}>
       <View
         style={{
           paddingHorizontal: 10,
