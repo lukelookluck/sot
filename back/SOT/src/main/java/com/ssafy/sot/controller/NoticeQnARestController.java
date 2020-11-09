@@ -1,5 +1,7 @@
 package com.ssafy.sot.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.sot.dto.ArticleDTO;
 import com.ssafy.sot.service.ArticleService;
 import com.ssafy.sot.service.CommentService;
+import com.ssafy.sot.util.JWTUtil;
 
 import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class NoticeQnARestController {
+	
+	
+	@Autowired
+	JWTUtil jwtUtil;
 	
 	@Autowired
 	ArticleService articleService;
@@ -92,5 +99,14 @@ public class NoticeQnARestController {
 	@DeleteMapping("/qna/{articleId}")
 	public Object deleteQnA(@PathVariable("articleId") int articleId) {
 		return new ResponseEntity<>(articleService.deleteArticle(articleId), HttpStatus.OK);
+	}
+	
+	// JWT 토큰에서 userId(PK) 가져오는 메소드
+	private int getUserPK(HttpServletRequest request) {
+		String token = request.getHeader("Authorization");
+		if(token == null) {
+			return -1;
+		}
+		return jwtUtil.getUserPK(token.substring("Bearer ".length()));
 	}
 }

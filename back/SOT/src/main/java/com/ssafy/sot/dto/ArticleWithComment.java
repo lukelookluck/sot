@@ -13,6 +13,20 @@ public class ArticleWithComment {
 	String nickname;
 	Timestamp created_at;
 	Timestamp updated_at;
+	int commentsCnt;
+	int likesCnt;
+	public int getCommentsCnt() {
+		return commentsCnt;
+	}
+	public void setCommentsCnt(int commentsCnt) {
+		this.commentsCnt = commentsCnt;
+	}
+	public int getLikesCnt() {
+		return likesCnt;
+	}
+	public void setLikesCnt(int likesCnt) {
+		this.likesCnt = likesCnt;
+	}
 	List<CommentDTO> comments;
 	public int getId() {
 		return id;
@@ -68,11 +82,13 @@ public class ArticleWithComment {
 	public void setComments(List<CommentDTO> comments) {
 		this.comments = comments;
 	}
+	
 	@Override
 	public String toString() {
 		return "ArticleWithComment [id=" + id + ", title=" + title + ", content=" + content + ", boardId=" + boardId
 				+ ", userId=" + userId + ", nickname=" + nickname + ", created_at=" + created_at + ", updated_at="
-				+ updated_at + ", comments=" + comments + "]";
+				+ updated_at + ", commentsCnt=" + commentsCnt + ", likesCnt=" + likesCnt + ", comments=" + comments
+				+ "]";
 	}
 	public ArticleWithComment(ArticleDTO article, List<CommentDTO> comments) {
 		this.id = article.getId();
@@ -83,6 +99,8 @@ public class ArticleWithComment {
 		this.nickname = article.getNickname();
 		this.created_at = article.getCreated_at();
 		this.updated_at = article.getUpdated_at();
+		this.commentsCnt = article.getCommentsCnt();
+		this.likesCnt = article.getLikesCnt();
 		this.comments = comments;
 	}
 	
