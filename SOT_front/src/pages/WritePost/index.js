@@ -12,7 +12,7 @@ import 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {CommonContext} from "../../context/CommonContext";
 
-const WritePost = ({navigation, route, props}) => {
+const WritePost = ({navigation, route}) => {
 
   const { serverUrl, user, setUser } = useContext(CommonContext);
 
@@ -32,7 +32,7 @@ const WritePost = ({navigation, route, props}) => {
     axios.post(`${serverUrl}/board/${route.params.boardid}`, {
         content: content,
         title: title,
-        userId: user.id, // user의 id 받아서 넣기
+        userId: user.id,
     })
       .then((response) => {
         console.log(response.data);

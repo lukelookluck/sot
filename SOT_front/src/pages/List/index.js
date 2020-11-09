@@ -18,15 +18,27 @@ const styles = StyleSheet.create({
   }
 });
 
-const List = ({navigation}) => {
+const List = ({navigation, route}) => {
 
   const [boardList, setBoardList] = useState([]);
-
+  let cnt = 0;
+  const [count, setCount] = useState(0);
   const { serverUrl, user, setUser } = useContext(CommonContext);
 
   useEffect(() => {
     refreshList();
+    console.log('여기에왔음');
   }, []);
+
+  function reLoad(){
+    
+    refreshList();
+
+    cnt = cnt + 1;
+    setCount(cnt);
+    console.log(route.params.isRe);
+    console.log(cnt);
+  }
 
   function refreshList() {
     axios.get(`${serverUrl}/boards`, {
@@ -56,6 +68,9 @@ const List = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      {/* { (count === 0 && route.params.isRef)
+        ? (reLoad())
+        : (console.log('여기야'))} */}
       <FlatList
         data={boardList}
         keyExtractor={(item, index) => index.toString()}
