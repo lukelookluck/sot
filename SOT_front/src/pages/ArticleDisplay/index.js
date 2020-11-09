@@ -2,6 +2,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   StyleSheet,
+  ScrollView,
   TextInput,
   View,
   Alert,
@@ -40,7 +41,6 @@ export default function ({route}) {
 
   const article = route.params.article;
   const comments = article2.comments || [];
-  console.log(comments);
 
   function writeReply() {
     Alert.alert(
@@ -173,73 +173,55 @@ export default function ({route}) {
     return theTime;
   }
 
-  function onPress() {
+  function goComment() {
     console.log('좋아요1!');
-    console.log('댓글', comments);
+    console.log(article.boardId, article.id, user.id, textInput2);
+    // axios
+    //   .post(
+    //     `${serverUrl}/board/${article.boardId}/${article.id}/?content=${textInput2}&userId=${user.id}`,
+    //   )
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     setModalVisible(false);
+    //     setTextInput2(null);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }
 
   const [modalVisible, setModalVisible] = useState(false);
   const [isReply, setIsReply] = useState(false);
 
+  const [textInput2, setTextInput2] = useState(null);
   let textInput = '';
 
   return (
-    <View
-      style={{
-        paddingHorizontal: 10,
-        // backgroundColor: 'white'
-      }}>
-      {/* 게시글 상단 */}
+    <ScrollView>
       <View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingVertical: 5,
+          paddingHorizontal: 10,
+          // backgroundColor: 'white'
         }}>
-        <View style={{flexDirection: 'row'}}>
-          <Icon name="person-circle" style={{fontSize: 40}} />
-          <View style={{marginLeft: 10, justifyContent: 'center'}}>
-            <Text style={{fontSize: 15, fontWeight: '700'}}>
-              {article.nickname}
-            </Text>
-            <Text style={{fontSize: 13, fontWeight: '500', color: '#5e5e5e'}}>
-              {getTime(article.created_at)}
-            </Text>
+        {/* 게시글 상단 */}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingVertical: 5,
+          }}>
+          <View style={{flexDirection: 'row'}}>
+            <Icon name="person-circle" style={{fontSize: 40}} />
+            <View style={{marginLeft: 10, justifyContent: 'center'}}>
+              <Text style={{fontSize: 15, fontWeight: '700'}}>
+                {article.nickname}
+              </Text>
+              <Text style={{fontSize: 13, fontWeight: '500', color: '#5e5e5e'}}>
+                {getTime(article.created_at)}
+              </Text>
+            </View>
           </View>
-        </View>
-        <TouchableHighlight
-          style={{
-            borderRadius: 20,
-          }}
-          onPress={() => onPress()}
-          underlayColor="#dfdfdf">
-          <Icon
-            name="ellipsis-vertical"
-            style={{fontSize: 22.5, paddingVertical: 4, paddingHorizontal: 5}}
-          />
-        </TouchableHighlight>
-      </View>
-      {/* 게시글 중단(제목, 내용) */}
-      <View style={{paddingVertical: 10}}>
-        <Text style={{fontSize: 17.5, fontWeight: '700', marginVertical: 10}}>
-          {article.title}
-        </Text>
-        <Text style={{fontSize: 14}}>{article.content}</Text>
-      </View>
-      {/* 게시글 하단(좋아요, 댓글) */}
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingVertical: 2.5,
-        }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginHorizontal: 2,
-          }}>
           <TouchableHighlight
             style={{
               borderRadius: 20,
@@ -247,211 +229,260 @@ export default function ({route}) {
             onPress={() => onPress()}
             underlayColor="#dfdfdf">
             <Icon
-              name="heart-outline"
-              color="#ff8000"
-              style={{
-                fontSize: 22.5,
-                paddingVertical: 5,
-                paddingHorizontal: 6,
-                // backgroundColor: 'white',
-                borderRadius: 20,
-              }}
+              name="ellipsis-vertical"
+              style={{fontSize: 22.5, paddingVertical: 4, paddingHorizontal: 5}}
             />
           </TouchableHighlight>
-          <Text
-            style={{
-              fontSize: 18,
-              color: '#ff8000',
-            }}>
-            {article.likesCnt}
-          </Text>
         </View>
+        {/* 게시글 중단(제목, 내용) */}
+        <View style={{paddingVertical: 10}}>
+          <Text style={{fontSize: 17.5, fontWeight: '700', marginVertical: 10}}>
+            {article.title}
+          </Text>
+          <Text style={{fontSize: 14}}>{article.content}</Text>
+        </View>
+        {/* 게시글 하단(좋아요, 댓글) */}
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            marginHorizontal: 2,
+            paddingVertical: 2.5,
           }}>
-          <TouchableHighlight
-            style={{
-              borderRadius: 20,
-            }}
-            onPress={() => onPress()}
-            underlayColor="#dfdfdf">
-            <Icon
-              name="chatbubbles-outline"
-              color="#058AB3"
-              style={{
-                fontSize: 22.5,
-                paddingVertical: 5,
-                paddingHorizontal: 6,
-                // backgroundColor: 'white',
-                borderRadius: 20,
-              }}
-            />
-          </TouchableHighlight>
-          <Text
-            style={{
-              fontSize: 18,
-              color: '#058AB3',
-            }}>
-            {article.commentsCnt}
-          </Text>
-        </View>
-      </View>
-      {/* 게시글 최하단(댓글) */}
-      <View style={{paddingVertical: 5}}>
-        <View style={{flexDirection: 'row'}}>
-          <Text
-            style={{
-              fontSize: 15,
-              fontWeight: '700',
-            }}>
-            댓글
-          </Text>
-          <Text style={{fontSize: 15, marginHorizontal: 7}}>
-            {article.commentsCnt}
-          </Text>
-        </View>
-      </View>
-      {/* 댓글 작성폼 */}
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingVertical: 5,
-          borderBottomWidth: 2,
-          borderBottomColor: '#dbdbdb',
-        }}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Icon name="person-circle" style={{fontSize: 40, color: '#ff8000'}} />
           <View
             style={{
-              marginHorizontal: 5,
-              flex: 1,
-              flexDirection: 'column',
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginHorizontal: 2,
             }}>
-            <Text
-              onPress={() => {
-                setModalVisible(true);
-              }}
+            <TouchableHighlight
               style={{
-                flex: 1,
-                textAlignVertical: 'center',
-                color: '#5e5e5e',
+                borderRadius: 20,
+              }}
+              onPress={() => onPress()}
+              underlayColor="#dfdfdf">
+              <Icon
+                name="heart-outline"
+                color="#ff8000"
+                style={{
+                  fontSize: 22.5,
+                  paddingVertical: 5,
+                  paddingHorizontal: 6,
+                  // backgroundColor: 'white',
+                  borderRadius: 20,
+                }}
+              />
+            </TouchableHighlight>
+            <Text
+              style={{
+                fontSize: 18,
+                color: '#ff8000',
               }}>
-              댓글 작성하기..
+              {article.likesCnt}
             </Text>
           </View>
-          <Modal
+          <View
             style={{
-              margin: 0,
-            }}
-            animationIn="slideInUp"
-            animationInTiming={500}
-            animationOut="fadeOut"
-            animationOutTiming={500}
-            isVisible={modalVisible}
-            useNativeDriver={true}
-            // hideModalContentWhileAnimating={true}
-            onModalShow={() => {
-              textInput.focus();
-            }}
-            onBackdropPress={() => {
-              setModalVisible(false);
-              setIsReply(false);
-            }}
-            onBackButtonPress={() => {
-              setModalVisible(false);
-              setIsReply(false);
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginHorizontal: 2,
             }}>
+            <TouchableHighlight
+              style={{
+                borderRadius: 20,
+              }}
+              onPress={() => onPress()}
+              underlayColor="#dfdfdf">
+              <Icon
+                name="chatbubbles-outline"
+                color="#058AB3"
+                style={{
+                  fontSize: 22.5,
+                  paddingVertical: 5,
+                  paddingHorizontal: 6,
+                  // backgroundColor: 'white',
+                  borderRadius: 20,
+                }}
+              />
+            </TouchableHighlight>
+            <Text
+              style={{
+                fontSize: 18,
+                color: '#058AB3',
+              }}>
+              {article.commentsCnt}
+            </Text>
+          </View>
+        </View>
+        {/* 게시글 최하단(댓글) */}
+        <View style={{paddingVertical: 5}}>
+          <View style={{flexDirection: 'row'}}>
+            <Text
+              style={{
+                fontSize: 15,
+                fontWeight: '700',
+              }}>
+              댓글
+            </Text>
+            <Text style={{fontSize: 15, marginHorizontal: 7}}>
+              {article.commentsCnt}
+            </Text>
+          </View>
+        </View>
+        {/* 댓글 작성폼 */}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingVertical: 5,
+            borderBottomWidth: 2,
+            borderBottomColor: '#dbdbdb',
+          }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Icon
+              name="person-circle"
+              style={{fontSize: 40, color: '#ff8000'}}
+            />
             <View
               style={{
+                marginHorizontal: 5,
                 flex: 1,
-                justifyContent: 'flex-end',
-                // backgroundColor: 'rgba(52, 52, 52, 0.5)',
+                flexDirection: 'column',
               }}>
-              {isReply === true && (
-                <View
-                  style={{
-                    backgroundColor: '#b0b0b0',
-                    padding: 15,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Text style={{fontSize: 14, color: '#414141'}}>
-                    답글 남기는 중...
-                  </Text>
-                  <TouchableOpacity
-                    activeOpacity={1}
-                    onPress={() => {
-                      setIsReply(false);
-                      setModalVisible(false);
-                    }}>
-                    <Text style={{fontSize: 14, color: '#414141'}}>취소</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
+              <Text
+                onPress={() => {
+                  setModalVisible(true);
+                }}
+                style={{
+                  flex: 1,
+                  textAlignVertical: 'center',
+                  color: '#5e5e5e',
+                }}>
+                댓글 작성하기..
+              </Text>
+            </View>
+            <Modal
+              style={{
+                margin: 0,
+              }}
+              animationIn="slideInUp"
+              animationInTiming={500}
+              animationOut="fadeOut"
+              animationOutTiming={500}
+              isVisible={modalVisible}
+              useNativeDriver={true}
+              // hideModalContentWhileAnimating={true}
+              onModalShow={() => {
+                textInput.focus();
+              }}
+              onBackdropPress={() => {
+                setModalVisible(false);
+                setIsReply(false);
+                setTextInput2(null);
+              }}
+              onBackButtonPress={() => {
+                setModalVisible(false);
+                setIsReply(false);
+                setTextInput2(null);
+              }}>
               <View
                 style={{
-                  backgroundColor: 'white',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  padding: 5,
+                  flex: 1,
+                  justifyContent: 'flex-end',
+                  // backgroundColor: 'rgba(52, 52, 52, 0.5)',
                 }}>
-                <Icon
-                  name="person-circle"
-                  style={{
-                    fontSize: 40,
-                    color: '#ff8000',
-                  }}
-                />
-                {(isReply === false && (
-                  <TextInput
-                    multiline={true}
-                    placeholder="댓글 작성하기.."
-                    ref={(input) => {
-                      textInput = input;
-                    }}
-                    style={{flex: 1, color: 'red', fontSize: 15}}
-                  />
-                )) || (
-                  <TextInput
-                    multiline={true}
-                    placeholder="답글 작성하기.."
-                    ref={(input) => {
-                      textInput = input;
-                    }}
-                    style={{flex: 1, color: 'red', fontSize: 15}}
-                  />
-                )}
-                <TouchableHighlight
-                  style={{
-                    borderRadius: 20,
-                  }}
-                  onPress={() => onPress()}
-                  underlayColor="#dfdfdf">
-                  <Icon
-                    name="paper-plane-outline"
-                    color="#058AB3"
+                {isReply === true && (
+                  <View
                     style={{
-                      fontSize: 30,
-                      paddingVertical: 5,
-                      paddingHorizontal: 6,
-                      // backgroundColor: 'white',
-                      borderRadius: 20,
+                      backgroundColor: '#b0b0b0',
+                      padding: 15,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Text style={{fontSize: 14, color: '#414141'}}>
+                      답글 남기는 중...
+                    </Text>
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => {
+                        setIsReply(false);
+                        setModalVisible(false);
+                        setTextInput2(null);
+                      }}>
+                      <Text style={{fontSize: 14, color: '#414141'}}>취소</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+                <View
+                  style={{
+                    backgroundColor: 'white',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    padding: 5,
+                  }}>
+                  <Icon
+                    name="person-circle"
+                    style={{
+                      fontSize: 40,
+                      color: '#ff8000',
                     }}
                   />
-                </TouchableHighlight>
+                  {(isReply === false && (
+                    <TextInput
+                      multiline={true}
+                      placeholder="댓글 작성하기.."
+                      ref={(input) => {
+                        textInput = input;
+                      }}
+                      style={{flex: 1, color: 'red', fontSize: 15}}
+                      onChangeText={(text) => {
+                        setTextInput2(text);
+                      }}
+                      value={textInput2}
+                    />
+                  )) || (
+                    <TextInput
+                      multiline={true}
+                      placeholder="답글 작성하기.."
+                      ref={(input) => {
+                        textInput = input;
+                      }}
+                      style={{flex: 1, color: 'red', fontSize: 15}}
+                      onBlur={(text) => {
+                        setTextInput2(text);
+                      }}
+                      value={textInput2}
+                    />
+                  )}
+                  {(textInput2 && (
+                    <TouchableHighlight
+                      style={{
+                        borderRadius: 20,
+                      }}
+                      onPress={() => goComment()}
+                      underlayColor="#dfdfdf">
+                      <Icon
+                        name="paper-plane-outline"
+                        color="#058AB3"
+                        style={{
+                          fontSize: 30,
+                          paddingVertical: 5,
+                          paddingHorizontal: 6,
+                          // backgroundColor: 'white',
+                          borderRadius: 20,
+                        }}
+                      />
+                    </TouchableHighlight>
+                  )) || <Text></Text>}
+                </View>
               </View>
-            </View>
-          </Modal>
+            </Modal>
+          </View>
         </View>
+        {/* 댓글목록 파트 */}
+        {comments2}
       </View>
-      {/* 댓글목록 파트 */}
-      {comments2}
-    </View>
+    </ScrollView>
   );
 }
 
