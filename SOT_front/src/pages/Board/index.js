@@ -12,15 +12,44 @@ import {
 import 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {CommonContext} from '../../context/CommonContext';
+import { color } from 'react-native-reanimated';
 
 const Board = ({navigation, route}) => {
   const {serverUrl} = useContext(CommonContext);
-
+  let cnt = 0;
+  const [count, setCount] = useState(0);
   const [postList, setPostList] = useState([]);
 
   useEffect(() => {
     refreshList();
   }, []);
+
+  const gotoWrite = () => {
+    navigation.navigate('WritePost', {
+      boardname: route.params.name,
+      boardid: route.params.id,
+    });
+  }
+
+  function reLoad(){
+    axios
+      .get(`${serverUrl}/board/${route.params.id}`, {
+        // headers: {
+        //   Authorization: `JWT ${user.token}`,
+        // },
+      })
+      .then((response) => {
+        setPostList(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    cnt = cnt + 1;
+    setCount(cnt);
+    console.log(route.params.isRe);
+    console.log(cnt);
+  }
 
   function refreshList() {
     axios
@@ -41,7 +70,11 @@ const Board = ({navigation, route}) => {
   }
 
   return (
+    
     <View style={styles.box}>
+      { (count === 0 && route.params.isRe)
+        ? (reLoad())
+        : (console.log('여기야'))}
       <FlatList
         data={postList}
         keyExtractor={(item, index) => index.toString()}
@@ -55,12 +88,7 @@ const Board = ({navigation, route}) => {
 
       <TouchableOpacity
         style={styles.writeBtn}
-        onPress={() =>
-          navigation.navigate('WritePost', {
-            boardname: route.params.name,
-            boardid: route.params.id,
-          })
-        }>
+        onPress={gotoWrite}>
         <Text style={{color: 'white', fontSize: 15}}>글작성</Text>
       </TouchableOpacity>
     </View>
