@@ -70,15 +70,6 @@ const Board = ({navigation, route}) => {
       });
   }
 
-  // const SingleArti = () => {
-
-
-
-  //   return (
-
-  //   );
-  // }
-
   return (
     <View style={styles.box}>
       {count === 0 && route.params.isRe ? reLoad() : console.log('여기야')}
@@ -94,40 +85,21 @@ const Board = ({navigation, route}) => {
             </View>
           ))
         }
-
-
-
-
-
-        <TouchableOpacity style={styles.writeBtn} onPress={gotoWrite}>
-          <Text style={{color: 'white', fontSize: 15}}>글작성</Text>
-        </TouchableOpacity>
       </ScrollView>
-
-
-      {/* <FlatList
-        data={postList}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item}) => (
-          <View>
-            <Text style={styles.item}>{item.title}</Text>
-            <Text style={styles.item}>{item.content}</Text>
-            <Text style={styles.item}>{item.nickname}</Text>
-          </View>
-        )}></FlatList> */}
+      <TouchableOpacity style={styles.writeBtn} onPress={gotoWrite}>
+        <Text style={{color: 'white', fontSize: 15}}>글작성</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   box: {
-    // flex: 1,
-    // backgroundColor: 'red',
+    flex: 1,
   },
 
   container: {
-    // flex: 1,
-    // backgroundColor: 'gray',
+    
   },
 
   writeBtn: {
@@ -137,6 +109,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 50,
+    position: 'absolute',
+    bottom: 20,
+    left: 160,
   },
 });
 
