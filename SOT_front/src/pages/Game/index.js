@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {Text, View, StyleSheet, ScrollView} from 'react-native';
 import {DataTable} from 'react-native-paper';
+import axios from 'axios';
+import { CommonContext } from "../../context/CommonContext";
 
 const Game = () => {
+
+  const { serverUrl, user, setUser } = useContext(CommonContext);
+
   return (
     <ScrollView style={styles.scroll}>
+      <View style={{backgroundColor: '#ff8000', paddingLeft: 15, borderBottomWidth: 1,
+        borderBottomColor: '#df380f', height: 56, justifyContent: 'center'}}>
+        <Text style={{fontSize: 12, color: 'white'}}>SOT</Text>
+        <Text style={{color: 'white', fontWeight: '700', fontSize: 18}}>
+          {user.schoolName}
+        </Text>
+      </View>
       <View style={{alignItems: 'center'}}>
         <View style={styles.gameWindow}></View>
 
@@ -75,7 +87,7 @@ const styles = StyleSheet.create({
     width: 350,
     height: 250,
     backgroundColor: 'gray',
-    marginTop: 50,
+    marginTop: 20,
   },
 
   tableView: {

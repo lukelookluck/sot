@@ -9,12 +9,13 @@ const styles = StyleSheet.create({
   },
   item: {
     fontSize: 20,
+    marginLeft: 15,
   },
   text_box: {
-    // borderBottomWidth: 0.5,
-    // borderBottomColor: "gray",
-    borderTopWidth: 0.5,
-    borderTopColor: "gray",
+    borderBottomWidth: 0.5,
+    borderBottomColor: "gray",
+    // borderTopWidth: 0.5,
+    // borderTopColor: "gray",
     justifyContent: 'center',
     height: 50,
   }
@@ -70,6 +71,13 @@ const List = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
+      <View style={{backgroundColor: '#ff8000', paddingLeft: 15, borderBottomWidth: 1,
+        borderBottomColor: '#df380f', height: 56, justifyContent: 'center'}}>
+        <Text style={{fontSize: 12, color: 'white'}}>SOT</Text>
+        <Text style={{color: 'white', fontWeight: '700', fontSize: 18}}>
+          {user.schoolName}
+        </Text>
+      </View>
       {/* { (count === 0 && route.params.isRef)
         ? (reLoad())
         : (console.log('여기야'))} */}
