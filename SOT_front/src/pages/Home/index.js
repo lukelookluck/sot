@@ -28,6 +28,13 @@ export default function Home({navigation}) {
   // 특정게시글
   const [certainArticleList, setCertainArticleList] = useState([]);
 
+  React.useEffect(() =>
+    navigation.addListener('focus', () => {
+      refreshBoardList();
+      refreshWholeArticleList();
+    }),
+  );
+
   useEffect(() => {
     refreshBoardList();
     refreshWholeArticleList();

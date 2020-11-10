@@ -1,13 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Text, View, TouchableHighlight} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function SingleArticle(props) {
   function onPress() {
-    props.navigation.navigate('ArticleDisplay', {article: props.article});
+    props.navigation.navigate('ArticleDisplay', {
+      article: props.article,
+      idx: props.idx,
+      setArticle: setArticle,
+      article: article,
+    });
   }
 
-  console.log(props.article);
+  const [article, setArticle] = useState(props.article);
 
   function getTime(myTime) {
     let theTime = null;
@@ -72,20 +77,18 @@ export default function SingleArticle(props) {
               color="#77a6b7"
             />
             <Text style={{fontSize: 13, fontWeight: '700'}}>
-              {props.article.nickname}
+              {article.nickname}
             </Text>
           </View>
           <Text style={{fontSize: 12, color: '#9f9f9f'}}>
-            {getTime(props.article.created_at)}
+            {getTime(article.created_at)}
           </Text>
         </View>
 
         {/* mid */}
         <View style={{marginBottom: 0}}>
-          <Text style={{fontSize: 13, fontWeight: '700'}}>
-            {props.article.title}
-          </Text>
-          <Text style={{fontSize: 12}}>{props.article.content}</Text>
+          <Text style={{fontSize: 13, fontWeight: '700'}}>{article.title}</Text>
+          <Text style={{fontSize: 12}}>{article.content}</Text>
         </View>
 
         {/* bottom */}
@@ -100,7 +103,7 @@ export default function SingleArticle(props) {
               fontSize: 11,
               fontWeight: '700',
             }}>
-            {props.pressed === false && props.article.boardName}
+            {props.pressed === false && article.boardName}
           </Text>
           <View
             style={{
@@ -116,7 +119,7 @@ export default function SingleArticle(props) {
                 color="#ff8000"
                 style={{fontSize: 15, marginRight: 2}}></Icon>
               <Text style={{fontSize: 11, color: '#ff8000'}}>
-                {props.article.likesCnt}
+                {article.likesCnt}
               </Text>
             </View>
             <View
@@ -128,7 +131,7 @@ export default function SingleArticle(props) {
                 color="#058AB3"
                 style={{fontSize: 15, marginRight: 2}}></Icon>
               <Text style={{fontSize: 11, color: '#058AB3'}}>
-                {props.article.commentsCnt}
+                {article.commentsCnt}
               </Text>
             </View>
           </View>
