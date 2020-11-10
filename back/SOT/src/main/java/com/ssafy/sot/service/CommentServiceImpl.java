@@ -27,4 +27,9 @@ public class CommentServiceImpl implements CommentService {
 		return commentDAO.deleteComment(id) == 1;
 	}
 
+	@Override
+	public boolean createReplyComment(CommentDTO commentDTO) {
+		return commentDAO.insertReplyComment(commentDTO) == 1;
+	}
+
 }

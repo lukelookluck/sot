@@ -1,5 +1,6 @@
 package com.ssafy.sot.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import com.ssafy.sot.dto.ArticleDTO;
 import com.ssafy.sot.dto.ArticleFullInfo;
 import com.ssafy.sot.dto.ArticleWithComment;
 import com.ssafy.sot.dto.CommentDTO;
+import com.ssafy.sot.dto.CommentWithReply;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -29,7 +31,12 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public ArticleWithComment showArticle(int id) {
 		ArticleDTO article = articleDAO.selectArticleById(id);
-		List<CommentDTO> comments = commentDAO.selectCommentsByArticleId(id);
+		List<CommentDTO> originalComments = commentDAO.selectCommentsByArticleId(id);
+		List<CommentWithReply> comments = new ArrayList<>();
+		for(CommentDTO originalComment : originalComments){
+			CommentWithReply comment = new CommentWithReply(originalComment, commentDAO.selectReplyCommentsByParentId(originalComment.getId()));
+			comments.add(comment);
+		}
 		if(article != null) {
 			ArticleWithComment AWC = new ArticleWithComment(article, comments);
 			return AWC;

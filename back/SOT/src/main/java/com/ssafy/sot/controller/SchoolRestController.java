@@ -166,6 +166,16 @@ public class SchoolRestController {
 		return new ResponseEntity<>(commentService.createComment(commentDTO), HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "답댓글 작성, (created_at, updated_at 같은 것들은 무시하고 필수값만 넣으면 됨)")
+	@PostMapping("/board/{boardId}/{articleId}/{commentId}")
+	public Object createReplyComment(@PathVariable("boardId") int boardId,
+								@PathVariable("articleId") int articleId,
+								@PathVariable("commentId") int commentId, CommentDTO commentDTO) {
+		commentDTO.setArticleId(articleId);
+		commentDTO.setParentId(commentId);
+		return new ResponseEntity<>(commentService.createReplyComment(commentDTO), HttpStatus.OK);
+	}
+	
 	@ApiOperation(value = "댓글 수정, (created_at, updated_at 같은 것들은 무시하고 필수값만 넣으면 됨)")
 	@PutMapping("/board/{boardId}/{articleId}/{commentId}")
 	public Object updateComment(@PathVariable("boardId") int boardId,

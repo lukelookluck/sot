@@ -22,7 +22,28 @@ public class CommentDTO {
 	Timestamp updated_at;
 	@ApiParam(value = "좋아요 수", required = false, hidden = true)
 	int likesCnt;
+	@ApiParam(value = "부모 댓글 아이디(자기자신 FK)", required = false, hidden = true)
+	int parentId;
 	
+	
+	@Override
+	public String toString() {
+		return "CommentDTO [id=" + id + ", content=" + content + ", articleId=" + articleId + ", userId=" + userId
+				+ ", nickname=" + nickname + ", created_at=" + created_at + ", updated_at=" + updated_at + ", likesCnt="
+				+ likesCnt + ", parentId=" + parentId + "]";
+	}
+	public int getParentId() {
+		return parentId;
+	}
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
+	}
+	public int getLikesCnt() {
+		return likesCnt;
+	}
+	public void setLikesCnt(int likesCnt) {
+		this.likesCnt = likesCnt;
+	}
 	public int getId() {
 		return id;
 	}
@@ -71,12 +92,6 @@ public class CommentDTO {
 	}
 	public void setLikes(int likeCnt) {
 		this.likesCnt = likeCnt;
-	}
-	@Override
-	public String toString() {
-		return "CommentDTO [id=" + id + ", content=" + content + ", articleId=" + articleId + ", userId=" + userId
-				+ ", nickname=" + nickname + ", created_at=" + created_at + ", updated_at=" + updated_at + ", likesCnt="
-				+ likesCnt + "]";
 	}
 	
 }

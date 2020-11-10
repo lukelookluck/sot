@@ -15,6 +15,8 @@ public class ArticleWithComment {
 	Timestamp updated_at;
 	int commentsCnt;
 	int likesCnt;
+	List<CommentWithReply> comments;
+	
 	public int getCommentsCnt() {
 		return commentsCnt;
 	}
@@ -27,7 +29,7 @@ public class ArticleWithComment {
 	public void setLikesCnt(int likesCnt) {
 		this.likesCnt = likesCnt;
 	}
-	List<CommentDTO> comments;
+	
 	public int getId() {
 		return id;
 	}
@@ -76,10 +78,10 @@ public class ArticleWithComment {
 	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
 	}
-	public List<CommentDTO> getComments() {
+	public List<CommentWithReply> getComments() {
 		return comments;
 	}
-	public void setComments(List<CommentDTO> comments) {
+	public void setComments(List<CommentWithReply> comments) {
 		this.comments = comments;
 	}
 	
@@ -90,7 +92,7 @@ public class ArticleWithComment {
 				+ updated_at + ", commentsCnt=" + commentsCnt + ", likesCnt=" + likesCnt + ", comments=" + comments
 				+ "]";
 	}
-	public ArticleWithComment(ArticleDTO article, List<CommentDTO> comments) {
+	public ArticleWithComment(ArticleDTO article, List<CommentWithReply> comments) {
 		this.id = article.getId();
 		this.title = article.getTitle();
 		this.content = article.getContent();

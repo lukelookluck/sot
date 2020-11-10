@@ -13,11 +13,28 @@
 			user.nickname as nickname,
 			comment.created_at,
 			comment.updated_at,
-			(select count(id) from commentlike where commentlike.comment_id = comment.id) as likesCnt
+			(select count(id) from commentlike where commentlike.comment_id = comment.id) as likesCnt,
+			comment.parent_id as parentId
 		from comment
 		join user
 		on comment.user_id = user.id
 		where article_id = #{articleId}
+		and parent_id is null
+	</select>
+	
+	<select id="showReplyComments" resultType="CommentDTO">
+		select comment.id,
+			comment.content,
+			comment.user_id as userId,
+			user.nickname as nickname,
+			comment.created_at,
+			comment.updated_at,
+			(select count(id) from commentlike where commentlike.comment_id = comment.id) as likesCnt,
+			comment.parent_id as parentId
+		from comment
+		join user
+		on comment.user_id = user.id
+		where parent_id = #{parentId}
 	</select>
 	
 	<insert id="insertComment" parameterType="CommentDTO">
@@ -25,6 +42,15 @@
 		values(#{content},
 				#{articleId},
 				#{userId}
+			)
+	</insert>
+	
+	<insert id="insertReplyComment" parameterType="CommentDTO">
+		insert into comment(content, article_id, user_id, parent_id)
+		values(#{content},
+				#{articleId},
+				#{userId},
+				#{parentId}
 			)
 	</insert>
 	
