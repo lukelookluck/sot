@@ -19,7 +19,6 @@ import {CommonContext} from '../../context/CommonContext';
 export default function ({route}) {
   const {serverUrl, user, setUser} = useContext(CommonContext);
   const [article, setArticle] = useState([]);
-
   useEffect(() => {
     getArticleInfo();
   }, []);
@@ -31,7 +30,6 @@ export default function ({route}) {
       )
       .then((res) => {
         setArticle(res.data);
-        console.log('??', res.data);
         // console.log(article);
       })
       .catch((err) => {
@@ -40,8 +38,9 @@ export default function ({route}) {
   }
 
   const comments = article.comments || [];
+  console.log(article);
 
-  function writeReply() {
+  function writeReply(data) {
     Alert.alert(
       '답글을 작성하시겠습니까?',
       '',
@@ -54,6 +53,7 @@ export default function ({route}) {
           onPress: () => {
             setModalVisible(true);
             setIsReply(true);
+            setReplyId(data.id);
           },
         },
       ],
@@ -61,9 +61,10 @@ export default function ({route}) {
     );
   }
 
-  const comments2 = comments.reverse().map((comment) => {
+  const comments2 = comments.map((comment) => {
     return (
       <View
+        key={comment.id}
         style={{
           paddingVertical: 5,
           borderBottomWidth: 2,
@@ -104,7 +105,7 @@ export default function ({route}) {
                   style={{
                     marginLeft: 15,
                   }}
-                  onPress={() => writeReply()}
+                  onPress={() => writeReply(comment)}
                   activeOpacity={1}>
                   <Text style={{fontSize: 12, color: '#5e5e5e'}}>
                     답글 달기..
@@ -173,6 +174,24 @@ export default function ({route}) {
   }
 
   function goComment() {
+    if (replyId) {
+      axios
+        .post(
+          `${serverUrl}/board/${article.boardId}/${article.id}/${replyId}/?content=${textInput2}&userId=${user.id}`,
+        )
+        .then((res) => {
+          console.log(res);
+          setModalVisible(false);
+          setIsReply(false);
+          setTextInput2(null);
+          setReplyId(null);
+          getArticleInfo();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      return;
+    }
     axios
       .post(
         `${serverUrl}/board/${article.boardId}/${article.id}/?content=${textInput2}&userId=${user.id}`,
@@ -191,6 +210,7 @@ export default function ({route}) {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [isReply, setIsReply] = useState(false);
+  const [replyId, setReplyId] = useState(null);
 
   const [textInput2, setTextInput2] = useState(null);
   let textInput = '';
@@ -447,7 +467,7 @@ export default function ({route}) {
                         textInput = input;
                       }}
                       style={{flex: 1, color: 'red', fontSize: 15}}
-                      onBlur={(text) => {
+                      onChangeText={(text) => {
                         setTextInput2(text);
                       }}
                       value={textInput2}
