@@ -1,8 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Text, View, TouchableHighlight} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { CommonContext } from "../../context/CommonContext";
 
 export default function Header(props) {
+
+  const { serverUrl, user, setUser } = useContext(CommonContext);
+
   const onPress = () => {
     props.setPressed(false);
     props.setMyloading(false);
@@ -19,6 +23,7 @@ export default function Header(props) {
         backgroundColor: '#ff8000',
         borderBottomWidth: 1,
         borderBottomColor: '#df380f',
+        height: 56,
       }}>
       <View>
         {(props.pressed === true && (
@@ -45,14 +50,14 @@ export default function Header(props) {
                 fontWeight: '700',
                 fontSize: 18,
               }}>
-              {props.name}
+              {user.schoolName}
             </Text>
           </View>
         )) || (
           <View style={{paddingLeft: 15}}>
-            <Text style={{fontSize: 12, color: 'white'}}>S.O.T</Text>
+            <Text style={{fontSize: 12, color: 'white'}}>SOT</Text>
             <Text style={{color: 'white', fontWeight: '700', fontSize: 18}}>
-              {props.name}
+              {user.schoolName}
             </Text>
           </View>
         )}
