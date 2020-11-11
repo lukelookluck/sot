@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Text, View, TouchableHighlight, Image} from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, TouchableHighlight, Image } from 'react-native';
 import PartBoardSingle from '../Single';
 import SingleArticle from '../SingleArticle';
 
@@ -44,10 +44,10 @@ export default function PartBoard(props) {
                       marginVertical: 10,
                       paddingHorizontal: 10,
                     }}>
-                    <Text style={{fontSize: 16, fontWeight: '700'}}>
+                    <Text style={{ fontSize: 16, fontWeight: '700' }}>
                       {props.PartName}
                     </Text>
-                    <Text style={{color: '#ff8000'}}>더 보기</Text>
+                    <Text style={{ color: '#ff8000' }}>더 보기</Text>
                   </View>
                 </TouchableHighlight>
                 {props.certainArticleList.map((article, idx) => (
@@ -62,29 +62,30 @@ export default function PartBoard(props) {
                 ))}
               </View>
             )) || (
-              <View>
-                {props.wholeArticleList.map((article, idx) => (
-                  <View key={idx}>
-                    <SingleArticle
-                      idx={idx}
-                      article={article}
-                      pressed={props.pressed}
-                      navigation={props.navigation}
-                    />
-                  </View>
-                ))}
-              </View>
-            )}
+                <View>
+                  {props.wholeArticleList.map((article, idx) => (
+                    <View key={article.id}>
+                      <SingleArticle
+                        idx={idx}
+                        article={article}
+                        pressed={props.pressed}
+                        navigation={props.navigation}
+                      />
+                    </View>
+                  ))}
+                </View>
+              )}
           </View>
+
         </View>
       )) || (
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <Image
-            source={require('./spiner.gif')}
-            style={{width: 100, height: 100}}
-          />
-        </View>
-      )}
+          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+            <Image
+              source={require('./spiner.gif')}
+              style={{ width: 100, height: 100 }}
+            />
+          </View>
+        )}
     </View>
   );
 }
