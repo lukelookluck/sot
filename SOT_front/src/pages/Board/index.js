@@ -34,8 +34,8 @@ const Board = ({navigation, route}) => {
   };
 
   function reLoad() {
-    setPostList([]);
     refreshList();
+    route.params.isRe = 'no';
     console.log(route.params.isRe);
   }
 
@@ -48,6 +48,7 @@ const Board = ({navigation, route}) => {
       })
       .then((response) => {
         console.log('here????');
+        setPostList([]);
         console.log(response.data);
         setPostList(response.data);
       })
@@ -64,9 +65,7 @@ const Board = ({navigation, route}) => {
   return (
     <View style={styles.box}>
       <ScrollView>
-        {msg === 'no' && route.params.isRe && route.params.isRe === 'yes'
-        ? reLoad()
-        : noLoad()}
+        {msg === 'no' && route.params.isRe && route.params.isRe === 'yes' && (reLoad()) || (noLoad())}
         {
           postList.length === 0
           ? (<View style={{justifyContent: 'center', alignItems: 'center', flex: 1,}}>
