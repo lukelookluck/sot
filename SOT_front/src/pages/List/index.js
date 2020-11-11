@@ -63,7 +63,9 @@ const List = ({navigation, route}) => {
   }
 
   const goBoard = (b_name, b_id) => {
-    navigation.navigate('Board', {name: b_name, id: b_id});
+    console.log('유저의 아이디는');
+    console.log(user.id);
+    navigation.navigate('Board', {name: b_name, id: b_id, u_id: user.id});
   };
 
   const goReqNewBoard = () => {
