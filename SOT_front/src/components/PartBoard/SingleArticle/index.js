@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Text, View, TouchableHighlight} from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, TouchableHighlight } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function SingleArticle(props) {
@@ -7,8 +7,6 @@ export default function SingleArticle(props) {
     props.navigation.navigate('ArticleDisplay', {
       article: props.article,
       idx: props.idx,
-      setArticle: setArticle,
-      article: article,
     });
   }
 
@@ -72,23 +70,23 @@ export default function SingleArticle(props) {
               justifyContent: 'space-between',
             }}>
             <Icon
-              style={{fontSize: 18, marginRight: 5}}
+              style={{ fontSize: 18, marginRight: 5 }}
               name="person"
               color="#77a6b7"
             />
-            <Text style={{fontSize: 13, fontWeight: '700'}}>
+            <Text style={{ fontSize: 13, fontWeight: '700' }}>
               {article.nickname}
             </Text>
           </View>
-          <Text style={{fontSize: 12, color: '#9f9f9f'}}>
+          <Text style={{ fontSize: 12, color: '#9f9f9f' }}>
             {getTime(article.created_at)}
           </Text>
         </View>
 
         {/* mid */}
-        <View style={{marginBottom: 0}}>
-          <Text style={{fontSize: 13, fontWeight: '700'}}>{article.title}</Text>
-          <Text style={{fontSize: 12}}>{article.content}</Text>
+        <View style={{ marginBottom: 0 }}>
+          <Text style={{ fontSize: 13, fontWeight: '700' }}>{article.title}</Text>
+          <Text style={{ fontSize: 12 }}>{article.content}</Text>
         </View>
 
         {/* bottom */}
@@ -117,8 +115,8 @@ export default function SingleArticle(props) {
               <Icon
                 name="heart-outline"
                 color="#ff8000"
-                style={{fontSize: 15, marginRight: 2}}></Icon>
-              <Text style={{fontSize: 11, color: '#ff8000'}}>
+                style={{ fontSize: 15, marginRight: 2 }}></Icon>
+              <Text style={{ fontSize: 11, color: '#ff8000' }}>
                 {article.likesCnt}
               </Text>
             </View>
@@ -129,8 +127,8 @@ export default function SingleArticle(props) {
               <Icon
                 name="chatbubbles-outline"
                 color="#058AB3"
-                style={{fontSize: 15, marginRight: 2}}></Icon>
-              <Text style={{fontSize: 11, color: '#058AB3'}}>
+                style={{ fontSize: 15, marginRight: 2 }}></Icon>
+              <Text style={{ fontSize: 11, color: '#058AB3' }}>
                 {article.commentsCnt}
               </Text>
             </View>
