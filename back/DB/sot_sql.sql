@@ -50,6 +50,7 @@ drop table if exists `comment`;
 drop table if exists article;
 drop table if exists board;
 
+# 1번 게시판은 공지사항, 2번 게시판은 QnA로 활용, 전체 사용자가 이용 가능
 create table `board` (
 	`id` int NOT NULL AUTO_INCREMENT,
     `name` varchar(100) NOT NULL,
@@ -111,10 +112,12 @@ create table `comment` (
     `user_id` int NOT NULL,
     `created_at` timestamp default current_timestamp,
     `updated_at` timestamp,
+    `parent_id` int,
     
     PRIMARY KEY (`id`),
     FOREIGN KEY (`article_id`) REFERENCES `article` (`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`parent_id`) REFERENCES `comment` (`id`) ON DELETE CASCADE
 );
 
 insert into comment (content, article_id, user_id)
@@ -136,6 +139,9 @@ create table `articlelike` (
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 );
 
+insert into articlelike(`article_id`, `user_id`) values(3, 1);
+insert into articlelike(`article_id`, `user_id`) values(3, 2);
+
 create table `commentlike` (
 	`id` int NOT NULL AUTO_INCREMENT,
     `comment_id` int NOT NULL,
@@ -146,6 +152,10 @@ create table `commentlike` (
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 );
 
+insert into commentlike(`comment_id`, `user_id`) values(3, 1);
+insert into commentlike(`comment_id`, `user_id`) values(3, 2);
+
+# 유저 알림 (댓글이 달렸습니다~ 같은 거)
 drop table if exists usernotice;
 create table `usernotice` (
 	`id` int NOT NULL AUTO_INCREMENT,
@@ -160,6 +170,7 @@ create table `usernotice` (
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 );
 
+# 게임 랭킹 기록 (수정 가능성 있음)
 drop table if exists ranking;
 create table `ranking` (
 	`id` int NOT NULL AUTO_INCREMENT,
@@ -172,6 +183,7 @@ create table `ranking` (
     FOREIGN KEY (`school_id`) REFERENCES `school` (`id`) ON DELETE CASCADE
 );
 
+# 유저의 게시판 즐겨찾기 (게시글이 아님)
 drop table if exists boardfav;
 create table `boardfav` (
 	`id` int NOT NULL AUTO_INCREMENT,
@@ -185,6 +197,7 @@ create table `boardfav` (
 
 insert into boardfav(board_id, user_id) values(3, 1);
 
+# 게시판 생성자 정보 저장
 drop table if exists boardcreator;
 create table `boardcreator` (
 	`id` int NOT NULL AUTO_INCREMENT,
