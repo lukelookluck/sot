@@ -48,6 +48,16 @@ export default function SingleArticle(props) {
     return theTime;
   }
 
+  const content = (
+    <View>
+      {article.content.length > 30 && (
+        <Text style={{ fontSize: 13, fontWeight: '400' }}>{article.content.substring(0, 30)}...</Text>
+      ) || (<Text style={{ fontSize: 13, fontWeight: '400' }}>{article.content}</Text>)}
+    </View>
+  )
+
+
+
   return (
     <TouchableHighlight onPress={onPress} underlayColor="#dfdfdf">
       <View
@@ -86,7 +96,7 @@ export default function SingleArticle(props) {
         {/* mid */}
         <View style={{ marginBottom: 0 }}>
           <Text style={{ fontSize: 13, fontWeight: '700' }}>{article.title}</Text>
-          <Text style={{ fontSize: 12 }}>{article.content}</Text>
+          {content}
         </View>
 
         {/* bottom */}

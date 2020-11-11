@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Text,
   StyleSheet,
@@ -14,11 +14,11 @@ import axios from 'axios';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
 
-import {CommonContext} from '../../context/CommonContext';
+import { CommonContext } from '../../context/CommonContext';
 
-export default function ({route}) {
-  const {serverUrl, user, setUser} = useContext(CommonContext);
-  const [article, setArticle] = useState([]);
+export default function ({ route }) {
+  const { serverUrl, user, setUser } = useContext(CommonContext);
+  const [article, setArticle] = useState(route.params.article);
   useEffect(() => {
     getArticleInfo();
   }, []);
@@ -30,7 +30,7 @@ export default function ({route}) {
       )
       .then((res) => {
         setArticle(res.data);
-        // console.log(article);
+        console.log('답글', res.data.comments[0].replies);
       })
       .catch((err) => {
         console.log(err.data);
@@ -38,7 +38,6 @@ export default function ({route}) {
   }
 
   const comments = article.comments || [];
-  console.log(article);
 
   function writeReply(data) {
     Alert.alert(
@@ -57,7 +56,7 @@ export default function ({route}) {
           },
         },
       ],
-      {cancelable: true},
+      { cancelable: true },
     );
   }
 
@@ -82,9 +81,9 @@ export default function ({route}) {
             }}>
             <Icon
               name="person-circle"
-              style={{fontSize: 40, color: '#919191'}}
+              style={{ fontSize: 40, color: '#919191' }}
             />
-            <View style={{flexDirection: 'column', marginLeft: 5}}>
+            <View style={{ flexDirection: 'column', marginLeft: 5 }}>
               <Text
                 style={{
                   fontWeight: '700',
@@ -95,9 +94,9 @@ export default function ({route}) {
                 }}>
                 {comment.nickname}
               </Text>
-              <Text style={{fontSize: 13}}>{comment.content}</Text>
-              <View style={{flexDirection: 'row', paddingVertical: 5}}>
-                <Text style={{fontSize: 12, color: '#5e5e5e'}}>
+              <Text style={{ fontSize: 13 }}>{comment.content}</Text>
+              <View style={{ flexDirection: 'row', paddingVertical: 5 }}>
+                <Text style={{ fontSize: 12, color: '#5e5e5e' }}>
                   {getTime(comment.created_at)}
                 </Text>
 
@@ -107,7 +106,7 @@ export default function ({route}) {
                   }}
                   onPress={() => writeReply(comment)}
                   activeOpacity={1}>
-                  <Text style={{fontSize: 12, color: '#5e5e5e'}}>
+                  <Text style={{ fontSize: 12, color: '#5e5e5e' }}>
                     답글 달기..
                   </Text>
                 </TouchableOpacity>
@@ -208,6 +207,17 @@ export default function ({route}) {
       });
   }
 
+  function likeArticle() {
+    axios
+      .post(`${serverUrl}/board/${article.boardId}/${article.id}/like?userId=${user.id}`,)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   const [modalVisible, setModalVisible] = useState(false);
   const [isReply, setIsReply] = useState(false);
   const [replyId, setReplyId] = useState(null);
@@ -230,13 +240,13 @@ export default function ({route}) {
             justifyContent: 'space-between',
             paddingVertical: 5,
           }}>
-          <View style={{flexDirection: 'row'}}>
-            <Icon name="person-circle" style={{fontSize: 40}} />
-            <View style={{marginLeft: 10, justifyContent: 'center'}}>
-              <Text style={{fontSize: 15, fontWeight: '700'}}>
+          <View style={{ flexDirection: 'row' }}>
+            <Icon name="person-circle" style={{ fontSize: 40 }} />
+            <View style={{ marginLeft: 10, justifyContent: 'center' }}>
+              <Text style={{ fontSize: 15, fontWeight: '700' }}>
                 {article.nickname}
               </Text>
-              <Text style={{fontSize: 13, fontWeight: '500', color: '#5e5e5e'}}>
+              <Text style={{ fontSize: 13, fontWeight: '500', color: '#5e5e5e' }}>
                 {getTime(article.created_at)}
               </Text>
             </View>
@@ -249,16 +259,16 @@ export default function ({route}) {
             underlayColor="#dfdfdf">
             <Icon
               name="ellipsis-vertical"
-              style={{fontSize: 22.5, paddingVertical: 4, paddingHorizontal: 5}}
+              style={{ fontSize: 22.5, paddingVertical: 4, paddingHorizontal: 5 }}
             />
           </TouchableHighlight>
         </View>
         {/* 게시글 중단(제목, 내용) */}
-        <View style={{paddingVertical: 10}}>
-          <Text style={{fontSize: 17.5, fontWeight: '700', marginVertical: 10}}>
+        <View style={{ paddingVertical: 10 }}>
+          <Text style={{ fontSize: 17.5, fontWeight: '700', marginVertical: 10 }}>
             {article.title}
           </Text>
-          <Text style={{fontSize: 14}}>{article.content}</Text>
+          <Text style={{ fontSize: 14 }}>{article.content}</Text>
         </View>
         {/* 게시글 하단(좋아요, 댓글) */}
         <View
@@ -277,7 +287,7 @@ export default function ({route}) {
               style={{
                 borderRadius: 20,
               }}
-              onPress={() => onPress()}
+              onPress={() => likeArticle()}
               underlayColor="#dfdfdf">
               <Icon
                 name="heart-outline"
@@ -333,8 +343,8 @@ export default function ({route}) {
           </View>
         </View>
         {/* 게시글 최하단(댓글) */}
-        <View style={{paddingVertical: 5}}>
-          <View style={{flexDirection: 'row'}}>
+        <View style={{ paddingVertical: 5 }}>
+          <View style={{ flexDirection: 'row' }}>
             <Text
               style={{
                 fontSize: 15,
@@ -342,7 +352,7 @@ export default function ({route}) {
               }}>
               댓글
             </Text>
-            <Text style={{fontSize: 15, marginHorizontal: 7}}>
+            <Text style={{ fontSize: 15, marginHorizontal: 7 }}>
               {article.commentsCnt}
             </Text>
           </View>
@@ -357,10 +367,10 @@ export default function ({route}) {
             borderBottomWidth: 2,
             borderBottomColor: '#dbdbdb',
           }}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Icon
               name="person-circle"
-              style={{fontSize: 40, color: '#ff8000'}}
+              style={{ fontSize: 40, color: '#ff8000' }}
             />
             <View
               style={{
@@ -418,7 +428,7 @@ export default function ({route}) {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    <Text style={{fontSize: 14, color: '#414141'}}>
+                    <Text style={{ fontSize: 14, color: '#414141' }}>
                       답글 남기는 중...
                     </Text>
                     <TouchableOpacity
@@ -428,7 +438,7 @@ export default function ({route}) {
                         setModalVisible(false);
                         setTextInput2(null);
                       }}>
-                      <Text style={{fontSize: 14, color: '#414141'}}>취소</Text>
+                      <Text style={{ fontSize: 14, color: '#414141' }}>취소</Text>
                     </TouchableOpacity>
                   </View>
                 )}
@@ -453,26 +463,26 @@ export default function ({route}) {
                       ref={(input) => {
                         textInput = input;
                       }}
-                      style={{flex: 1, color: 'red', fontSize: 15}}
+                      style={{ flex: 1, color: 'red', fontSize: 15 }}
                       onChangeText={(text) => {
                         setTextInput2(text);
                       }}
                       value={textInput2}
                     />
                   )) || (
-                    <TextInput
-                      multiline={true}
-                      placeholder="답글 작성하기.."
-                      ref={(input) => {
-                        textInput = input;
-                      }}
-                      style={{flex: 1, color: 'red', fontSize: 15}}
-                      onChangeText={(text) => {
-                        setTextInput2(text);
-                      }}
-                      value={textInput2}
-                    />
-                  )}
+                      <TextInput
+                        multiline={true}
+                        placeholder="답글 작성하기.."
+                        ref={(input) => {
+                          textInput = input;
+                        }}
+                        style={{ flex: 1, color: 'red', fontSize: 15 }}
+                        onChangeText={(text) => {
+                          setTextInput2(text);
+                        }}
+                        value={textInput2}
+                      />
+                    )}
                   {(textInput2 && (
                     <TouchableHighlight
                       style={{

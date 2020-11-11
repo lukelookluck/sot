@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,10 +12,12 @@ import Header from '../../components/Header';
 import PartBoard from '../../components/PartBoard/Box';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
-import {CommonContext} from '../../context/CommonContext';
+import { CommonContext } from '../../context/CommonContext';
+import SingleArticle from '../../components/PartBoard/SingleArticle';
 
-export default function Home({navigation}) {
-  const {serverUrl, user, setUser} = useContext(CommonContext);
+
+export default function Home({ navigation }) {
+  const { serverUrl, user, setUser } = useContext(CommonContext);
 
   const [temp, setTemp] = useState(null);
   const [pressed, setPressed] = useState(false);
@@ -74,7 +76,8 @@ export default function Home({navigation}) {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        setwholeArticleList([])
+        console.log("전체 새로고침", res.data);
         setwholeArticleList(res.data);
       })
       .catch((err) => {
@@ -129,8 +132,8 @@ export default function Home({navigation}) {
               justifyContent: 'center',
             }}>
             <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 1}}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
               colors={['#ff8000', '#ffff57']}
               style={{
                 borderRadius: 30,
@@ -156,13 +159,13 @@ export default function Home({navigation}) {
                 {data.name.substring(0, 6) + '..'}
               </Text>
             )) || (
-              <Text
-                style={{
-                  fontSize: 12,
-                }}>
-                {data.name}
-              </Text>
-            )}
+                <Text
+                  style={{
+                    fontSize: 12,
+                  }}>
+                  {data.name}
+                </Text>
+              )}
           </View>
         </TouchableHighlight>
       </View>
@@ -172,22 +175,22 @@ export default function Home({navigation}) {
   return (
     <View>
       {(temp === null,
-      pressed === false && <Header name="경북대학교" pressed={pressed} />) || (
-        <Header
-          name={temp}
-          pressed={pressed}
-          setTemp={setTemp}
-          setPressed={setPressed}
-          setMyloading={setMyloading}
-        />
-      )}
+        pressed === false && <Header name="경북대학교" pressed={pressed} />) || (
+          <Header
+            name={temp}
+            pressed={pressed}
+            setTemp={setTemp}
+            setPressed={setPressed}
+            setMyloading={setMyloading}
+          />
+        )}
 
       {/* 무한스크롤 = Flatlist 인듯, 따라서 ScrollView를 Flatlist로 바꿔야함 */}
       <ScrollView
-        style={{marginBottom: 50}}
+        style={{ marginBottom: 50 }}
         showsHorizontalScrollIndicator={false}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <View style={{flexDirection: 'row', paddingLeft: 10}}>{a}</View>
+          <View style={{ flexDirection: 'row', paddingLeft: 10 }}>{a}</View>
         </ScrollView>
 
         <View>
@@ -213,6 +216,7 @@ export default function Home({navigation}) {
             navigation={navigation}
           />
           {/* <PartBoard PartName="즐겨찾는 게시판" /> */}
+
         </View>
       </ScrollView>
     </View>
