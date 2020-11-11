@@ -18,6 +18,12 @@ public class ArticleWithComment {
 	List<CommentWithReply> comments;
 	List<Like> likes;
 	
+	public List<Like> getLikes() {
+		return likes;
+	}
+	public void setLikes(List<Like> likes) {
+		this.likes = likes;
+	}
 	public int getCommentsCnt() {
 		return commentsCnt;
 	}
@@ -86,12 +92,14 @@ public class ArticleWithComment {
 		this.comments = comments;
 	}
 	
+	
+	
 	@Override
 	public String toString() {
 		return "ArticleWithComment [id=" + id + ", title=" + title + ", content=" + content + ", boardId=" + boardId
 				+ ", userId=" + userId + ", nickname=" + nickname + ", created_at=" + created_at + ", updated_at="
 				+ updated_at + ", commentsCnt=" + commentsCnt + ", likesCnt=" + likesCnt + ", comments=" + comments
-				+ "]";
+				+ ", likes=" + likes + "]";
 	}
 	public ArticleWithComment(ArticleDTO article, List<CommentWithReply> comments) {
 		this.id = article.getId();

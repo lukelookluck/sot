@@ -25,7 +25,8 @@ public class LikeServiceImpl implements LikeService {
 		if(!commentLikeDAO.alreadyLikedComment(commentLikeDTO)) {
 			return commentLikeDAO.insertCommentLike(commentLikeDTO) == 1;
 		}
-		return false;		
+		// 이미 좋아요 한 경우 좋아요 취소를 대신 함?
+		return commentLikeDAO.deleteCommentLike(commentLikeDTO) == 1;		
 	}
 
 	@Override
@@ -47,7 +48,7 @@ public class LikeServiceImpl implements LikeService {
 		if(!articleLikeDAO.alreadyLikedArticle(articleLikeDTO)) {
 			return articleLikeDAO.insertArticleLike(articleLikeDTO) == 1;
 		}
-		return false;
+		return articleLikeDAO.deleteArticleLike(articleLikeDTO) == 1;
 	}
 
 	@Override

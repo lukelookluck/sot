@@ -20,6 +20,7 @@ import com.ssafy.sot.dto.BoardNewDTO;
 import com.ssafy.sot.dto.CommentDTO;
 import com.ssafy.sot.dto.ReturnMsg;
 import com.ssafy.sot.dto.SchoolDTO;
+import com.ssafy.sot.dto.UserIdDTO;
 import com.ssafy.sot.service.ArticleService;
 import com.ssafy.sot.service.BoardService;
 import com.ssafy.sot.service.CommentService;
@@ -112,14 +113,22 @@ public class SchoolRestController {
 	
 	@ApiOperation(value = "게시판 즐겨찾기")
 	@PostMapping("/board/{boardId}/fav")
-	public Object favBoard(@PathVariable("boardId") int boardId, @RequestBody int userId) {
-		return new ResponseEntity<>(boardService.favBoard(boardId, userId), HttpStatus.OK);
+	public Object favBoard(@PathVariable("boardId") int boardId, @RequestBody UserIdDTO userId) {
+		int id = userId.getUserId();
+		System.out.println("보드: " + boardId);
+		System.out.println("유저아이디:" + userId);
+		System.out.println(id);
+		return new ResponseEntity<>(boardService.favBoard(boardId, id), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "게시판 즐겨찾기 취소")
 	@DeleteMapping("/board/{boardId}/fav")
-	public Object unfavBoard(@PathVariable("boardId") int boardId, @RequestBody int userId) {
-		return new ResponseEntity<>(boardService.unfavBoard(boardId, userId), HttpStatus.OK);
+	public Object unfavBoard(@PathVariable("boardId") int boardId, @RequestBody UserIdDTO userId) {
+		int id = userId.getUserId();
+		System.out.println("보드: " + boardId);
+		System.out.println("유저아이디:" + userId);
+		System.out.println(id);
+		return new ResponseEntity<>(boardService.unfavBoard(boardId, id), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "게시판의 게시글 리스트 읽기")

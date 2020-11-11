@@ -15,9 +15,16 @@ public class CommentWithReply {
 	int likesCnt;
 	int parentId;
 	List<CommentDTO> replies;
+	List<Like> likes;
 	
-	
-	
+	public List<Like> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(List<Like> likes) {
+		this.likes = likes;
+	}
+
 	public CommentWithReply() {
 		super();
 	}
@@ -32,6 +39,7 @@ public class CommentWithReply {
 		this.updated_at = commentDTO.getUpdated_at();
 		this.likesCnt = commentDTO.getLikesCnt();
 		this.parentId = commentDTO.getParentId();
+		this.likes = commentDTO.getLikes();
 		this.replies = replies;
 	}
 	

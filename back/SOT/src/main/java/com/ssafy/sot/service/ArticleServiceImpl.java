@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.sot.dao.ArticleDAO;
+import com.ssafy.sot.dao.ArticleLikeDAO;
 import com.ssafy.sot.dao.CommentDAO;
+import com.ssafy.sot.dao.CommentLikeDAO;
 import com.ssafy.sot.dto.ArticleDTO;
 import com.ssafy.sot.dto.ArticleFullInfo;
 import com.ssafy.sot.dto.ArticleWithComment;
 import com.ssafy.sot.dto.CommentDTO;
 import com.ssafy.sot.dto.CommentWithReply;
+import com.ssafy.sot.dto.Like;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -22,6 +25,12 @@ public class ArticleServiceImpl implements ArticleService {
 	
 	@Autowired
 	CommentDAO commentDAO;
+	
+	@Autowired
+	CommentLikeDAO commentLikeDAO;
+	
+	@Autowired
+	ArticleLikeDAO articleLikeDAO;
 	
 	@Override
 	public List<ArticleFullInfo> showArticles(int boardId) {
@@ -33,12 +42,24 @@ public class ArticleServiceImpl implements ArticleService {
 		ArticleDTO article = articleDAO.selectArticleById(id);
 		List<CommentDTO> originalComments = commentDAO.selectCommentsByArticleId(id);
 		List<CommentWithReply> comments = new ArrayList<>();
+		
 		for(CommentDTO originalComment : originalComments){
-			CommentWithReply comment = new CommentWithReply(originalComment, commentDAO.selectReplyCommentsByParentId(originalComment.getId()));
+			List<Like> likes = commentLikeDAO.selectLikedUserList(originalComment.getId());
+			originalComment.setLikes(likes);
+			
+			List<CommentDTO> originalReplies = commentDAO.selectReplyCommentsByParentId(originalComment.getId());
+			List<CommentDTO> replies = new ArrayList<>();
+			for(CommentDTO originalReply : originalReplies) {
+				originalReply.setLikes(commentLikeDAO.selectLikedUserList(originalReply.getId()));
+				replies.add(originalReply);
+			}
+			
+			CommentWithReply comment = new CommentWithReply(originalComment, replies);
 			comments.add(comment);
 		}
 		if(article != null) {
 			ArticleWithComment AWC = new ArticleWithComment(article, comments);
+			AWC.setLikes(articleLikeDAO.selectLikedUserList(article.getId()));
 			return AWC;
 		}
 		return null;		

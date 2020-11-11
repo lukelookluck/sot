@@ -1,6 +1,7 @@
 package com.ssafy.sot.dto;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import io.swagger.annotations.ApiParam;
 
@@ -24,14 +25,9 @@ public class CommentDTO {
 	int likesCnt;
 	@ApiParam(value = "부모 댓글 아이디(자기자신 FK)", required = false, hidden = true)
 	int parentId;
+	@ApiParam(value = "좋아요한 유저 목록", required = false, hidden = true)
+	List<Like> likes;
 	
-	
-	@Override
-	public String toString() {
-		return "CommentDTO [id=" + id + ", content=" + content + ", articleId=" + articleId + ", userId=" + userId
-				+ ", nickname=" + nickname + ", created_at=" + created_at + ", updated_at=" + updated_at + ", likesCnt="
-				+ likesCnt + ", parentId=" + parentId + "]";
-	}
 	public int getParentId() {
 		return parentId;
 	}
@@ -86,12 +82,18 @@ public class CommentDTO {
 	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
 	}
+	@Override
+	public String toString() {
+		return "CommentDTO [id=" + id + ", content=" + content + ", articleId=" + articleId + ", userId=" + userId
+				+ ", nickname=" + nickname + ", created_at=" + created_at + ", updated_at=" + updated_at + ", likesCnt="
+				+ likesCnt + ", parentId=" + parentId + ", likes=" + likes + "]";
+	}
+	public List<Like> getLikes() {
+		return likes;
+	}
+	public void setLikes(List<Like> likes) {
+		this.likes = likes;
+	}
 	
-	public int getLikes() {
-		return likesCnt;
-	}
-	public void setLikes(int likeCnt) {
-		this.likesCnt = likeCnt;
-	}
 	
 }

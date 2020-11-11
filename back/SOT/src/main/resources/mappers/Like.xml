@@ -28,7 +28,7 @@
 		and user_id = #{userId}
 	</delete>
 	
-	<select id="selectLikesByArticleId" parameterType="Like">
+	<select id="selectLikesByArticleId" resultType="Like">
 		select id, user_id as userId
 		from articlelike
 		where article_id = #{articleId}
