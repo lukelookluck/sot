@@ -20,6 +20,7 @@ const Board = ({navigation, route}) => {
   let cnt = 0;
   const [count, setCount] = useState(0);
   const [postList, setPostList] = useState([]);
+  const [msg, setMsg] = useState('no');
 
   useEffect(() => {
     refreshList();
@@ -33,23 +34,9 @@ const Board = ({navigation, route}) => {
   };
 
   function reLoad() {
-    axios
-      .get(`${serverUrl}/board/${route.params.id}`, {
-        // headers: {
-        //   Authorization: `JWT ${user.token}`,
-        // },
-      })
-      .then((response) => {
-        setPostList(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    cnt = cnt + 1;
-    setCount(cnt);
+    setPostList([]);
+    refreshList();
     console.log(route.params.isRe);
-    console.log(cnt);
   }
 
   function refreshList() {
@@ -70,10 +57,16 @@ const Board = ({navigation, route}) => {
       });
   }
 
+  function noLoad() {
+    console.log('아니야');
+  }
+
   return (
     <View style={styles.box}>
-      {count === 0 && route.params.isRe ? reLoad() : console.log('여기야')}
       <ScrollView>
+        {msg === 'no' && route.params.isRe && route.params.isRe === 'yes'
+        ? reLoad()
+        : noLoad()}
         {
           postList.length === 0
           ? (<View style={{justifyContent: 'center', alignItems: 'center', flex: 1,}}>
