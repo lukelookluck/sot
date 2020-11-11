@@ -37,7 +37,7 @@ const ReqNewBoard = ({navigation, route}) => {
     })
       .then((response) => {
         console.log(response.data);
-        navigation.navigate("게시판 목록", {isRef: 'yes', help: "kill"});
+        navigation.navigate("게시판 목록", {isRe: 'yes'});
       })
       .catch((error) => {
         console.log(error);

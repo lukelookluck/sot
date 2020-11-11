@@ -22,8 +22,12 @@ const Board = ({navigation, route}) => {
   const [postList, setPostList] = useState([]);
   const [msg, setMsg] = useState('no');
 
+
   useEffect(() => {
     refreshList();
+    navigation.addListener('focus', () => {
+      refreshList();
+    })
   }, []);
 
   const gotoWrite = () => {

@@ -27,20 +27,20 @@ const List = ({navigation, route}) => {
   let cnt = 0;
   const [count, setCount] = useState(0);
   const { serverUrl, user, setUser } = useContext(CommonContext);
+  const [msg, setMsg] = useState('no');
 
   useEffect(() => {
     refreshList();
-    console.log('여기에왔음');
   }, []);
 
-  function reLoad(){
-    
+  function reLoad() {
     refreshList();
-
-    cnt = cnt + 1;
-    setCount(cnt);
+    route.params.isRe = 'no';
     console.log(route.params.isRe);
-    console.log(cnt);
+  }
+
+  function noLoad() {
+    console.log('아니야');
   }
 
   function refreshList() {
@@ -53,6 +53,7 @@ const List = ({navigation, route}) => {
       },
     })
       .then((response) => {
+        setBoardList([]);
         console.log(response.data);
         setBoardList(response.data);
       })
@@ -78,9 +79,7 @@ const List = ({navigation, route}) => {
           {user.schoolName}
         </Text>
       </View>
-      {/* { (count === 0 && route.params.isRef)
-        ? (reLoad())
-        : (console.log('여기야'))} */}
+      {/* {msg === 'no' && route.params.isRe && route.params.isRe === 'yes' && (reLoad()) || (noLoad())} */}
       <FlatList
         data={boardList}
         keyExtractor={(item, index) => index.toString()}
