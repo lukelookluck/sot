@@ -75,6 +75,13 @@ const Board = ({navigation, route}) => {
       {count === 0 && route.params.isRe ? reLoad() : console.log('여기야')}
       <ScrollView>
         {
+          postList.length === 0
+          ? (<View style={{justifyContent: 'center', alignItems: 'center', flex: 1,}}>
+              <Text style={{fontSize: 25, marginTop: 70,}}>게시글이 없습니다</Text>
+            </View>)
+          : (<></>) 
+        }
+        {
           postList.map((item, index) => (
             <View key={index} style={{borderBottomWidth: 0.5, borderBottomColor: "gray"}}>
               <SingleArticle
