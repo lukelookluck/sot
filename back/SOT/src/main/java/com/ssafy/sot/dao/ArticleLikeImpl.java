@@ -22,4 +22,10 @@ public class ArticleLikeImpl implements ArticleLikeDAO {
 		return sqlSession.delete("like.deleteArticleLike", articleLikeDTO);
 	}
 
+	@Override
+	public boolean alreadyLikedArticle(ArticleLikeDTO articleLikeDTO) {
+		ArticleLikeDTO dto = sqlSession.selectOne("like.articleLikeCheck", articleLikeDTO);
+		return dto != null;
+	}
+
 }

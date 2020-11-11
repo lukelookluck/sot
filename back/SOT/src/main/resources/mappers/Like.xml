@@ -27,5 +27,31 @@
 		where article_id = #{articleId}
 		and user_id = #{userId}
 	</delete>
-
+	
+	<select id="selectLikesByArticleId" parameterType="Like">
+		select id, user_id as userId
+		from articlelike
+		where article_id = #{articleId}
+	</select>
+	
+	<select id="selectLikesByCommentId" resultType="Like">
+		select id, user_id as userId
+		from commentlike
+		where comment_id = #{commentId}
+	</select>
+	
+	<select id="articleLikeCheck" parameterType="ArticleLikeDTO" resultType="ArticleLikeDTO">
+		select article_id as articleId, user_id as userId
+		from articlelike
+		where article_id = #{articleId}
+		and user_id = #{userId}
+	</select>
+	
+	<select id="commentLikeCheck" parameterType="commentLikeDTO" resultType="commentLikeDTO">
+		select comment_id as commentId, user_id as userId
+		from commentlike
+		where comment_id = #{commentId}
+		and user_id = #{userId}
+	</select>
+	
 </mapper>

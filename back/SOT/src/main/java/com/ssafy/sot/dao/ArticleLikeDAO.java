@@ -6,5 +6,5 @@ public interface ArticleLikeDAO {
 	
 	int insertArticleLike(ArticleLikeDTO articleLikeDTO);
 	int deleteArticleLike(ArticleLikeDTO articleLikeDTO);
-
+	boolean alreadyLikedArticle(ArticleLikeDTO articleLikeDTO);
 }

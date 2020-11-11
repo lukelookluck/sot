@@ -16,6 +16,7 @@ public class ArticleWithComment {
 	int commentsCnt;
 	int likesCnt;
 	List<CommentWithReply> comments;
+	List<Like> likes;
 	
 	public int getCommentsCnt() {
 		return commentsCnt;

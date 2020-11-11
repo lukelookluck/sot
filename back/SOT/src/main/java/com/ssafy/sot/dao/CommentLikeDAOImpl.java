@@ -22,4 +22,10 @@ public class CommentLikeDAOImpl implements CommentLikeDAO {
 		return sqlSession.delete("like.deleteCommentLike", commentLikeDTO);
 	}
 
+	@Override
+	public boolean alreadyLikedComment(CommentLikeDTO commentLikeDTO) {
+		CommentLikeDTO dto = sqlSession.selectOne("like.commentLikeCheck", commentLikeDTO);
+		return dto != null;
+	}
+
 }

@@ -22,7 +22,10 @@ public class LikeServiceImpl implements LikeService {
 		CommentLikeDTO commentLikeDTO = new CommentLikeDTO();
 		commentLikeDTO.setCommentId(commentId);
 		commentLikeDTO.setUserId(userId);
-		return commentLikeDAO.insertCommentLike(commentLikeDTO) == 1;
+		if(!commentLikeDAO.alreadyLikedComment(commentLikeDTO)) {
+			return commentLikeDAO.insertCommentLike(commentLikeDTO) == 1;
+		}
+		return false;		
 	}
 
 	@Override
@@ -30,7 +33,10 @@ public class LikeServiceImpl implements LikeService {
 		CommentLikeDTO commentLikeDTO = new CommentLikeDTO();
 		commentLikeDTO.setCommentId(commentId);
 		commentLikeDTO.setUserId(userId);
-		return commentLikeDAO.deleteCommentLike(commentLikeDTO) == 1;
+		if(commentLikeDAO.alreadyLikedComment(commentLikeDTO)) {
+			return commentLikeDAO.deleteCommentLike(commentLikeDTO) == 1;
+		}
+		return false;
 	}
 
 	@Override
@@ -38,7 +44,10 @@ public class LikeServiceImpl implements LikeService {
 		ArticleLikeDTO articleLikeDTO = new ArticleLikeDTO();
 		articleLikeDTO.setArticleId(articleId);
 		articleLikeDTO.setUserId(userId);
-		return articleLikeDAO.insertArticleLike(articleLikeDTO) == 1;
+		if(!articleLikeDAO.alreadyLikedArticle(articleLikeDTO)) {
+			return articleLikeDAO.insertArticleLike(articleLikeDTO) == 1;
+		}
+		return false;
 	}
 
 	@Override
@@ -46,7 +55,10 @@ public class LikeServiceImpl implements LikeService {
 		ArticleLikeDTO articleLikeDTO = new ArticleLikeDTO();
 		articleLikeDTO.setArticleId(articleId);
 		articleLikeDTO.setUserId(userId);
-		return articleLikeDAO.deleteArticleLike(articleLikeDTO) == 1;
+		if(articleLikeDAO.alreadyLikedArticle(articleLikeDTO)) {
+			return articleLikeDAO.deleteArticleLike(articleLikeDTO) == 1;			
+		}
+		return false;
 	}
 
 }

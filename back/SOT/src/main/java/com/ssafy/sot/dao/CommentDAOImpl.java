@@ -44,4 +44,5 @@ public class CommentDAOImpl implements CommentDAO {
 		return sqlSession.selectList("comment.showReplyComments", parentId);
 	}
 
+
 }
