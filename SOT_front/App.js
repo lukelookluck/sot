@@ -95,18 +95,22 @@ function MyStack() {
           title: '',
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           headerShown: true,
-          headerRight: () => (
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Button
-                onPress={() => navigation.navigate('WritePost')}
-                title="글쓰기로 감(임시)"
-              />
-              <Icon
-                name="ellipsis-vertical"
-                style={{fontSize: 22.5, marginHorizontal: 10}}
-              />
-            </View>
-          ),
+          headerTintColor: 'white',
+          headerStyle: {
+            backgroundColor: '#FACA0F',
+          },
+          // headerRight: () => (
+          //   <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          //     <Button
+          //       onPress={() => navigation.navigate('WritePost')}
+          //       title="글쓰기로 감(임시)"
+          //     />
+          //     <Icon
+          //       name="ellipsis-vertical"
+          //       style={{fontSize: 22.5, marginHorizontal: 10}}
+          //     />
+          //   </View>
+          // ),
         })}
         component={ArticleDisplay}
       />
