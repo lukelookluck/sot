@@ -14,12 +14,14 @@ public class PlayerMovement : MonoBehaviour
     Vector3 direction;
     Quaternion newRotation;
 
+    private Animator anim;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         newRotation = newRotation.normalized;
+        anim = gameObject.GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -29,13 +31,23 @@ public class PlayerMovement : MonoBehaviour
     //}
 
     public void FixedUpdate()
-    { 
-        Run();
-        Trun();  
+    {
+
+        if(myJoystick.Vertical != 0 || myJoystick.Horizontal != 0 || Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
+        {
+            Run();
+            anim.SetInteger("AnimationPar", 1);
+        }
+        else
+        {
+            anim.SetInteger("AnimationPar", 0);
+        }
+        Trun();
     }
 
     void Run()
     {
+
         if(myJoystick.Vertical != 0 || myJoystick.Horizontal != 0)
         {
             direction = Vector3.forward * myJoystick.Vertical + Vector3.right * myJoystick.Horizontal;
