@@ -140,8 +140,9 @@ public class SchoolRestController {
 	@ApiOperation(value = "게시글 하나 읽기 (댓글 리스트도 가져옴)")
 	@GetMapping("/board/{boardId}/{articleId}")
 	public Object showArticle(@PathVariable("boardId") int boardId,
-								@PathVariable("articleId") int articleId) {
-		return new ResponseEntity<>(articleService.showArticle(articleId), HttpStatus.OK);
+								@PathVariable("articleId") int articleId,
+								@RequestParam("userId") int userId) {
+		return new ResponseEntity<>(articleService.showArticle(articleId, userId), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "게시글 생성, 필요값: title, content, boardId,")
@@ -245,7 +246,6 @@ public class SchoolRestController {
 //		}
 		return new ResponseEntity<>(likeService.cancelLikeArticle(articleId, userId), HttpStatus.OK);
 	}
-
 	
 	// JWT 토큰에서 userId(PK) 가져오는 메소드
 	private int getUserPK(HttpServletRequest request) {

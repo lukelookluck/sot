@@ -26,7 +26,9 @@ public class CommentDTO {
 	@ApiParam(value = "부모 댓글 아이디(자기자신 FK)", required = false, hidden = true)
 	int parentId;
 	@ApiParam(value = "좋아요한 유저 목록", required = false, hidden = true)
-	List<Like> likes;
+	boolean isLiked;
+	
+	
 	
 	public int getParentId() {
 		return parentId;
@@ -82,18 +84,16 @@ public class CommentDTO {
 	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
 	}
+	public boolean getIsLiked() {
+		return isLiked;
+	}
+	public void setIsLiked(boolean isLiked) {
+		this.isLiked = isLiked;
+	}
 	@Override
 	public String toString() {
 		return "CommentDTO [id=" + id + ", content=" + content + ", articleId=" + articleId + ", userId=" + userId
 				+ ", nickname=" + nickname + ", created_at=" + created_at + ", updated_at=" + updated_at + ", likesCnt="
-				+ likesCnt + ", parentId=" + parentId + ", likes=" + likes + "]";
+				+ likesCnt + ", parentId=" + parentId + ", isLiked=" + isLiked + "]";
 	}
-	public List<Like> getLikes() {
-		return likes;
-	}
-	public void setLikes(List<Like> likes) {
-		this.likes = likes;
-	}
-	
-	
 }

@@ -3,7 +3,7 @@ package com.ssafy.sot.dto;
 import java.sql.Timestamp;
 import java.util.List;
 
-public class ArticleWithComment {
+public class ArticleWithCommentBackup {
 	
 	int id;
 	String title;
@@ -16,24 +16,14 @@ public class ArticleWithComment {
 	int commentsCnt;
 	int likesCnt;
 	List<CommentWithReply> comments;
-	boolean isLiked;
+	List<Like> likes;
 	
-	@Override
-	public String toString() {
-		return "ArticleWithComment [id=" + id + ", title=" + title + ", content=" + content + ", boardId=" + boardId
-				+ ", userId=" + userId + ", nickname=" + nickname + ", created_at=" + created_at + ", updated_at="
-				+ updated_at + ", commentsCnt=" + commentsCnt + ", likesCnt=" + likesCnt + ", comments=" + comments
-				+ ", isLiked=" + isLiked + "]";
+	public List<Like> getLikes() {
+		return likes;
 	}
-	
-	public boolean getIsLiked() {
-		return isLiked;
+	public void setLikes(List<Like> likes) {
+		this.likes = likes;
 	}
-
-	public void setIsLiked(boolean isLiked) {
-		this.isLiked = isLiked;
-	}
-
 	public int getCommentsCnt() {
 		return commentsCnt;
 	}
@@ -102,7 +92,16 @@ public class ArticleWithComment {
 		this.comments = comments;
 	}
 	
-	public ArticleWithComment(ArticleDTO article, List<CommentWithReply> comments) {
+	
+	
+	@Override
+	public String toString() {
+		return "ArticleWithComment [id=" + id + ", title=" + title + ", content=" + content + ", boardId=" + boardId
+				+ ", userId=" + userId + ", nickname=" + nickname + ", created_at=" + created_at + ", updated_at="
+				+ updated_at + ", commentsCnt=" + commentsCnt + ", likesCnt=" + likesCnt + ", comments=" + comments
+				+ ", likes=" + likes + "]";
+	}
+	public ArticleWithCommentBackup(ArticleDTO article, List<CommentWithReply> comments) {
 		this.id = article.getId();
 		this.title = article.getTitle();
 		this.content = article.getContent();
@@ -115,4 +114,7 @@ public class ArticleWithComment {
 		this.likesCnt = article.getLikesCnt();
 		this.comments = comments;
 	}
+	
+	
+
 }

@@ -11,7 +11,8 @@ public interface ArticleService {
 	
 	public ArticleListWithFav showArticles(int boardId, int userId);
 	public List<ArticleFullInfo> showArticles(int boardId);
-	public ArticleWithComment showArticle(int id);
+	public ArticleWithComment showArticle(int id, int userId);
+//	public ArticleWithComment showArticle(int id);
 	public boolean createArticle(ArticleDTO articleDTO);
 	public boolean updateArticle(ArticleDTO articleDTO);
 	public boolean deleteArticle(int id);
