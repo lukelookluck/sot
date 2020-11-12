@@ -26,7 +26,7 @@ const List = ({navigation, route}) => {
   const [boardList, setBoardList] = useState([]);
   let cnt = 0;
   const [count, setCount] = useState(0);
-  const { serverUrl, user, setUser } = useContext(CommonContext);
+  const { serverUrl, user, setUser, fav, setFav } = useContext(CommonContext);
   const [msg, setMsg] = useState('no');
 
   useEffect(() => {
@@ -65,7 +65,23 @@ const List = ({navigation, route}) => {
   const goBoard = (b_name, b_id) => {
     console.log('유저의 아이디는');
     console.log(user.id);
-    navigation.navigate('Board', {name: b_name, id: b_id, u_id: user.id});
+
+    axios
+      .get(`${serverUrl}/board/${b_id}/isfaved?userId=${user.id}`, {
+        // headers: {
+        //   Authorization: `JWT ${user.token}`,
+        // },
+      })
+      .then((response) => {
+        // setFav(false);
+        console.log(response.data);
+        setFav(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    navigation.navigate('Board', {name: b_name, id: b_id, u_id: user.id, isRe: 'no'});
   };
 
   const goReqNewBoard = () => {

@@ -20,16 +20,19 @@ const Board = ({navigation, route}) => {
   const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
   const [postList, setPostList] = useState([]);
   const [msg, setMsg] = useState('no');
-  // const [fav, setFav] = useState(false);
 
   useEffect(() => {
     refreshList();
-    refreshFav();
+    // refreshFav();
     navigation.addListener('focus', () => {
       refreshList();
-      refreshFav();
+      // refreshFav();
     })
   }, []);
+
+  // useEffect(() => {
+  //   refreshFav();
+  // }, [fav]);
 
   const gotoWrite = () => {
     navigation.navigate('WritePost', {
@@ -37,12 +40,6 @@ const Board = ({navigation, route}) => {
       boardid: route.params.id,
     });
   };
-
-  function reLoad() {
-    refreshList();
-    route.params.isRe = 'no';
-    console.log(route.params.isRe);
-  }
 
   function refreshFav() {
     axios
@@ -81,7 +78,15 @@ const Board = ({navigation, route}) => {
   }
 
   function noLoad() {
-    console.log('아니야');
+    console.log('노 로딩');
+    console.log(route.params.isRe);
+  }
+
+  function reLoad() {
+    refreshList();
+    route.params.isRe = 'no';
+    console.log('리 로딩')
+    console.log(route.params.isRe);
   }
 
   return (
@@ -107,9 +112,14 @@ const Board = ({navigation, route}) => {
           ))
         }
       </ScrollView>
-      <TouchableOpacity style={styles.writeBtn} onPress={gotoWrite}>
-        <Text style={{color: 'white', fontSize: 15}}>글작성</Text>
-      </TouchableOpacity>
+
+      <View style={{position: 'absolute', bottom: 20, width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+        <TouchableOpacity style={styles.writeBtn} onPress={gotoWrite}>
+          <Text style={{color: 'white', fontSize: 15}}>글작성</Text>
+        </TouchableOpacity>
+      </View>
+
+      
     </View>
   );
 };
@@ -130,9 +140,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 50,
-    position: 'absolute',
-    bottom: 20,
-    left: 160,
+    // position: 'absolute',
+    // bottom: 20,
   },
 });
 
