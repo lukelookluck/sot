@@ -38,6 +38,7 @@ export default function Home({ navigation }) {
     refreshFavBoardList();
     refreshWholeArticleList();
     navigation.addListener('focus', () => {
+      // console.log('adasdas')
       refreshFavBoardList();
       refreshWholeArticleList();
     });
@@ -77,6 +78,8 @@ export default function Home({ navigation }) {
         },
       })
       .then((res) => {
+        // console.log('adasdas222')
+
         setwholeArticleList([])
         // console.log("전체 새로고침", res.data);
         setwholeArticleList(res.data);
@@ -108,13 +111,13 @@ export default function Home({ navigation }) {
 
   function initHeader(data) {
     console.log(data)
-    if (temp === data.name) {
+    if (temp.name === data.name) {
       setTemp(null);
       setPressed(false);
       setMyloading(false);
       refreshWholeArticleList();
     } else {
-      setTemp(data.name);
+      setTemp(data);
       setPressed(true);
       setMyloading(false);
       refreshCertainArticleList(data);
@@ -179,10 +182,10 @@ export default function Home({ navigation }) {
 
   return (
     <View>
-      {(temp === null,
+      {(temp.name === null,
         pressed === false && <Header name={user.schoolName} pressed={pressed} navigation={navigation} />) || (
           <Header
-            name={temp}
+            name={temp.name}
             pressed={pressed}
             setTemp={setTemp}
             setPressed={setPressed}

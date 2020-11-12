@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import {
   View,
@@ -10,16 +10,17 @@ import {
   FlatList,
 } from 'react-native';
 import 'react-native-gesture-handler';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {CommonContext} from '../../context/CommonContext';
-import {color} from 'react-native-reanimated';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { CommonContext } from '../../context/CommonContext';
+import { color } from 'react-native-reanimated';
 import SingleArticle from '../../components/PartBoard/SingleArticle'
 
 
-const Board = ({navigation, route}) => {
-  const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
+const Board = ({ navigation, route }) => {
+  const { serverUrl, user, setUser, fav, setFav } = useContext(CommonContext);
   const [postList, setPostList] = useState([]);
   const [msg, setMsg] = useState('no');
+
 
   useEffect(() => {
     refreshList();
@@ -95,31 +96,31 @@ const Board = ({navigation, route}) => {
         {msg === 'no' && route.params.isRe && route.params.isRe === 'yes' && (reLoad()) || (noLoad())}
         {
           postList.length === 0
-          ? (<View style={{justifyContent: 'center', alignItems: 'center', flex: 1,}}>
-              <Text style={{fontSize: 25, marginTop: 70,}}>게시글이 없습니다</Text>
+            ? (<View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, }}>
+              <Text style={{ fontSize: 25, marginTop: 70, }}>게시글이 없습니다</Text>
             </View>)
-          : (<></>) 
+            : (<></>)
         }
         {
           postList.map((item, index) => (
-            <View key={index} style={{borderBottomWidth: 0.5, borderBottomColor: "gray"}}>
+            <View key={index} style={{ borderBottomWidth: 0.5, borderBottomColor: "gray" }}>
               <SingleArticle
-              idx={index}
-              article={item}
-              navigation={navigation}
+                idx={index}
+                article={item}
+                navigation={navigation}
               ></SingleArticle>
             </View>
           ))
         }
       </ScrollView>
 
-      <View style={{position: 'absolute', bottom: 20, width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{ position: 'absolute', bottom: 20, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
         <TouchableOpacity style={styles.writeBtn} onPress={gotoWrite}>
-          <Text style={{color: 'white', fontSize: 15}}>글작성</Text>
+          <Text style={{ color: 'white', fontSize: 15 }}>글작성</Text>
         </TouchableOpacity>
       </View>
 
-      
+
     </View>
   );
 };
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    
+
   },
 
   writeBtn: {

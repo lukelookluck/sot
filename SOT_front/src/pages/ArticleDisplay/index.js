@@ -24,6 +24,8 @@ export default function ({ navigation, route }) {
     getArticleInfo();
   }, []);
 
+  console.log(article)
+
   // 게시글 조회
   function getArticleInfo() {
     axios
@@ -158,15 +160,48 @@ export default function ({ navigation, route }) {
       })
   }
 
-  // 게시글 수정/삭제
+  // 게시글 삭제
   function deleteArticle(data) {
-    navigation.navigate('Main')
-    console.log(navigation)
-    // axios
-    //   .post(`${serverUrl}/board/${article.boardId}/${data.id}`)
-    //   .then((res) => {
-    //     console.log(res)
-    //   })
+    setModalVisible2(false)
+    Alert.alert(
+      '삭제 확인',
+      '해당 게시글이 삭제됩니다.',
+      [
+        {
+          text: '취소',
+        },
+        {
+          text: '삭제',
+          onPress: () => {
+            navigation.navigate('Main')
+            console.log(data)
+            axios
+              .delete(`${serverUrl}/board/${data.boardId}/${data.id}`)
+              .then((res) => {
+                console.log(res)
+              })
+              .catch((err) => {
+                console.log(err)
+              })
+          },
+          style: { backgroundColor: 'red' }
+        },
+      ],
+      { cancelable: true },
+    );
+  }
+
+  function reviseArticle(data) {
+    console.log(data)
+    setModalVisible2(false)
+
+    navigation.navigate('WritePost', {
+      boardname: route.params.article.boardName,
+      boardid: data.boardId,
+      articleId: data.id,
+      content: data.content,
+      title: data.title
+    })
   }
 
   // 댓글작성폼 관련
@@ -250,7 +285,7 @@ export default function ({ navigation, route }) {
                   alignItems: 'flex-start',
                 }}>
                 <TouchableHighlight
-                  onPress={() => { deleteArticle() }}
+                  onPress={() => { reviseArticle(article) }}
                   underlayColor="#dfdfdf"
                   style={{
                     backgroundColor: 'white',
@@ -282,7 +317,7 @@ export default function ({ navigation, route }) {
                   </View>
                 </TouchableHighlight>
                 <TouchableHighlight
-                  onPress={() => { deleteArticle() }}
+                  onPress={() => { deleteArticle(article) }}
                   underlayColor="#dfdfdf"
                   style={{
                     backgroundColor: 'white',

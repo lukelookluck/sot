@@ -1,4 +1,4 @@
-import React, {Component, useContext, useState} from 'react';
+import React, { Component, useContext, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -35,49 +35,49 @@ import axios from 'axios';
 const Stack = createStackNavigator();
 
 function MyStack() {
-  
-  const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
+
+  const { serverUrl, user, setUser, fav, setFav } = useContext(CommonContext);
 
   const addBookmark = (b_id, u_id) => {
 
     console.log('등록!');
-    
+
     axios
-    .post(`${serverUrl}/board/${b_id}/fav/`, {
-      userId: u_id,
-    })
-    .then(function (response) {
-      console.log('제대로간겨??');
-      console.log(response.data);
-      setFav(true);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+      .post(`${serverUrl}/board/${b_id}/fav/`, {
+        userId: u_id,
+      })
+      .then(function (response) {
+        console.log('제대로간겨??');
+        console.log(response.data);
+        setFav(true);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
-  
+
   const deleteBookmark = (b_id, u_id) => {
-  
+
     console.log('삭제!');
-    
+
     axios
-    .delete(`${serverUrl}/board/${b_id}/fav?userId=${u_id}`)
-    .then(function (response) {
-      console.log('제대로간겨??');
-      console.log(response.data);
-      setFav(false);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+      .delete(`${serverUrl}/board/${b_id}/fav?userId=${u_id}`)
+      .then(function (response) {
+        console.log('제대로간겨??');
+        console.log(response.data);
+        setFav(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
-  
+
   const whatBook = (isfav, b_id, u_id) => {
-  
-    if(isfav) {
+
+    if (isfav) {
       console.log("여기입니다");
       deleteBookmark(b_id, u_id);
-      
+
     } else {
       console.log("저기입니다");
       addBookmark(b_id, u_id);
@@ -90,7 +90,7 @@ function MyStack() {
         name="Start"
         options={{ headerShown: false }}
         component={Start}
-        />
+      />
       <Stack.Screen
         name="회원가입"
         options={{
@@ -134,7 +134,7 @@ function MyStack() {
               <TouchableOpacity onPress={() => whatBook(fav, route.params.id, route.params.u_id)}>
                 <Icon
                   name={fav ? "bookmark" : "bookmark-outline"}
-                  style={{fontSize: 23, color: 'white', marginRight: 15}}
+                  style={{ fontSize: 23, color: 'white', marginRight: 15 }}
                 />
               </TouchableOpacity>
             </View>
@@ -290,7 +290,7 @@ export default function App() {
     'user',
   );
 
-  const HOST = '192.168.100.72:8090';
+  const HOST = '118.45.110.147:8090';
   const serverUrl = `http://${HOST}`;
   const [fav, setFav] = useLocalStorageSetState(false, "fav");
 
@@ -300,7 +300,7 @@ export default function App() {
         serverUrl,
         user,
         setUser,
-        fav, 
+        fav,
         setFav,
       }}>
       <NavigationContainer>
