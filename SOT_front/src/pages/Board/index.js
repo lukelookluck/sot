@@ -52,6 +52,7 @@ const Board = ({navigation, route}) => {
         // },
       })
       .then((response) => {
+        setFav(false);
         console.log(response.data);
         setFav(response.data);
       })
