@@ -15,18 +15,18 @@ public class CommentWithReply {
 	int likesCnt;
 	int parentId;
 	List<CommentDTO> replies;
-	List<Like> likes;
-	
-	public List<Like> getLikes() {
-		return likes;
-	}
-
-	public void setLikes(List<Like> likes) {
-		this.likes = likes;
-	}
+	boolean isLiked;
 
 	public CommentWithReply() {
 		super();
+	}
+
+	public boolean getIsLiked() {
+		return isLiked;
+	}
+
+	public void setIsLiked(boolean isLiked) {
+		this.isLiked = isLiked;
 	}
 
 	public CommentWithReply(CommentDTO commentDTO, List<CommentDTO> replies) {
@@ -39,7 +39,6 @@ public class CommentWithReply {
 		this.updated_at = commentDTO.getUpdated_at();
 		this.likesCnt = commentDTO.getLikesCnt();
 		this.parentId = commentDTO.getParentId();
-		this.likes = commentDTO.getLikes();
 		this.replies = replies;
 	}
 	
@@ -103,10 +102,12 @@ public class CommentWithReply {
 	public void setReplies(List<CommentDTO> replies) {
 		this.replies = replies;
 	}
+
 	@Override
 	public String toString() {
 		return "CommentWithReply [id=" + id + ", content=" + content + ", articleId=" + articleId + ", userId=" + userId
 				+ ", nickname=" + nickname + ", created_at=" + created_at + ", updated_at=" + updated_at + ", likesCnt="
-				+ likesCnt + ", parentId=" + parentId + ", replies=" + replies + "]";
+				+ likesCnt + ", parentId=" + parentId + ", replies=" + replies + ", isLiked=" + isLiked + "]";
 	}
+	
 }

@@ -8,12 +8,17 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.sot.dao.ArticleDAO;
 import com.ssafy.sot.dao.ArticleLikeDAO;
+import com.ssafy.sot.dao.BoardDAO;
 import com.ssafy.sot.dao.CommentDAO;
 import com.ssafy.sot.dao.CommentLikeDAO;
 import com.ssafy.sot.dto.ArticleDTO;
 import com.ssafy.sot.dto.ArticleFullInfo;
+import com.ssafy.sot.dto.ArticleLikeDTO;
+import com.ssafy.sot.dto.ArticleListWithFav;
 import com.ssafy.sot.dto.ArticleWithComment;
+import com.ssafy.sot.dto.BoardFavDTO;
 import com.ssafy.sot.dto.CommentDTO;
+import com.ssafy.sot.dto.CommentLikeDTO;
 import com.ssafy.sot.dto.CommentWithReply;
 import com.ssafy.sot.dto.Like;
 
@@ -32,25 +37,68 @@ public class ArticleServiceImpl implements ArticleService {
 	@Autowired
 	ArticleLikeDAO articleLikeDAO;
 	
+	@Autowired
+	BoardDAO boardDAO;
+	
 	@Override
-	public List<ArticleFullInfo> showArticles(int boardId) {
-		return articleDAO.selectArticlesByBoardId(boardId);
+	public ArticleListWithFav showArticles(int boardId, int userId) {
+		BoardFavDTO boardFavDTO = new BoardFavDTO();
+		boardFavDTO.setBoardId(boardId);
+		boardFavDTO.setUserId(userId);
+		boolean isFaved = boardDAO.alreadyFaved(boardFavDTO);
+		List<ArticleFullInfo> articles = articleDAO.selectArticlesByBoardId(boardId);
+		return new ArticleListWithFav(articles, isFaved);
 	}
 
+//	@Override
+//	public ArticleWithComment showArticle(int id) {
+//		ArticleDTO article = articleDAO.selectArticleById(id);
+//		List<CommentDTO> originalComments = commentDAO.selectCommentsByArticleId(id);
+//		List<CommentWithReply> comments = new ArrayList<>();
+//		
+//		for(CommentDTO originalComment : originalComments){
+//			List<Like> likes = commentLikeDAO.selectLikedUserList(originalComment.getId());
+//			originalComment.setLikes(likes);
+//			
+//			List<CommentDTO> originalReplies = commentDAO.selectReplyCommentsByParentId(originalComment.getId());
+//			List<CommentDTO> replies = new ArrayList<>();
+//			for(CommentDTO originalReply : originalReplies) {
+//				originalReply.setLikes(commentLikeDAO.selectLikedUserList(originalReply.getId()));
+//				replies.add(originalReply);
+//			}
+//			
+//			CommentWithReply comment = new CommentWithReply(originalComment, replies);
+//			comments.add(comment);
+//		}
+//		if(article != null) {
+//			ArticleWithComment AWC = new ArticleWithComment(article, comments);
+//			AWC.setLikes(articleLikeDAO.selectLikedUserList(article.getId()));
+//			return AWC;
+//		}
+//		return null;		
+//	}
+	
 	@Override
-	public ArticleWithComment showArticle(int id) {
+	public ArticleWithComment showArticle(int id, int userId) {
 		ArticleDTO article = articleDAO.selectArticleById(id);
 		List<CommentDTO> originalComments = commentDAO.selectCommentsByArticleId(id);
 		List<CommentWithReply> comments = new ArrayList<>();
 		
 		for(CommentDTO originalComment : originalComments){
-			List<Like> likes = commentLikeDAO.selectLikedUserList(originalComment.getId());
-			originalComment.setLikes(likes);
+			CommentLikeDTO commentLikeDTO = new CommentLikeDTO();
+			commentLikeDTO.setCommentId(originalComment.getId());
+			commentLikeDTO.setUserId(userId);
+			boolean commentIsLiked = commentLikeDAO.alreadyLikedComment(commentLikeDTO);
+			originalComment.setIsLiked(commentIsLiked);
 			
 			List<CommentDTO> originalReplies = commentDAO.selectReplyCommentsByParentId(originalComment.getId());
 			List<CommentDTO> replies = new ArrayList<>();
 			for(CommentDTO originalReply : originalReplies) {
-				originalReply.setLikes(commentLikeDAO.selectLikedUserList(originalReply.getId()));
+				CommentLikeDTO replyLikeDTO = new CommentLikeDTO();
+				replyLikeDTO.setCommentId(originalReply.getId());
+				replyLikeDTO.setUserId(userId);
+				boolean replyIsLiked = commentLikeDAO.alreadyLikedComment(replyLikeDTO);
+				originalReply.setIsLiked(replyIsLiked);
 				replies.add(originalReply);
 			}
 			
@@ -59,11 +107,16 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		if(article != null) {
 			ArticleWithComment AWC = new ArticleWithComment(article, comments);
-			AWC.setLikes(articleLikeDAO.selectLikedUserList(article.getId()));
+			ArticleLikeDTO articleLikeDTO = new ArticleLikeDTO();
+			articleLikeDTO.setArticleId(id);
+			articleLikeDTO.setUserId(userId);
+			AWC.setIsLiked(articleLikeDAO.alreadyLikedArticle(articleLikeDTO));
+			
 			return AWC;
 		}
 		return null;		
 	}
+	
 
 	@Override
 	public boolean createArticle(ArticleDTO articleDTO) {
@@ -93,6 +146,14 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public List<ArticleFullInfo> showBestArticles(int boardId) {
 		return articleDAO.selectBestArticlesByBoardId(boardId);
+	}
+
+	@Override
+	public List<ArticleFullInfo> showArticles(int boardId) {
+		BoardFavDTO boardFavDTO = new BoardFavDTO();
+		boardFavDTO.setBoardId(boardId);
+		List<ArticleFullInfo> articles = articleDAO.selectArticlesByBoardId(boardId);
+		return articles;
 	}
 
 }

@@ -55,4 +55,12 @@ public class BoardServiceImpl implements BoardService {
 		return boardDAO.deleteBoardFav(dto) == 1;
 	}
 
+	@Override
+	public boolean isFaved(int boardId, int userId) {
+		BoardFavDTO dto = new BoardFavDTO();
+		dto.setBoardId(boardId);
+		dto.setUserId(userId);
+		return boardDAO.alreadyFaved(dto);
+	}
+
 }

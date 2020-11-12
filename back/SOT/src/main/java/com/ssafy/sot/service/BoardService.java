@@ -13,5 +13,6 @@ public interface BoardService {
 	List<BoardFavReturnDTO> showFavBoards(int userId);
 	boolean favBoard(int boardId, int userId);
 	boolean unfavBoard(int boardId, int userId);
+	boolean isFaved(int boardId, int userId);
 
 }
