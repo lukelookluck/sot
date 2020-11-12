@@ -224,7 +224,9 @@ export default function ({ route }) {
       .post(`${serverUrl}/board/${article.boardId}/${article.id}/like?userId=${user.id}`,)
       .then((res) => {
         console.log(res)
-        getArticleInfo()
+        setArticle({ ...article, likesCnt: article.likesCnt + 1 })
+        console.log(article)
+        // getArticleInfo()
       })
       .catch((err) => {
         console.log(err)

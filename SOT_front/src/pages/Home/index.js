@@ -35,24 +35,24 @@ export default function Home({ navigation }) {
 
 
   useEffect(() => {
-    refreshBoardList();
+    refreshFavBoardList();
     refreshWholeArticleList();
     navigation.addListener('focus', () => {
-      refreshBoardList();
+      refreshFavBoardList();
       refreshWholeArticleList();
     });
   }, []);
 
-  // 게시판 리스트 불러오기
-  function refreshBoardList() {
+  // 즐찾 게시판 리스트 불러오기
+  function refreshFavBoardList() {
     axios
-      .get(`${serverUrl}/boards`, {
+      .get(`${serverUrl}/board/fav?userId=${user.id}`, {
         // headers: {
         //   Authorization: `JWT ${user.token}`,
         // },
-        params: {
-          id: user.schoolId, // user의 schoolId 받아서 넣기
-        },
+        // params: {
+        //   id: user.schoolId, // user의 schoolId 받아서 넣기
+        // },
       })
       .then((response) => {
         setBoardList(response.data);
