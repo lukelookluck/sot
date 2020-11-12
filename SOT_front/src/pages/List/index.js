@@ -14,8 +14,6 @@ const styles = StyleSheet.create({
   text_box: {
     borderBottomWidth: 0.5,
     borderBottomColor: "gray",
-    // borderTopWidth: 0.5,
-    // borderTopColor: "gray",
     justifyContent: 'center',
     height: 50,
   }
@@ -24,24 +22,14 @@ const styles = StyleSheet.create({
 const List = ({navigation, route}) => {
 
   const [boardList, setBoardList] = useState([]);
-  let cnt = 0;
-  const [count, setCount] = useState(0);
-  const { serverUrl, user, setUser } = useContext(CommonContext);
-  const [msg, setMsg] = useState('no');
+  const { serverUrl, user, setUser, fav, setFav } = useContext(CommonContext);
 
   useEffect(() => {
     refreshList();
+    navigation.addListener('focus', () => {
+      refreshList();
+    })
   }, []);
-
-  function reLoad() {
-    refreshList();
-    route.params.isRe = 'no';
-    console.log(route.params.isRe);
-  }
-
-  function noLoad() {
-    console.log('아니야');
-  }
 
   function refreshList() {
     axios.get(`${serverUrl}/boards`, {
@@ -65,7 +53,22 @@ const List = ({navigation, route}) => {
   const goBoard = (b_name, b_id) => {
     console.log('유저의 아이디는');
     console.log(user.id);
-    navigation.navigate('Board', {name: b_name, id: b_id, u_id: user.id});
+
+    axios
+      .get(`${serverUrl}/board/${b_id}/isfaved?userId=${user.id}`, {
+        // headers: {
+        //   Authorization: `JWT ${user.token}`,
+        // },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setFav(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    navigation.navigate('Board', {name: b_name, id: b_id, u_id: user.id, isRe: 'no'});
   };
 
   const goReqNewBoard = () => {
@@ -81,7 +84,6 @@ const List = ({navigation, route}) => {
           {user.schoolName}
         </Text>
       </View>
-      {/* {msg === 'no' && route.params.isRe && route.params.isRe === 'yes' && (reLoad()) || (noLoad())} */}
       <FlatList
         data={boardList}
         keyExtractor={(item, index) => index.toString()}

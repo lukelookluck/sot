@@ -180,8 +180,7 @@ export default function Home({ navigation }) {
   return (
     <View>
       {(temp === null,
-        pressed === false && <Header name={user.schoolName} pressed={pressed}
-        />) || (
+        pressed === false && <Header name={user.schoolName} pressed={pressed} navigation={navigation} />) || (
           <Header
             name={temp}
             pressed={pressed}
@@ -189,7 +188,6 @@ export default function Home({ navigation }) {
             setPressed={setPressed}
             setMyloading={setMyloading}
             navigation={navigation}
-
           />
         )}
 

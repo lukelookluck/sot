@@ -7,9 +7,6 @@ export default function Header(props) {
 
   const { serverUrl, user, setUser } = useContext(CommonContext);
 
-  function onPress2() {
-    props.navigation.navigate('ArticleDisplay');
-  }
 
   const onPress = () => {
     props.setPressed(false);
@@ -74,7 +71,7 @@ export default function Header(props) {
         </View>
 
         <View style={{}}>
-          <TouchableHighlight onPress={() => onPress2()} underlayColor="#dfdfdf">
+          <TouchableHighlight onPress={() => props.navigation.navigate('MyPage')} underlayColor="#dfdfdf">
             <Icon style={{ color: 'white' }} name="person-outline" size={30} />
           </TouchableHighlight>
         </View>

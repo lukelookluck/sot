@@ -12,7 +12,7 @@ import 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {CommonContext} from "../../context/CommonContext";
 
-const MyPage = ({navigation, route}) => {
+const MyPage = (navigation) => {
 
   const { serverUrl, user, setUser } = useContext(CommonContext);
 
@@ -20,7 +20,9 @@ const MyPage = ({navigation, route}) => {
 
   return (
     <ScrollView>
-      
+      <View>
+        <Text>살려줘요</Text>
+      </View>
     </ScrollView>
   );
 };
