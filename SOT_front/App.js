@@ -6,6 +6,7 @@ import {
   TouchableHighlight,
   FlatList,
   View,
+  TouchableOpacity,
 } from 'react-native';
 import Start from './src/pages/Start';
 import SignUp from './src/pages/SignUp';
@@ -26,10 +27,31 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CommonContext } from './src/context/CommonContext';
 import { useLocalStorageSetState } from './src/common/CommonHooks';
+import axios from 'axios';
 
 const Stack = createStackNavigator();
 
+const addBookmark = (b_id, u_id) => {
+  console.log('help!');
+  console.log(b_id);
+  console.log(u_id);
+
+  axios
+    .post(`http://118.45.110.147:8090/board/${b_id}/fav/`, {
+      userId: u_id,
+    })
+    .then(function (response) {
+      console.log('제대로간겨??');
+      console.log(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
+
+
 function MyStack() {
+
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -74,6 +96,16 @@ function MyStack() {
           headerStyle: {
             backgroundColor: '#FACA0F',
           },
+          headerRight: () => (
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+              <TouchableOpacity onPress={() => addBookmark(route.params.id, route.params.u_id)}>
+                <Icon
+                  name="bookmark-outline"
+                  style={{ fontSize: 23, color: 'white', marginRight: 15 }}
+                />
+              </TouchableOpacity>
+            </View>
+          ),
         })}
         component={Board}
       />

@@ -61,6 +61,8 @@ const SignUp = ({navigation, route}) => {
         navigation.navigate('Main');
       })
       .catch(function (error) {
+        alert('사용할 수 없는 아이디입니다.');
+        setUserId('');
         console.log('에러난겨??');
         console.log(error);
       });
