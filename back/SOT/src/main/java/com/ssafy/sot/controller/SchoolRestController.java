@@ -120,9 +120,9 @@ public class SchoolRestController {
 	
 	@ApiOperation(value = "게시판 즐겨찾기 취소")
 	@DeleteMapping("/board/{boardId}/fav")
-	public Object unfavBoard(@PathVariable("boardId") int boardId, @RequestBody UserIdDTO userId) {
-		int id = userId.getUserId();
-		return new ResponseEntity<>(boardService.unfavBoard(boardId, id), HttpStatus.OK);
+	public Object unfavBoard(@PathVariable("boardId") int boardId, @RequestParam("userId") int userId) {
+//		int id = userId.getUserId();
+		return new ResponseEntity<>(boardService.unfavBoard(boardId, userId), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "게시판의 게시글 리스트 읽기")
