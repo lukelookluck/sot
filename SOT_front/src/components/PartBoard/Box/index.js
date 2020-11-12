@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, TouchableHighlight, Image } from 'react-native';
 import PartBoardSingle from '../Single';
 import SingleArticle from '../SingleArticle';
@@ -8,17 +8,26 @@ export default function PartBoard(props) {
     props.navigation.navigate('ArticleDisplay');
   }
 
-  const certainArticleList = props.certainArticleList.map((article) => {
-    return (
-      <View key={article.id}>
-        <SingleArticle article={article} />
-      </View>
-    );
-  });
+  // const certainArticleList = props.certainArticleList.map((article) => {
+  //   return (
+  //     <View key={article.id}>
+  //       <SingleArticle article={article} />
+  //     </View>
+  //   );
+  // });
 
-  setTimeout(() => {
-    props.setMyloading(true);
-  }, 2000);
+  // setTimeout(() => {
+  //   props.setMyloading(true);
+  // }, 2000);
+
+  // useEffect(() => {
+  //   if (props.wholeArticleList.length > 0 || props.certainArticleList.length > 0) {
+  //     props.setMyloading(true);
+  //   }
+  // })
+
+
+
   return (
     <View>
       {(props.myLoading === true && (

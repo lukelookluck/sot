@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
@@ -17,15 +17,15 @@ import Board from './src/pages/Board';
 import ArticleDisplay from './src/pages/ArticleDisplay';
 import SchoolSearch from './src/pages/SchoolSearch';
 import ReqNewBoard from './src/pages/ReqNewBoard';
-import {NavigationContainer} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {CommonContext} from './src/context/CommonContext';
-import {useLocalStorageSetState} from './src/common/CommonHooks';
+import { CommonContext } from './src/context/CommonContext';
+import { useLocalStorageSetState } from './src/common/CommonHooks';
 
 const Stack = createStackNavigator();
 
@@ -34,7 +34,7 @@ function MyStack() {
     <Stack.Navigator>
       <Stack.Screen
         name="Start"
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
         component={Start}
       />
       <Stack.Screen
@@ -62,12 +62,12 @@ function MyStack() {
       />
       <Stack.Screen
         name="Main"
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
         component={TabsScreen}
       />
       <Stack.Screen
         name="Board"
-        options={({route}) => ({
+        options={({ route }) => ({
           title: route.params.name,
           headerShown: true,
           headerTintColor: 'white',
@@ -91,7 +91,7 @@ function MyStack() {
       />
       <Stack.Screen
         name="ArticleDisplay"
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           title: '',
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           headerShown: true,
@@ -134,8 +134,8 @@ const Tab = createBottomTabNavigator();
 
 const TabsScreen = () => (
   <Tab.Navigator
-    screenOptions={({route}) => ({
-      tabBarIcon: ({focused, color, size}) => {
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ focused, color, size }) => {
         if (route.name === '홈') {
           return (
             <Icon
@@ -189,7 +189,7 @@ export default function App() {
     'user',
   );
 
-  const HOST = '118.45.110.147:8090';
+  const HOST = '192.168.100.72:8090/';
   const serverUrl = `http://${HOST}`;
 
   return (

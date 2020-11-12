@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableHighlight,
   FlatList,
+  Image,
 } from 'react-native';
 import axios from 'axios';
 import Header from '../../components/Header';
@@ -22,6 +23,8 @@ export default function Home({ navigation }) {
   const [temp, setTemp] = useState(null);
   const [pressed, setPressed] = useState(false);
   const [myLoading, setMyloading] = useState(false);
+  const [myLoading2, setMyloading2] = useState(false);
+
 
   const [boardList, setBoardList] = useState([]);
 
@@ -30,16 +33,14 @@ export default function Home({ navigation }) {
   // 특정게시글
   const [certainArticleList, setCertainArticleList] = useState([]);
 
-  React.useEffect(() =>
-    navigation.addListener('focus', () => {
-      refreshBoardList();
-      refreshWholeArticleList();
-    }),
-  );
 
   useEffect(() => {
     refreshBoardList();
     refreshWholeArticleList();
+    navigation.addListener('focus', () => {
+      refreshBoardList();
+      refreshWholeArticleList();
+    });
   }, []);
 
   // 게시판 리스트 불러오기
@@ -54,9 +55,9 @@ export default function Home({ navigation }) {
         },
       })
       .then((response) => {
-        // console.log('here????');
-        // console.log(response.data);
         setBoardList(response.data);
+        setMyloading2(true);
+
       })
       .catch((error) => {
         console.log('why???');
@@ -79,6 +80,8 @@ export default function Home({ navigation }) {
         setwholeArticleList([])
         console.log("전체 새로고침", res.data);
         setwholeArticleList(res.data);
+        setMyloading(true);
+
       })
       .catch((err) => {
         console.log(err.data);
@@ -88,21 +91,22 @@ export default function Home({ navigation }) {
   // 특정 게시판 게시글 불러오기
   function refreshCertainArticleList(data) {
     axios
-      .get(`${serverUrl}/board/${data.id}`, {
+      .get(`${serverUrl}/board/${data.id}/?userId=${user.id}`, {
         // headers: {
         //     Authorization: `JWT ${user.token}`,
         //   },
       })
       .then((res) => {
-        // console.log(res.data);
-        setCertainArticleList(res.data);
+        setCertainArticleList(res.data.articles);
+        setMyloading(true);
       })
       .catch((err) => {
-        console.log(err.data);
+        console.log(err);
       });
   }
 
   function initHeader(data) {
+    console.log(data)
     if (temp === data.name) {
       setTemp(null);
       setPressed(false);
@@ -189,9 +193,19 @@ export default function Home({ navigation }) {
       <ScrollView
         style={{ marginBottom: 50 }}
         showsHorizontalScrollIndicator={false}>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <View style={{ flexDirection: 'row', paddingLeft: 10 }}>{a}</View>
-        </ScrollView>
+        {(myLoading2 === true && (
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            <View style={{ flexDirection: 'row', paddingLeft: 10 }}>{a}</View>
+          </ScrollView>
+
+        )) || (
+            <View style={{ marginTop: 10, flex: 1, alignItems: 'center' }}>
+              <Image
+                source={require('../../components/PartBoard/Box/spiner.gif')}
+                style={{ width: 50, height: 50 }}
+              />
+            </View>
+          )}
 
         <View>
           {/* <PartBoard
