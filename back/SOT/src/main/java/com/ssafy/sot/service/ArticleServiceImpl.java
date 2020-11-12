@@ -90,6 +90,7 @@ public class ArticleServiceImpl implements ArticleService {
 			commentLikeDTO.setCommentId(originalComment.getId());
 			commentLikeDTO.setUserId(userId);
 			boolean commentIsLiked = commentLikeDAO.alreadyLikedComment(commentLikeDTO);
+//			System.out.println(commentIsLiked);
 			originalComment.setIsLiked(commentIsLiked);
 			
 			List<CommentDTO> originalReplies = commentDAO.selectReplyCommentsByParentId(originalComment.getId());
@@ -103,7 +104,9 @@ public class ArticleServiceImpl implements ArticleService {
 				replies.add(originalReply);
 			}
 			
+//			System.out.println(originalComment.getIsLiked());
 			CommentWithReply comment = new CommentWithReply(originalComment, replies);
+			comment.setIsLiked(commentIsLiked);
 			comments.add(comment);
 		}
 		if(article != null) {
@@ -179,6 +182,16 @@ public class ArticleServiceImpl implements ArticleService {
 	public List<ArticleFullInfo> showBestArticles(int boardId, int startIdx, int amount) {
 		IdWithIndexDTO idWithIndexDTO = new IdWithIndexDTO(boardId, startIdx, amount);
 		return articleDAO.selectBestArticlesByBoardId(boardId, idWithIndexDTO);
+	}
+
+	@Override
+	public List<ArticleFullInfo> showMyArticles(int userId) {
+		return articleDAO.selectMyArticles(userId);
+	}
+
+	@Override
+	public List<ArticleFullInfo> showLikedArticles(int userId) {
+		return articleDAO.selectLikedArticles(userId);
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.ssafy.sot.controller;
 
+import java.sql.Timestamp;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -98,6 +100,8 @@ public class UserRestController {
 	@GetMapping("login")
 	public Object login(@RequestParam String email, @RequestParam String password) {
 		try {
+			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+			System.out.println("currentTimeStamp: " + timestamp);
 			UserLoginDTO loginDTO = new UserLoginDTO(email, password);
 			UserInfoDTO uservo = userService.login(loginDTO);
 			if(uservo != null) {

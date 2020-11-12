@@ -230,5 +230,48 @@
 		delete from article
 		where id = #{id}
 	</delete>
+	
+	<!-- 마이페이지 관련 -->
+	<select id="selectMyArticles" resultType="ArticleFullInfo">
+		select article.id,
+			article.title,
+			article.content,
+			article.board_id as boardId,
+			board.name as boardName,
+			article.user_id as userId,
+			user.nickname as nickname,
+			article.created_at,
+			article.updated_at,
+			(select count(id) from comment where comment.article_id = article.id) as commentsCnt,
+			(select count(id) from articlelike where articlelike.article_id = article.id) as likesCnt
+		from article
+		join user
+		on article.user_id = user.id
+		join board
+		on article.board_id = board.id
+		where article.id in (select article.id from article where article.user_id = #{userId})
+		order by id desc
+	</select>
+	
+	<select id="selectLikedArticles" resultType="ArticleFullInfo">
+		select article.id,
+			article.title,
+			article.content,
+			article.board_id as boardId,
+			board.name as boardName,
+			article.user_id as userId,
+			user.nickname as nickname,
+			article.created_at,
+			article.updated_at,
+			(select count(id) from comment where comment.article_id = article.id) as commentsCnt,
+			(select count(id) from articlelike where articlelike.article_id = article.id) as likesCnt
+		from article
+		join user
+		on article.user_id = user.id
+		join board
+		on article.board_id = board.id
+		where article.id in (select articlelike.article_id from articlelike where articlelike.user_id = #{userId})
+		order by id desc
+	</select>
 
 </mapper>
