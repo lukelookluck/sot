@@ -51,4 +51,9 @@ public class BoardDAOImpl implements BoardDAO {
 	public int insertBoardCreator(BoardNewDTO boardNewDTO) {
 		return sqlSession.insert("board.insertBoardCreator", boardNewDTO);
 	}
+
+	@Override
+	public int deleteBaord(int id) {
+		return sqlSession.delete("board.deleteBoard", id);
+	}
 }

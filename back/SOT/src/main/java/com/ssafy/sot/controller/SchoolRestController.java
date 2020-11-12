@@ -52,6 +52,16 @@ public class SchoolRestController {
 	@Autowired
 	JWTUtil jwtUtil;
 	
+	@GetMapping("/myarticles")
+	public Object myArticles(@RequestParam("id") int userId) {
+		return new ResponseEntity<>(articleService.showMyArticles(userId), HttpStatus.OK);
+	}
+	
+	@GetMapping("/likedarticles")
+	public Object likedArticles(@RequestParam("id") int userId) {
+		return new ResponseEntity<>(articleService.showLikedArticles(userId), HttpStatus.OK);
+	}
+	
 	
 	@ApiOperation(value = "시도 리스트 (없는 학교 신청시 시도 선택용)")
 	@GetMapping("/sido")
@@ -211,6 +221,7 @@ public class SchoolRestController {
 							@PathVariable("commentId") int commentId,
 //							HttpServletRequest request,
 							@RequestParam("userId") int userId) {
+//		System.out.println("boardId:" + boardId + ", articleId: " + articleId + "commentId: " + commentId + "userId:" + userId);
 		return new ResponseEntity<>(likeService.likeComment(commentId, userId), HttpStatus.OK);
 	}
 	

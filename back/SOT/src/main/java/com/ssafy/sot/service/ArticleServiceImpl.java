@@ -20,6 +20,7 @@ import com.ssafy.sot.dto.BoardFavDTO;
 import com.ssafy.sot.dto.CommentDTO;
 import com.ssafy.sot.dto.CommentLikeDTO;
 import com.ssafy.sot.dto.CommentWithReply;
+import com.ssafy.sot.dto.IdWithIndexDTO;
 import com.ssafy.sot.dto.Like;
 
 @Service
@@ -89,6 +90,7 @@ public class ArticleServiceImpl implements ArticleService {
 			commentLikeDTO.setCommentId(originalComment.getId());
 			commentLikeDTO.setUserId(userId);
 			boolean commentIsLiked = commentLikeDAO.alreadyLikedComment(commentLikeDTO);
+//			System.out.println(commentIsLiked);
 			originalComment.setIsLiked(commentIsLiked);
 			
 			List<CommentDTO> originalReplies = commentDAO.selectReplyCommentsByParentId(originalComment.getId());
@@ -102,7 +104,9 @@ public class ArticleServiceImpl implements ArticleService {
 				replies.add(originalReply);
 			}
 			
+//			System.out.println(originalComment.getIsLiked());
 			CommentWithReply comment = new CommentWithReply(originalComment, replies);
+			comment.setIsLiked(commentIsLiked);
 			comments.add(comment);
 		}
 		if(article != null) {
@@ -154,6 +158,40 @@ public class ArticleServiceImpl implements ArticleService {
 		boardFavDTO.setBoardId(boardId);
 		List<ArticleFullInfo> articles = articleDAO.selectArticlesByBoardId(boardId);
 		return articles;
+	}
+
+	@Override
+	public List<ArticleFullInfo> showArticles(int boardId, int startIdx, int amount) {
+		IdWithIndexDTO idWithIndexDTO = new IdWithIndexDTO(boardId, startIdx, amount);
+		return articleDAO.selectArticlesByBoardId(boardId, idWithIndexDTO);
+	}
+
+	@Override
+	public List<ArticleFullInfo> showAllArticles(int schoolId, int startIdx, int amount) {
+		IdWithIndexDTO idWithIndexDTO = new IdWithIndexDTO(schoolId, startIdx, amount);
+		return articleDAO.selectArticlesBySchoolId(schoolId, idWithIndexDTO);
+	}
+
+	@Override
+	public List<ArticleFullInfo> showAllBestArticles(int schoolId, int startIdx, int amount) {
+		IdWithIndexDTO idWithIndexDTO = new IdWithIndexDTO(schoolId, startIdx, amount);
+		return articleDAO.selectBestArticlesBySchoolId(schoolId, idWithIndexDTO);
+	}
+
+	@Override
+	public List<ArticleFullInfo> showBestArticles(int boardId, int startIdx, int amount) {
+		IdWithIndexDTO idWithIndexDTO = new IdWithIndexDTO(boardId, startIdx, amount);
+		return articleDAO.selectBestArticlesByBoardId(boardId, idWithIndexDTO);
+	}
+
+	@Override
+	public List<ArticleFullInfo> showMyArticles(int userId) {
+		return articleDAO.selectMyArticles(userId);
+	}
+
+	@Override
+	public List<ArticleFullInfo> showLikedArticles(int userId) {
+		return articleDAO.selectLikedArticles(userId);
 	}
 
 }
