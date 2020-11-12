@@ -41,8 +41,8 @@ public class NoticeQnARestController {
 	
 	@ApiOperation(value = "공지사항 글 하나 읽기")
 	@GetMapping("/notice/{articleId}")
-	public Object readNotice(@PathVariable("articleId") int articleId) {
-		return new ResponseEntity<>(articleService.showArticle(articleId), HttpStatus.OK);
+	public Object readNotice(@PathVariable("articleId") int articleId, @PathVariable("userId") int userId) {
+		return new ResponseEntity<>(articleService.showArticle(articleId, userId), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "공지사항 글 작성")
@@ -75,8 +75,8 @@ public class NoticeQnARestController {
 	
 	@ApiOperation(value = "QnA 글 하나 읽기")
 	@GetMapping("/qna/{articleId}")
-	public Object readOneQnA(@PathVariable("articleId") int articleId) {
-		return new ResponseEntity<>(articleService.showArticle(articleId), HttpStatus.OK);
+	public Object readOneQnA(@PathVariable("articleId") int articleId, @PathVariable("userId") int userId) {
+		return new ResponseEntity<>(articleService.showArticle(articleId, userId), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "QnA 글 작성")
