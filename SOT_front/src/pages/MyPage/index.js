@@ -16,9 +16,15 @@ const MyPage = ({navigation}) => {
 
   const { serverUrl, user, setUser } = useContext(CommonContext);
 
+  const goLogout = () => {
+    setUser({});
+    alert('로그아웃 되었습니다');
+    navigation.navigate('Start');
+  };
+
   return (
     <ScrollView>
-      <View style={{borderBottomColor: 'gray', borderBottomWidth: 0.5, paddingBottom: 10,}}>
+      <View style={{ paddingBottom: 10,}}>
         <View style={styles.nick}>
           <Text style={styles.nicktext}>{user.nickname}</Text>
           <Text style={{fontSize: 20}}> 님</Text>
@@ -29,14 +35,24 @@ const MyPage = ({navigation}) => {
         </View>
       </View>
 
+      <View style={{height: 15, backgroundColor: 'lightgray'}}></View>
+
       <View style={styles.title}>
         <TouchableOpacity onPress={() => navigation.navigate('MyArticle')}>
           <Text style={styles.titleText}>내가 쓴 게시글</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.title}>
+      <View style={styles.title2}>
         <TouchableOpacity onPress={() => navigation.navigate('LikeArticle')}>
           <Text style={styles.titleText}>좋아요 한 게시글</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={{height: 15, backgroundColor: 'lightgray'}}></View>
+
+      <View style={styles.title}>
+        <TouchableOpacity onPress={goLogout}>
+          <Text style={styles.titleText}>로그아웃</Text>
         </TouchableOpacity>
       </View>
 
@@ -71,6 +87,11 @@ const styles = StyleSheet.create({
     height: 50,
     borderBottomWidth: 0.5,
     borderBottomColor: "gray",
+    justifyContent: 'center',
+  },
+
+  title2 : {
+    height: 50,
     justifyContent: 'center',
   },
 
