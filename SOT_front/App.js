@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component, useContext, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -29,36 +29,38 @@ import { CommonContext } from './src/context/CommonContext';
 import { useLocalStorageSetState } from './src/common/CommonHooks';
 import axios from 'axios';
 
+
 const Stack = createStackNavigator();
 
 const addBookmark = (b_id, u_id) => {
   console.log('help!');
   console.log(b_id);
   console.log(u_id);
-
+  
   axios
-    .post(`http://118.45.110.147:8090/board/${b_id}/fav/`, {
-      userId: u_id,
-    })
-    .then(function (response) {
-      console.log('제대로간겨??');
-      console.log(response.data);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  .post(`http://192.168.100.72:8090/board/${b_id}/fav/`, {
+    userId: u_id,
+  })
+  .then(function (response) {
+    console.log('제대로간겨??');
+    console.log(response.data);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
 }
 
 
 function MyStack() {
-
+  
+  const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Start"
         options={{ headerShown: false }}
         component={Start}
-      />
+        />
       <Stack.Screen
         name="회원가입"
         options={{
@@ -100,8 +102,8 @@ function MyStack() {
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
               <TouchableOpacity onPress={() => addBookmark(route.params.id, route.params.u_id)}>
                 <Icon
-                  name="bookmark-outline"
-                  style={{ fontSize: 23, color: 'white', marginRight: 15 }}
+                  name={fav ? "bookmark" : "bookmark-outline"}
+                  style={{fontSize: 23, color: 'white', marginRight: 15}}
                 />
               </TouchableOpacity>
             </View>
@@ -221,8 +223,9 @@ export default function App() {
     'user',
   );
 
-  const HOST = '192.168.100.72:8090/';
+  const HOST = '192.168.100.72:8090';
   const serverUrl = `http://${HOST}`;
+  const [fav, setFav] = useLocalStorageSetState(false, "fav");
 
   return (
     <CommonContext.Provider
@@ -230,6 +233,8 @@ export default function App() {
         serverUrl,
         user,
         setUser,
+        fav, 
+        setFav,
       }}>
       <NavigationContainer>
         <MyStack />

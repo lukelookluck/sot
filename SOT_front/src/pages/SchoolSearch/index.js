@@ -60,6 +60,7 @@ const SchoolSearch = ({navigation}) => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (
           <View style={styles.s_box}>
+            <Text style={styles.sido}>{item.sido}</Text>
             <Text style={styles.item} onPress={() => navigation.navigate("회원가입", {s_name: item.name, s_id: item.id})}>{item.name}</Text>
           </View>
         )}></FlatList>
@@ -93,9 +94,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 10,
   },
+  
+  sido: {
+    fontSize: 15,
+    marginLeft: 10,
+  },
+
   s_box : {
     justifyContent: 'center',
-    height: 50,
+    height: 60,
     borderBottomWidth: 1,
     borderBottomColor: 'silver',
     borderLeftWidth: 1,

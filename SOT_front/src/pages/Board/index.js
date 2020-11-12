@@ -15,18 +15,19 @@ import {CommonContext} from '../../context/CommonContext';
 import {color} from 'react-native-reanimated';
 import SingleArticle from '../../components/PartBoard/SingleArticle'
 
+
 const Board = ({navigation, route}) => {
-  const {serverUrl} = useContext(CommonContext);
-  let cnt = 0;
-  const [count, setCount] = useState(0);
+  const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
   const [postList, setPostList] = useState([]);
   const [msg, setMsg] = useState('no');
-
+  // const [fav, setFav] = useState(false);
 
   useEffect(() => {
     refreshList();
+    refreshFav();
     navigation.addListener('focus', () => {
       refreshList();
+      refreshFav();
     })
   }, []);
 
@@ -41,6 +42,22 @@ const Board = ({navigation, route}) => {
     refreshList();
     route.params.isRe = 'no';
     console.log(route.params.isRe);
+  }
+
+  function refreshFav() {
+    axios
+      .get(`${serverUrl}/board/${route.params.id}/isfaved?userId=${user.id}`, {
+        // headers: {
+        //   Authorization: `JWT ${user.token}`,
+        // },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setFav(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function refreshList() {
