@@ -63,4 +63,9 @@ public class BoardServiceImpl implements BoardService {
 		return boardDAO.alreadyFaved(dto);
 	}
 
+	@Override
+	public boolean deleteBoard(int id) {
+		return boardDAO.deleteBaord(id) == 1;
+	}
+
 }

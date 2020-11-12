@@ -19,5 +19,10 @@ public interface ArticleService {
 	public List<ArticleFullInfo> showAllArticles(int schoolId);
 	public List<ArticleFullInfo> showAllBestArticles(int schoolId);
 	public List<ArticleFullInfo> showBestArticles(int boardId);
+	
+	public List<ArticleFullInfo> showArticles(int boardId, int startIdx, int amount);
+	public List<ArticleFullInfo> showAllArticles(int schoolId, int startIdx, int amount);
+	public List<ArticleFullInfo> showAllBestArticles(int schoolId, int startIdx, int amount);
+	public List<ArticleFullInfo> showBestArticles(int boardId, int startIdx, int amount);
 
 }

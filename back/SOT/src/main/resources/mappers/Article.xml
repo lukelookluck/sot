@@ -5,6 +5,102 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="article">
+	<!-- **************** limit 두는 시리즈 **************** -->
+	<!-- (LIMIT) 특정 학교의 전체 게시글 불러오기 -->
+	<select id="selectArticlesBySchoolIdWithLimit" parameterType="IdWithIndexDTO" resultType="ArticleFullInfo">
+		select article.id,
+			article.title,
+			article.content,
+			article.board_id as boardId,
+			board.name as boardName,
+			article.user_id as userId,
+			user.nickname as nickname,
+			article.created_at,
+			article.updated_at,
+			(select count(id) from comment where comment.article_id = article.id) as commentsCnt,
+			(select count(id) from articlelike where articlelike.article_id = article.id) as likesCnt
+		from article
+		join user
+		on article.user_id = user.id
+		join board
+		on article.board_id = board.id
+		where board_id in (select id from board where school_id = #{id})
+		order by id desc
+		limit #{startIdx}, #{amount}
+	</select>
+	
+	<!-- (LIMIT) 특정 학교의 베스트 게시글 불러오기 (최신글 순) -->
+	<select id="selectBestArticlesBySchoolIdWithLimit" parameterType="IdWithIndexDTO" resultType="ArticleFullInfo">
+		select article.id,
+			article.title,
+			article.content,
+			article.board_id as boardId,
+			board.name as boardName,
+			article.user_id as userId,
+			user.nickname as nickname,
+			article.created_at,
+			article.updated_at,
+			(select count(id) from comment where comment.article_id = article.id) as commentsCnt,
+			(select count(id) from articlelike where articlelike.article_id = article.id) as likesCnt
+		from article
+		join user
+		on article.user_id = user.id
+		join board
+		on article.board_id = board.id
+		where board_id in (select id from board where school_id = #{id})
+		and (select count(id) from articlelike where articlelike.article_id = article.id) > 2
+		order by id desc
+		limit #{startIdx}, #{amount}
+	</select>
+	
+	<!-- (LIMIT) 특정 게시판의 전체 글 불러오기(최신글 순) -->
+	<select id="selectArticlesByBoardIdWithLimit" parameterType="idWithIndexDTO" resultType="ArticleFullInfo">
+		select article.id,
+			article.title,
+			article.content,
+			article.board_id as boardId,
+			board.name as boardName,
+			article.user_id as userId,
+			user.nickname as nickname,
+			article.created_at,
+			article.updated_at,
+			(select count(id) from comment where comment.article_id = article.id) as commentsCnt,
+			(select count(id) from articlelike where articlelike.article_id = article.id) as likesCnt
+		from article
+		join user
+		on article.user_id = user.id
+		join board
+		on article.board_id = board.id
+		where board_id = #{id}
+		order by id desc
+		limit #{startIdx}, #{amount}
+	</select>
+	
+	<!-- (LIMIT) 특정 게시판의 베스트 글 불러오기(최신글 순) -->
+	<select id="selectBestArticlesByBoardIdWithLimit" parameterType="idWithIndexDTO" resultType="ArticleFullInfo">
+		select article.id,
+			article.title,
+			article.content,
+			article.board_id as boardId,
+			board.name as boardName,
+			article.user_id as userId,
+			user.nickname as nickname,
+			article.created_at,
+			article.updated_at,
+			(select count(id) from comment where comment.article_id = article.id) as commentsCnt,
+			(select count(id) from articlelike where articlelike.article_id = article.id) as likesCnt
+		from article
+		join user
+		on article.user_id = user.id
+		join board
+		on article.board_id = board.id
+		where board_id = #{id}
+		and (select count(id) from articlelike where articlelike.article_id = article.id) > 2
+		order by id desc
+		limit #{startIdx}, #{amount}
+	</select>
+	
+	<!-- *************** **************** -->
 
 	<!-- 특정 학교의 전체 게시글 불러오기 (최신글 순) -->
 	<select id="selectArticlesBySchoolId" resultType="ArticleFullInfo">

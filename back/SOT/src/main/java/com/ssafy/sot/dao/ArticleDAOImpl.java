@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ssafy.sot.dto.ArticleDTO;
 import com.ssafy.sot.dto.ArticleFullInfo;
+import com.ssafy.sot.dto.IdWithIndexDTO;
 
 @Repository
 public class ArticleDAOImpl implements ArticleDAO {
@@ -53,6 +54,26 @@ public class ArticleDAOImpl implements ArticleDAO {
 	@Override
 	public List<ArticleFullInfo> selectBestArticlesByBoardId(int boardId) {
 		return sqlSession.selectList("article.selectBestArticlesByBoardId", boardId);
+	}
+
+	@Override
+	public List<ArticleFullInfo> selectArticlesBySchoolId(int schoolId, IdWithIndexDTO idWithIndexDTO) {
+		return sqlSession.selectList("article.selectArticlesBySchoolIdWithLimit", idWithIndexDTO);
+	}
+
+	@Override
+	public List<ArticleFullInfo> selectBestArticlesBySchoolId(int schoolId, IdWithIndexDTO idWithIndexDTO) {
+		return sqlSession.selectList("article.selectBestArticlesBySchoolIdWithLimit", idWithIndexDTO);
+	}
+
+	@Override
+	public List<ArticleFullInfo> selectBestArticlesByBoardId(int boardId, IdWithIndexDTO idWithIndexDTO) {
+		return sqlSession.selectList("article.selectBestArticlesByBoardIdWithLimit", idWithIndexDTO);
+	}
+
+	@Override
+	public List<ArticleFullInfo> selectArticlesByBoardId(int boardId, IdWithIndexDTO idWithIndexDTO) {
+		return sqlSession.selectList("article.selectArticlesByBoardIdWithLimit", idWithIndexDTO);
 	}
 
 }

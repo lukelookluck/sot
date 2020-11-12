@@ -20,6 +20,7 @@ import com.ssafy.sot.dto.BoardFavDTO;
 import com.ssafy.sot.dto.CommentDTO;
 import com.ssafy.sot.dto.CommentLikeDTO;
 import com.ssafy.sot.dto.CommentWithReply;
+import com.ssafy.sot.dto.IdWithIndexDTO;
 import com.ssafy.sot.dto.Like;
 
 @Service
@@ -154,6 +155,30 @@ public class ArticleServiceImpl implements ArticleService {
 		boardFavDTO.setBoardId(boardId);
 		List<ArticleFullInfo> articles = articleDAO.selectArticlesByBoardId(boardId);
 		return articles;
+	}
+
+	@Override
+	public List<ArticleFullInfo> showArticles(int boardId, int startIdx, int amount) {
+		IdWithIndexDTO idWithIndexDTO = new IdWithIndexDTO(boardId, startIdx, amount);
+		return articleDAO.selectArticlesByBoardId(boardId, idWithIndexDTO);
+	}
+
+	@Override
+	public List<ArticleFullInfo> showAllArticles(int schoolId, int startIdx, int amount) {
+		IdWithIndexDTO idWithIndexDTO = new IdWithIndexDTO(schoolId, startIdx, amount);
+		return articleDAO.selectArticlesBySchoolId(schoolId, idWithIndexDTO);
+	}
+
+	@Override
+	public List<ArticleFullInfo> showAllBestArticles(int schoolId, int startIdx, int amount) {
+		IdWithIndexDTO idWithIndexDTO = new IdWithIndexDTO(schoolId, startIdx, amount);
+		return articleDAO.selectBestArticlesBySchoolId(schoolId, idWithIndexDTO);
+	}
+
+	@Override
+	public List<ArticleFullInfo> showBestArticles(int boardId, int startIdx, int amount) {
+		IdWithIndexDTO idWithIndexDTO = new IdWithIndexDTO(boardId, startIdx, amount);
+		return articleDAO.selectBestArticlesByBoardId(boardId, idWithIndexDTO);
 	}
 
 }
