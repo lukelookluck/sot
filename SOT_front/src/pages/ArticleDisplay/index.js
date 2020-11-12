@@ -15,21 +15,23 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
 
 import { CommonContext } from '../../context/CommonContext';
-import ReplyList from '../../components/ReplyList'
+import CommentList from '../../components/CommentList'
 
-export default function ({ route }) {
+export default function ({ navigation, route }) {
   const { serverUrl, user, setUser } = useContext(CommonContext);
   const [article, setArticle] = useState(route.params.article);
   useEffect(() => {
     getArticleInfo();
   }, []);
 
+  // 게시글 조회
   function getArticleInfo() {
     axios
       .get(
         `${serverUrl}/board/${route.params.article.boardId}/${route.params.article.id}?userId=${user.id}`,
       )
       .then((res) => {
+        setArticle([])
         setArticle(res.data);
       })
       .catch((err) => {
@@ -37,8 +39,7 @@ export default function ({ route }) {
       });
   }
 
-  const comments = article.comments || [];
-
+  // 답글폼 띄우기
   function writeReply(data) {
     Alert.alert(
       '답글을 작성하시겠습니까?',
@@ -60,115 +61,7 @@ export default function ({ route }) {
     );
   }
 
-
-  const comments2 = comments.map((comment) => {
-
-    console.log(comment.replies)
-    return (
-      <View
-        key={comment.id}
-        style={{
-          paddingTop: 5,
-          borderBottomWidth: 2,
-          borderBottomColor: '#dbdbdb',
-        }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-            }}>
-            <Icon
-              name="person-circle"
-              style={{ fontSize: 40, color: '#919191' }}
-            />
-            <View style={{ flexDirection: 'column', marginLeft: 5 }}>
-              <Text
-                style={{
-                  fontWeight: '700',
-                  fontSize: 12,
-                  color: '#5e5e5e',
-                  paddingTop: 5,
-                  paddingBottom: 2,
-                }}>
-                {comment.nickname}
-              </Text>
-              <Text style={{ fontSize: 13 }}>{comment.content}</Text>
-              <View style={{ flexDirection: 'row', paddingVertical: 5 }}>
-                <Text style={{ fontSize: 12, color: '#5e5e5e' }}>
-                  {getTime(comment.created_at)}
-                </Text>
-
-                <TouchableOpacity
-                  style={{
-                    marginLeft: 15,
-                  }}
-                  onPress={() => writeReply(comment)}
-                  activeOpacity={1}>
-                  <Text style={{ fontSize: 12, color: '#5e5e5e' }}>
-                    답글 달기..
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-          {(comment.isLiked === false) && (
-            <TouchableHighlight
-              style={{
-                borderRadius: 20,
-              }}
-              onPress={() => {
-                likeArticle(comment)
-              }}
-              underlayColor="#dfdfdf">
-
-              <Icon
-                name="heart-outline"
-                color="#ff8000"
-                style={{
-                  fontSize: 22.5,
-                  paddingVertical: 5,
-                  paddingHorizontal: 6,
-                  // backgroundColor: 'white',
-                  borderRadius: 20,
-                }}
-              />
-            </TouchableHighlight>
-          ) || (
-              <TouchableHighlight
-                style={{
-                  borderRadius: 20,
-                }}
-                onPress={() => likeArticle(comment)}
-                underlayColor="#dfdfdf">
-
-                <Icon
-                  name="heart"
-                  color="#ff8000"
-                  style={{
-                    fontSize: 22.5,
-                    paddingVertical: 5,
-                    paddingHorizontal: 6,
-                    // backgroundColor: 'white',
-                    borderRadius: 20,
-                  }}
-                />
-              </TouchableHighlight>
-            )}
-        </View>
-        <ReplyList comment={comment.replies} boardId={article.boardId} />
-      </View>
-    );
-  });
-
-
-
-
-
+  const comments = article.comments || [];
 
   function getTime(myTime) {
     let theTime = null;
@@ -206,14 +99,15 @@ export default function ({ route }) {
     return theTime;
   }
 
+  // 댓글 작성
   function goComment() {
+    // 답글 
     if (replyId) {
       axios
         .post(
           `${serverUrl}/board/${article.boardId}/${article.id}/${replyId}/?content=${textInput2}&userId=${user.id}`,
         )
         .then((res) => {
-          console.log(res);
           setModalVisible(false);
           setIsReply(false);
           setTextInput2(null);
@@ -231,7 +125,6 @@ export default function ({ route }) {
         `${serverUrl}/board/${article.boardId}/${article.id}/?content=${textInput2}&userId=${user.id}`,
       )
       .then((res) => {
-        console.log(res.data);
         setModalVisible(false);
         setIsReply(false);
         setTextInput2(null);
@@ -242,7 +135,7 @@ export default function ({ route }) {
       });
   }
 
-
+  // 게시글 좋아요
   function likeArticle(data) {
     axios
       .post(`${serverUrl}/board/${article.boardId}/${data.id}/like?userId=${user.id}`,)
@@ -265,12 +158,26 @@ export default function ({ route }) {
       })
   }
 
+  // 게시글 수정/삭제
+  function deleteArticle(data) {
+    navigation.navigate('Main')
+    console.log(navigation)
+    // axios
+    //   .post(`${serverUrl}/board/${article.boardId}/${data.id}`)
+    //   .then((res) => {
+    //     console.log(res)
+    //   })
+  }
+
+  // 댓글작성폼 관련
   const [modalVisible, setModalVisible] = useState(false);
   const [isReply, setIsReply] = useState(false);
   const [replyId, setReplyId] = useState(null);
-
   const [textInput2, setTextInput2] = useState(null);
   let textInput = '';
+
+  // 게시글 수정/삭제 모달 관련
+  const [modalVisible2, setModalVisible2] = useState(false);
 
   return (
     <ScrollView keyboardShouldPersistTaps={'always'}>
@@ -302,13 +209,114 @@ export default function ({ route }) {
             style={{
               borderRadius: 20,
             }}
-            onPress={() => onPress()}
+            onPress={() => setModalVisible2(true)}
             underlayColor="#dfdfdf">
             <Icon
               name="ellipsis-vertical"
               style={{ fontSize: 22.5, paddingVertical: 4, paddingHorizontal: 5 }}
             />
           </TouchableHighlight>
+          {/* 수정/삭제 모달 */}
+          <Modal
+            style={{
+              margin: 0,
+            }}
+            animationIn="slideInUp"
+            animationInTiming={500}
+            animationOut="fadeOut"
+            animationOutTiming={500}
+            isVisible={modalVisible2}
+            useNativeDriver={true}
+            // hideModalContentWhileAnimating={true}
+            // onModalShow={() => {
+            //   textInput.focus();
+            // }}
+            onBackdropPress={() => {
+              setModalVisible2(false);
+            }}
+            onBackButtonPress={() => {
+              setModalVisible2(false);
+            }}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'flex-end',
+                // backgroundColor: 'rgba(52, 52, 52, 0.5)',
+              }}>
+              <View
+                style={{
+                  backgroundColor: 'white',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                }}>
+                <TouchableHighlight
+                  onPress={() => { deleteArticle() }}
+                  underlayColor="#dfdfdf"
+                  style={{
+                    backgroundColor: 'white',
+                    paddingVertical: 15,
+                    flexDirection: 'row',
+
+                  }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      flex: 1
+                    }}>
+                    <Icon
+                      name="build"
+                      color="#ff8000"
+                      style={{
+                        fontSize: 27.5,
+                        marginVertical: 5,
+                        marginLeft: 10,
+                        marginRight: 25,
+                        borderRadius: 20,
+                      }}
+                    />
+                    <Text
+                      style={{ fontSize: 19.5, color: 'black', }}>
+                      수정
+                    </Text>
+                  </View>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  onPress={() => { deleteArticle() }}
+                  underlayColor="#dfdfdf"
+                  style={{
+                    backgroundColor: 'white',
+                    paddingVertical: 15,
+                    flexDirection: 'row',
+                  }}>
+                  <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    flex: 1
+                  }}>
+                    <Icon
+                      name="trash"
+                      color="#ff8000"
+                      style={{
+                        fontSize: 27.5,
+                        marginVertical: 5,
+                        marginLeft: 10,
+                        marginRight: 25,
+                        borderRadius: 20,
+                      }}
+                    />
+                    <Text style={{ fontSize: 19.5, color: 'black' }}>
+                      삭제
+                    </Text>
+
+                  </View>
+                </TouchableHighlight>
+
+
+
+              </View>
+            </View>
+          </Modal>
         </View>
         {/* 게시글 중단(제목, 내용) */}
         <View style={{ paddingVertical: 10 }}>
@@ -535,7 +543,7 @@ export default function ({ route }) {
                       ref={(input) => {
                         textInput = input;
                       }}
-                      style={{ flex: 1, color: 'red', fontSize: 15 }}
+                      style={{ flex: 1, color: 'black', fontSize: 15 }}
                       onChangeText={(text) => {
                         setTextInput2(text);
                       }}
@@ -581,15 +589,9 @@ export default function ({ route }) {
           </View>
         </View>
         {/* 댓글목록 파트 */}
-        {comments2}
+        <CommentList comments={comments} boardId={article.boardId} writeReply={writeReply} />
       </View>
     </ScrollView>
   );
 }
 
-// const styles = StyleSheet.create({
-//   centeredView: {},
-//   modalView: {
-//     // alignItems: 'center',
-//   },
-// });

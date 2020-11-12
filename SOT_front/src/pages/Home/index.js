@@ -78,7 +78,7 @@ export default function Home({ navigation }) {
       })
       .then((res) => {
         setwholeArticleList([])
-        console.log("전체 새로고침", res.data);
+        // console.log("전체 새로고침", res.data);
         setwholeArticleList(res.data);
         setMyloading(true);
 
@@ -97,7 +97,7 @@ export default function Home({ navigation }) {
         //   },
       })
       .then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         setCertainArticleList(res.data);
         setMyloading(true);
       })
@@ -188,6 +188,7 @@ export default function Home({ navigation }) {
             setPressed={setPressed}
             setMyloading={setMyloading}
             navigation={navigation}
+            refreshWholeArticleList={refreshWholeArticleList}
           />
         )}
 

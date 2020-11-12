@@ -12,6 +12,7 @@ export default function Header(props) {
     props.setPressed(false);
     props.setMyloading(false);
     props.setTemp(null);
+    props.refreshWholeArticleList()
   };
 
   return (

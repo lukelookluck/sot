@@ -13,73 +13,14 @@ import axios from 'axios';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CommonContext } from '../../context/CommonContext';
+import ReplyList from '../../components/ReplyList'
+
 
 
 export default function (props) {
   const { serverUrl, user, setUser } = useContext(CommonContext);
 
-  const [myIndex, setMyIndex] = useState(2);
-  const [showReplysBool, setshowReplysBool] = useState(false);
 
-
-
-  function moreComment() {
-    setMyIndex(myIndex + 2);
-  }
-
-  function switcher() {
-    setshowReplysBool(!showReplysBool);
-  }
-
-  let showReplys = null;
-  if (!showReplysBool) {
-    // console.log("폴스!!");
-    if (myIndex < props.comment.length && props.comment.length > 2) {
-      showReplys = (
-        <TouchableHighlight
-          style={{
-            paddingVertical: 10,
-            paddingLeft: 50
-          }}
-          onPress={() => moreComment()}
-          underlayColor="#dfdfdf">
-          <Text >
-            이전 답글 {props.comment.length - myIndex}개 보기
-        </Text>
-        </TouchableHighlight>
-      );
-    }
-    if (props.comment.length > 2 && myIndex >= props.comment.length) {
-      // console.log("숨기기");
-      showReplys = (
-        <TouchableHighlight
-          style={{
-            paddingVertical: 10,
-            paddingLeft: 50
-          }}
-          onPress={() => switcher()}
-          underlayColor="#dfdfdf">
-          <Text >
-            답글 숨기기
-          </Text>
-        </TouchableHighlight>
-      );
-    }
-  } else {
-    showReplys = (
-      <TouchableHighlight
-        style={{
-          paddingVertical: 10,
-          paddingLeft: 50
-        }}
-        onPress={() => switcher()}
-        underlayColor="#dfdfdf">
-        <Text onPress={() => switcher()}>
-          답글 {props.comment.length}개 보기
-      </Text>
-      </TouchableHighlight>
-    );
-  }
 
   function getTime(myTime) {
     let theTime = null;
@@ -117,43 +58,40 @@ export default function (props) {
     return theTime;
   }
 
+  let comments = null
+  if (props.comments.length > 0) {
+    comments = props.comments.map((comment) => {
+      const [like, setLike] = useState(comment.isLiked);
+      const [likeCnt, setLikeCnt] = useState(comment.likesCnt)
 
 
-  let replies = props.comment.map((reply, idx) => {
-    const [like, setLike] = useState(reply.isLiked);
-    const [likeCnt, setLikeCnt] = useState(reply.likesCnt)
+      function likeComment(data) {
+        axios
+          .post(`${serverUrl}/board/${props.boardId}/${data.articleId}/${data.id}/like?userId=${user.id}`,)
+          .then((res) => {
+            if (like === true) {
+              setLike(false)
+              setLikeCnt(likeCnt - 1)
+            } else {
+              setLike(true)
+              setLikeCnt(likeCnt + 1)
 
-    function likeComment(data) {
-      axios
-        .post(`${serverUrl}/board/${props.boardId}/${data.articleId}/${data.id}/like?userId=${user.id}`,)
-        .then((res) => {
-          if (like === true) {
-            setLike(!like)
-            setLikeCnt(likeCnt - 1)
-          } else {
-            setLike(!like)
-            setLikeCnt(likeCnt + 1)
-
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-
-    }
-
-    if (showReplysBool === false && idx < myIndex) {
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
       return (
         <View
-          key={reply.id}
+          key={comment.id}
           style={{
-            paddingVertical: 5,
+            paddingTop: 5,
             borderBottomWidth: 2,
             borderBottomColor: '#dbdbdb',
           }}>
           <View
             style={{
-              paddingLeft: 50,
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -175,19 +113,31 @@ export default function (props) {
                     paddingTop: 5,
                     paddingBottom: 2,
                   }}>
-                  {reply.nickname}
+                  {comment.nickname}
                 </Text>
-                <Text style={{ fontSize: 13 }}>{reply.content}</Text>
+                <Text style={{ fontSize: 13 }}>{comment.content}</Text>
                 <View style={{ flexDirection: 'row', paddingVertical: 5 }}>
                   {(likeCnt > 0) && (
                     <Text style={{ marginRight: 10, fontSize: 12, color: '#5e5e5e' }}>
                       좋아요 {likeCnt}개
                     </Text>
 
-                  )}
+                  ) || (
+                      <Text ></Text>)}
                   <Text style={{ fontSize: 12, color: '#5e5e5e' }}>
-                    {getTime(reply.created_at)}
+                    {getTime(comment.created_at)}
                   </Text>
+
+                  <TouchableOpacity
+                    style={{
+                      marginLeft: 15,
+                    }}
+                    onPress={() => props.writeReply(comment)}
+                    activeOpacity={1}>
+                    <Text style={{ fontSize: 12, color: '#5e5e5e' }}>
+                      답글 달기..
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -197,7 +147,7 @@ export default function (props) {
                   borderRadius: 20,
                 }}
                 onPress={() => {
-                  likeComment(reply)
+                  likeComment(comment)
                 }}
                 underlayColor="#dfdfdf">
 
@@ -218,7 +168,7 @@ export default function (props) {
                   style={{
                     borderRadius: 20,
                   }}
-                  onPress={() => likeComment(reply)}
+                  onPress={() => likeComment(comment)}
                   underlayColor="#dfdfdf">
 
                   <Icon
@@ -235,21 +185,20 @@ export default function (props) {
                 </TouchableHighlight>
               )}
           </View>
-        </View >
-      )
-    }
-  })
+          <ReplyList comment={comment.replies} boardId={props.boardId} />
+        </View>
+      );
+    });
+
+  }
+
 
 
 
 
   return (
     <View>
-      {/* <Text>11</Text> */}
-      {/* {replyWord} */}
-      {showReplys}
-      {replies}
-
+      {comments}
     </View>
   )
 }
