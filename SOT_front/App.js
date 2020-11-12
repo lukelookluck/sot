@@ -19,6 +19,8 @@ import ArticleDisplay from './src/pages/ArticleDisplay';
 import SchoolSearch from './src/pages/SchoolSearch';
 import ReqNewBoard from './src/pages/ReqNewBoard';
 import MyPage from './src/pages/MyPage';
+import MyArticle from './src/pages/MyArticle';
+import LikeArticle from './src/pages/LikeArticle';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   createStackNavigator,
@@ -200,6 +202,30 @@ function MyStack() {
           },
         }}
         component={MyPage}
+      />
+      <Stack.Screen
+        name="MyArticle"
+        options={{
+          title: '내가 쓴 글',
+          headerShown: true,
+          headerTintColor: 'white',
+          headerStyle: {
+            backgroundColor: '#FACA0F',
+          },
+        }}
+        component={MyArticle}
+      />
+      <Stack.Screen
+        name="LikeArticle"
+        options={{
+          title: '좋아요 한 글',
+          headerShown: true,
+          headerTintColor: 'white',
+          headerStyle: {
+            backgroundColor: '#FACA0F',
+          },
+        }}
+        component={LikeArticle}
       />
     </Stack.Navigator>
   );
