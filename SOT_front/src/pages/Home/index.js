@@ -97,7 +97,8 @@ export default function Home({ navigation }) {
         //   },
       })
       .then((res) => {
-        setCertainArticleList(res.data.articles);
+        console.log(res.data)
+        setCertainArticleList(res.data);
         setMyloading(true);
       })
       .catch((err) => {
@@ -179,13 +180,16 @@ export default function Home({ navigation }) {
   return (
     <View>
       {(temp === null,
-        pressed === false && <Header name="경북대학교" pressed={pressed} />) || (
+        pressed === false && <Header name={user.schoolName} pressed={pressed}
+        />) || (
           <Header
             name={temp}
             pressed={pressed}
             setTemp={setTemp}
             setPressed={setPressed}
             setMyloading={setMyloading}
+            navigation={navigation}
+
           />
         )}
 

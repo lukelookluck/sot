@@ -27,14 +27,13 @@ export default function ({ route }) {
   function getArticleInfo() {
     axios
       .get(
-        `${serverUrl}/board/${route.params.article.boardId}/${route.params.article.id}`,
+        `${serverUrl}/board/${route.params.article.boardId}/${route.params.article.id}?userId=${user.id}`,
       )
       .then((res) => {
         setArticle(res.data);
-        console.log('답글', res.data.comments);
       })
       .catch((err) => {
-        console.log(err.data);
+        // console.log(err.data);
       });
   }
 
@@ -64,8 +63,7 @@ export default function ({ route }) {
 
   const comments2 = comments.map((comment) => {
 
-
-
+    console.log(comment.replies)
     return (
       <View
         key={comment.id}
@@ -118,26 +116,51 @@ export default function ({ route }) {
               </View>
             </View>
           </View>
-          <TouchableHighlight
-            style={{
-              borderRadius: 20,
-            }}
-            onPress={() => onPress()}
-            underlayColor="#dfdfdf">
-            <Icon
-              name="heart-outline"
-              color="#ff8000"
+          {(comment.isLiked === false) && (
+            <TouchableHighlight
               style={{
-                fontSize: 22.5,
-                paddingVertical: 5,
-                paddingHorizontal: 6,
-                // backgroundColor: 'white',
                 borderRadius: 20,
               }}
-            />
-          </TouchableHighlight>
+              onPress={() => {
+                likeArticle(comment)
+              }}
+              underlayColor="#dfdfdf">
+
+              <Icon
+                name="heart-outline"
+                color="#ff8000"
+                style={{
+                  fontSize: 22.5,
+                  paddingVertical: 5,
+                  paddingHorizontal: 6,
+                  // backgroundColor: 'white',
+                  borderRadius: 20,
+                }}
+              />
+            </TouchableHighlight>
+          ) || (
+              <TouchableHighlight
+                style={{
+                  borderRadius: 20,
+                }}
+                onPress={() => likeArticle(comment)}
+                underlayColor="#dfdfdf">
+
+                <Icon
+                  name="heart"
+                  color="#ff8000"
+                  style={{
+                    fontSize: 22.5,
+                    paddingVertical: 5,
+                    paddingHorizontal: 6,
+                    // backgroundColor: 'white',
+                    borderRadius: 20,
+                  }}
+                />
+              </TouchableHighlight>
+            )}
         </View>
-        <ReplyList comment={comment.replies} />
+        <ReplyList comment={comment.replies} boardId={article.boardId} />
       </View>
     );
   });
@@ -219,14 +242,23 @@ export default function ({ route }) {
       });
   }
 
-  function likeArticle() {
+
+  function likeArticle(data) {
     axios
-      .post(`${serverUrl}/board/${article.boardId}/${article.id}/like?userId=${user.id}`,)
+      .post(`${serverUrl}/board/${article.boardId}/${data.id}/like?userId=${user.id}`,)
       .then((res) => {
-        console.log(res)
-        setArticle({ ...article, likesCnt: article.likesCnt + 1 })
-        console.log(article)
-        // getArticleInfo()
+        // console.log(res)
+        if (data.isLiked === true) {
+          setArticle({
+            ...data, likesCnt: data.likesCnt - 1,
+            isLiked: !data.isLiked
+          })
+        } else {
+          setArticle({
+            ...data, likesCnt: data.likesCnt + 1,
+            isLiked: !data.isLiked
+          })
+        }
       })
       .catch((err) => {
         console.log(err)
@@ -298,24 +330,49 @@ export default function ({ route }) {
               alignItems: 'center',
               marginHorizontal: 2,
             }}>
-            <TouchableHighlight
-              style={{
-                borderRadius: 20,
-              }}
-              onPress={() => likeArticle()}
-              underlayColor="#dfdfdf">
-              <Icon
-                name="heart-outline"
-                color="#ff8000"
+            {(article.isLiked === false) && (
+              <TouchableHighlight
                 style={{
-                  fontSize: 22.5,
-                  paddingVertical: 5,
-                  paddingHorizontal: 6,
-                  // backgroundColor: 'white',
                   borderRadius: 20,
                 }}
-              />
-            </TouchableHighlight>
+                onPress={() => {
+                  likeArticle(article)
+                }}
+                underlayColor="#dfdfdf">
+
+                <Icon
+                  name="heart-outline"
+                  color="#ff8000"
+                  style={{
+                    fontSize: 22.5,
+                    paddingVertical: 5,
+                    paddingHorizontal: 6,
+                    // backgroundColor: 'white',
+                    borderRadius: 20,
+                  }}
+                />
+              </TouchableHighlight>
+            ) || (
+                <TouchableHighlight
+                  style={{
+                    borderRadius: 20,
+                  }}
+                  onPress={() => likeArticle(article)}
+                  underlayColor="#dfdfdf">
+
+                  <Icon
+                    name="heart"
+                    color="#ff8000"
+                    style={{
+                      fontSize: 22.5,
+                      paddingVertical: 5,
+                      paddingHorizontal: 6,
+                      // backgroundColor: 'white',
+                      borderRadius: 20,
+                    }}
+                  />
+                </TouchableHighlight>
+              )}
             <Text
               style={{
                 fontSize: 18,

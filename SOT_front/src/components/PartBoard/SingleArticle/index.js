@@ -10,6 +10,7 @@ export default function SingleArticle(props) {
     });
   }
 
+
   const [article, setArticle] = useState(props.article);
 
   function getTime(myTime) {
@@ -122,6 +123,7 @@ export default function SingleArticle(props) {
                 flexDirection: 'row',
                 marginRight: 7,
               }}>
+
               <Icon
                 name="heart-outline"
                 color="#ff8000"

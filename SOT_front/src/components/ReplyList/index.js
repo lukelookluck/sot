@@ -9,26 +9,30 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
+import axios from 'axios';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import { CommonContext } from '../../context/CommonContext';
+
 
 export default function (props) {
-  const [replyWord, setReplyWord] = useState(false)
+  const { serverUrl, user, setUser } = useContext(CommonContext);
+
   const [myIndex, setMyIndex] = useState(2);
   const [showReplysBool, setshowReplysBool] = useState(false);
 
+
+
   function moreComment() {
     setMyIndex(myIndex + 2);
-    console.log(myIndex);
   }
 
   function switcher() {
     setshowReplysBool(!showReplysBool);
-    console.log(showReplysBool);
   }
 
   let showReplys = null;
-  if (!replyWord) {
+  if (!showReplysBool) {
     // console.log("폴스!!");
     if (myIndex < props.comment.length && props.comment.length > 2) {
       showReplys = (
@@ -62,7 +66,6 @@ export default function (props) {
       );
     }
   } else {
-    console.log("트루");
     showReplys = (
       <TouchableHighlight
         style={{
@@ -116,7 +119,28 @@ export default function (props) {
 
 
 
-  let replys = props.comment.map((reply, idx) => {
+  let replies = props.comment.map((reply, idx) => {
+    const [like, setLike] = useState(reply.isLiked);
+
+    function likeComment(data) {
+      console.log(data)
+      axios
+        .post(`${serverUrl}/board/${props.boardId}/${data.id}/like?userId=${user.id}`,)
+        .then((res) => {
+          console.log('asda', res.data)
+          if (like === true) {
+            setLike(!like)
+          } else {
+            setLike(!like)
+
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      console.log(like)
+    }
+
     if (showReplysBool === false && idx < myIndex) {
       return (
         <View
@@ -160,26 +184,50 @@ export default function (props) {
                 </View>
               </View>
             </View>
-            <TouchableHighlight
-              style={{
-                borderRadius: 20,
-              }}
-              onPress={() => onPress()}
-              underlayColor="#dfdfdf">
-              <Icon
-                name="heart-outline"
-                color="#ff8000"
+            {(like === false) && (
+              <TouchableHighlight
                 style={{
-                  fontSize: 22.5,
-                  paddingVertical: 5,
-                  paddingHorizontal: 6,
-                  // backgroundColor: 'white',
                   borderRadius: 20,
                 }}
-              />
-            </TouchableHighlight>
-          </View>
+                onPress={() => {
+                  likeComment(reply)
+                }}
+                underlayColor="#dfdfdf">
 
+                <Icon
+                  name="heart-outline"
+                  color="#ff8000"
+                  style={{
+                    fontSize: 22.5,
+                    paddingVertical: 5,
+                    paddingHorizontal: 6,
+                    // backgroundColor: 'white',
+                    borderRadius: 20,
+                  }}
+                />
+              </TouchableHighlight>
+            ) || (
+                <TouchableHighlight
+                  style={{
+                    borderRadius: 20,
+                  }}
+                  onPress={() => likeComment(reply)}
+                  underlayColor="#dfdfdf">
+
+                  <Icon
+                    name="heart"
+                    color="#ff8000"
+                    style={{
+                      fontSize: 22.5,
+                      paddingVertical: 5,
+                      paddingHorizontal: 6,
+                      // backgroundColor: 'white',
+                      borderRadius: 20,
+                    }}
+                  />
+                </TouchableHighlight>
+              )}
+          </View>
         </View>
       )
     }
@@ -193,31 +241,8 @@ export default function (props) {
       {/* <Text>11</Text> */}
       {/* {replyWord} */}
       {showReplys}
-      {replys}
-      {replyWord === true && (
-        <View>
-          <TouchableHighlight
-            style={{
-              paddingVertical: 10,
-              paddingLeft: 50
-            }}
-            onPress={() => setReplyWord(!replyWord)}
-            underlayColor="#dfdfdf">
-            <Text>답글 숨기기..</Text>
-          </TouchableHighlight>
-          {/* {replys(props.comment)} */}
-        </View>
-      ) || (
-          <TouchableHighlight
-            style={{
-              paddingVertical: 10
-            }}
-            onPress={() => setReplyWord(!replyWord)}
-            underlayColor="#dfdfdf">
-            <Text>답글  보기..</Text>
+      {replies}
 
-          </TouchableHighlight>
-        )}
     </View>
   )
 }
