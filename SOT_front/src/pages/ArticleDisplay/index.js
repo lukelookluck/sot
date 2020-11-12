@@ -15,6 +15,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
 
 import { CommonContext } from '../../context/CommonContext';
+import ReplyList from '../../components/ReplyList'
 
 export default function ({ route }) {
   const { serverUrl, user, setUser } = useContext(CommonContext);
@@ -30,7 +31,7 @@ export default function ({ route }) {
       )
       .then((res) => {
         setArticle(res.data);
-        console.log('답글', res.data.comments[0].replies);
+        console.log('답글', res.data.comments);
       })
       .catch((err) => {
         console.log(err.data);
@@ -60,12 +61,16 @@ export default function ({ route }) {
     );
   }
 
+
   const comments2 = comments.map((comment) => {
+
+
+
     return (
       <View
         key={comment.id}
         style={{
-          paddingVertical: 5,
+          paddingTop: 5,
           borderBottomWidth: 2,
           borderBottomColor: '#dbdbdb',
         }}>
@@ -132,9 +137,15 @@ export default function ({ route }) {
             />
           </TouchableHighlight>
         </View>
+        <ReplyList comment={comment.replies} />
       </View>
     );
   });
+
+
+
+
+
 
   function getTime(myTime) {
     let theTime = null;
@@ -185,6 +196,7 @@ export default function ({ route }) {
           setTextInput2(null);
           setReplyId(null);
           getArticleInfo();
+
         })
         .catch((err) => {
           console.log(err);
@@ -212,6 +224,7 @@ export default function ({ route }) {
       .post(`${serverUrl}/board/${article.boardId}/${article.id}/like?userId=${user.id}`,)
       .then((res) => {
         console.log(res)
+        getArticleInfo()
       })
       .catch((err) => {
         console.log(err)
