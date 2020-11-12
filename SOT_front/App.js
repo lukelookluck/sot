@@ -18,6 +18,7 @@ import Board from './src/pages/Board';
 import ArticleDisplay from './src/pages/ArticleDisplay';
 import SchoolSearch from './src/pages/SchoolSearch';
 import ReqNewBoard from './src/pages/ReqNewBoard';
+import MyPage from './src/pages/MyPage';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   createStackNavigator,
@@ -28,7 +29,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { CommonContext } from './src/context/CommonContext';
 import { useLocalStorageSetState } from './src/common/CommonHooks';
 import axios from 'axios';
-
 
 const Stack = createStackNavigator();
 
@@ -188,6 +188,18 @@ function MyStack() {
           },
         }}
         component={ReqNewBoard}
+      />
+      <Stack.Screen
+        name="MyPage"
+        options={{
+          title: '마이 페이지',
+          headerShown: true,
+          headerTintColor: 'white',
+          headerStyle: {
+            backgroundColor: '#FACA0F',
+          },
+        }}
+        component={MyPage}
       />
     </Stack.Navigator>
   );

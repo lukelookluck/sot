@@ -70,7 +70,7 @@ export default function Header(props) {
         </View>
 
         <View style={{}}>
-          <TouchableHighlight onPress={() => {}} underlayColor="#dfdfdf">
+          <TouchableHighlight onPress={() => props.navigation.navigate('MyPage')} underlayColor="#dfdfdf">
             <Icon style={{color: 'white'}} name="person-outline" size={30} />
           </TouchableHighlight>
         </View>

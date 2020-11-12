@@ -179,13 +179,14 @@ export default function Home({ navigation }) {
   return (
     <View>
       {(temp === null,
-        pressed === false && <Header name="경북대학교" pressed={pressed} />) || (
+        pressed === false && <Header name="" pressed={pressed} navigation={navigation} />) || (
           <Header
             name={temp}
             pressed={pressed}
             setTemp={setTemp}
             setPressed={setPressed}
             setMyloading={setMyloading}
+            navigation={navigation}
           />
         )}
 
