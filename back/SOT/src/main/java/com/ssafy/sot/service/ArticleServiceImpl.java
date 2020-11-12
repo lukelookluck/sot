@@ -8,11 +8,14 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.sot.dao.ArticleDAO;
 import com.ssafy.sot.dao.ArticleLikeDAO;
+import com.ssafy.sot.dao.BoardDAO;
 import com.ssafy.sot.dao.CommentDAO;
 import com.ssafy.sot.dao.CommentLikeDAO;
 import com.ssafy.sot.dto.ArticleDTO;
 import com.ssafy.sot.dto.ArticleFullInfo;
+import com.ssafy.sot.dto.ArticleListWithFav;
 import com.ssafy.sot.dto.ArticleWithComment;
+import com.ssafy.sot.dto.BoardFavDTO;
 import com.ssafy.sot.dto.CommentDTO;
 import com.ssafy.sot.dto.CommentWithReply;
 import com.ssafy.sot.dto.Like;
@@ -32,9 +35,17 @@ public class ArticleServiceImpl implements ArticleService {
 	@Autowired
 	ArticleLikeDAO articleLikeDAO;
 	
+	@Autowired
+	BoardDAO boardDAO;
+	
 	@Override
-	public List<ArticleFullInfo> showArticles(int boardId) {
-		return articleDAO.selectArticlesByBoardId(boardId);
+	public ArticleListWithFav showArticles(int boardId, int userId) {
+		BoardFavDTO boardFavDTO = new BoardFavDTO();
+		boardFavDTO.setBoardId(boardId);
+		boardFavDTO.setUserId(userId);
+		boolean isFaved = boardDAO.alreadyFaved(boardFavDTO);
+		List<ArticleFullInfo> articles = articleDAO.selectArticlesByBoardId(boardId);
+		return new ArticleListWithFav(articles, isFaved);
 	}
 
 	@Override
@@ -93,6 +104,14 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public List<ArticleFullInfo> showBestArticles(int boardId) {
 		return articleDAO.selectBestArticlesByBoardId(boardId);
+	}
+
+	@Override
+	public List<ArticleFullInfo> showArticles(int boardId) {
+		BoardFavDTO boardFavDTO = new BoardFavDTO();
+		boardFavDTO.setBoardId(boardId);
+		List<ArticleFullInfo> articles = articleDAO.selectArticlesByBoardId(boardId);
+		return articles;
 	}
 
 }

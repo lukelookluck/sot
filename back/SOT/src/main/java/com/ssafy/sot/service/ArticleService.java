@@ -4,10 +4,12 @@ import java.util.List;
 
 import com.ssafy.sot.dto.ArticleDTO;
 import com.ssafy.sot.dto.ArticleFullInfo;
+import com.ssafy.sot.dto.ArticleListWithFav;
 import com.ssafy.sot.dto.ArticleWithComment;
 
 public interface ArticleService {
 	
+	public ArticleListWithFav showArticles(int boardId, int userId);
 	public List<ArticleFullInfo> showArticles(int boardId);
 	public ArticleWithComment showArticle(int id);
 	public boolean createArticle(ArticleDTO articleDTO);

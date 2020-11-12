@@ -115,9 +115,6 @@ public class SchoolRestController {
 	@PostMapping("/board/{boardId}/fav")
 	public Object favBoard(@PathVariable("boardId") int boardId, @RequestBody UserIdDTO userId) {
 		int id = userId.getUserId();
-		System.out.println("보드: " + boardId);
-		System.out.println("유저아이디:" + userId);
-		System.out.println(id);
 		return new ResponseEntity<>(boardService.favBoard(boardId, id), HttpStatus.OK);
 	}
 	
@@ -125,9 +122,6 @@ public class SchoolRestController {
 	@DeleteMapping("/board/{boardId}/fav")
 	public Object unfavBoard(@PathVariable("boardId") int boardId, @RequestBody UserIdDTO userId) {
 		int id = userId.getUserId();
-		System.out.println("보드: " + boardId);
-		System.out.println("유저아이디:" + userId);
-		System.out.println(id);
 		return new ResponseEntity<>(boardService.unfavBoard(boardId, id), HttpStatus.OK);
 	}
 	
@@ -135,6 +129,12 @@ public class SchoolRestController {
 	@GetMapping("/board/{boardId}")
 	public Object articleList(@PathVariable("boardId") int boardId, HttpServletRequest request) {
 		return new ResponseEntity<>(articleService.showArticles(boardId), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "게시판 즐겨찾기 여부 확인")
+	@GetMapping("/board/{boardId}/isfaved")
+	public Object checkBoardIsFaved(@PathVariable("boardId") int boardId, @RequestParam("userId") int userId) {
+		return new ResponseEntity<>(boardService.isFaved(boardId, userId), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "게시글 하나 읽기 (댓글 리스트도 가져옴)")
