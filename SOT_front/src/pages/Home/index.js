@@ -21,6 +21,7 @@ export default function Home({ navigation }) {
   const { serverUrl, user, setUser } = useContext(CommonContext);
 
   const [temp, setTemp] = useState(null);
+  const [tempId, setTempId] = useState(null);
   const [pressed, setPressed] = useState(false);
   const [myLoading, setMyloading] = useState(false);
   const [myLoading2, setMyloading2] = useState(false);
@@ -38,7 +39,6 @@ export default function Home({ navigation }) {
     refreshFavBoardList();
     refreshWholeArticleList();
     navigation.addListener('focus', () => {
-      // console.log('adasdas')
       refreshFavBoardList();
       refreshWholeArticleList();
     });
@@ -110,14 +110,16 @@ export default function Home({ navigation }) {
   }
 
   function initHeader(data) {
-    console.log(data)
-    if (temp.name === data.name) {
+    console.log(data, temp, tempId)
+    if (temp === data.name) {
       setTemp(null);
+      setTempId(null)
       setPressed(false);
       setMyloading(false);
       refreshWholeArticleList();
     } else {
-      setTemp(data);
+      setTemp(data.name);
+      setTempId(data.id)
       setPressed(true);
       setMyloading(false);
       refreshCertainArticleList(data);
@@ -182,10 +184,10 @@ export default function Home({ navigation }) {
 
   return (
     <View>
-      {(temp.name === null,
+      {(temp === null,
         pressed === false && <Header name={user.schoolName} pressed={pressed} navigation={navigation} />) || (
           <Header
-            name={temp.name}
+            name={temp}
             pressed={pressed}
             setTemp={setTemp}
             setPressed={setPressed}
@@ -228,6 +230,7 @@ export default function Home({ navigation }) {
           /> */}
           <PartBoard
             PartName={temp}
+            BoardId={tempId}
             pressed={pressed}
             myLoading={myLoading}
             setMyloading={setMyloading}

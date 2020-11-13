@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Text, View, TouchableHighlight, Image } from 'react-native';
 import PartBoardSingle from '../Single';
 import SingleArticle from '../SingleArticle';
+import { CommonContext } from '../../../context/CommonContext';
 
 export default function PartBoard(props) {
+  const { serverUrl, user, setUser } = useContext(CommonContext);
+
   function onPress() {
-    props.navigation.navigate('ArticleDisplay');
+    props.navigation.navigate('Board', { name: props.PartName, id: props.BoardId, u_id: user.id, isRe: 'no' });
   }
 
   // const certainArticleList = props.certainArticleList.map((article) => {
