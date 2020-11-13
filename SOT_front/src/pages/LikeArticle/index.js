@@ -4,17 +4,13 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   ScrollView,
-  FlatList,
 } from 'react-native';
 import 'react-native-gesture-handler';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {CommonContext} from '../../context/CommonContext';
-import {color} from 'react-native-reanimated';
 import SingleArticle from '../../components/PartBoard/SingleArticle'
 
-
+// 좋아요 한 게시글 목록
 const LikeArticle = ({navigation, route}) => {
   const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
   const [postList, setPostList] = useState([]);

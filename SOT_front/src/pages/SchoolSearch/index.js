@@ -3,20 +3,16 @@ import axios from 'axios';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
-  TouchableOpacity,
-  ScrollView,
   FlatList,
 } from 'react-native';
-import {SearchBar, Input} from 'react-native-elements';
+import {SearchBar} from 'react-native-elements';
 import 'react-native-gesture-handler';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {CommonContext} from '../../context/CommonContext';
 
+// 학교명 검색
 const SchoolSearch = ({navigation}) => {
   const [key, setKey] = useState('');
-  const [userSchoolId, setUserSchoolId] = useState('');
   const [searchList, setSearchList] = useState([]);
 
   const {serverUrl} = useContext(CommonContext);

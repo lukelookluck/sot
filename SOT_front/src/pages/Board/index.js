@@ -3,37 +3,26 @@ import axios from 'axios';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  FlatList,
 } from 'react-native';
 import 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { CommonContext } from '../../context/CommonContext';
-import { color } from 'react-native-reanimated';
+import {CommonContext} from '../../context/CommonContext';
 import SingleArticle from '../../components/PartBoard/SingleArticle'
 
-
-const Board = ({ navigation, route }) => {
-  const { serverUrl, user, setUser, fav, setFav } = useContext(CommonContext);
+// 게시글 목록
+const Board = ({navigation, route}) => {
+  const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
   const [postList, setPostList] = useState([]);
   const [msg, setMsg] = useState('no');
 
-
   useEffect(() => {
     refreshList();
-    // refreshFav();
     navigation.addListener('focus', () => {
       refreshList();
-      // refreshFav();
     })
   }, []);
-
-  // useEffect(() => {
-  //   refreshFav();
-  // }, [fav]);
 
   const gotoWrite = () => {
     navigation.navigate('WritePost', {
@@ -41,23 +30,6 @@ const Board = ({ navigation, route }) => {
       boardid: route.params.id,
     });
   };
-
-  function refreshFav() {
-    axios
-      .get(`${serverUrl}/board/${route.params.id}/isfaved?userId=${user.id}`, {
-        // headers: {
-        //   Authorization: `JWT ${user.token}`,
-        // },
-      })
-      .then((response) => {
-        setFav(false);
-        console.log(response.data);
-        setFav(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
 
   function refreshList() {
     axios
@@ -67,26 +39,22 @@ const Board = ({ navigation, route }) => {
         // },
       })
       .then((response) => {
-        console.log('here????');
         setPostList([]);
         console.log(response.data);
         setPostList(response.data);
       })
       .catch((error) => {
-        console.log('why???');
         console.log(error);
       });
   }
 
   function noLoad() {
-    console.log('노 로딩');
     console.log(route.params.isRe);
   }
 
   function reLoad() {
     refreshList();
     route.params.isRe = 'no';
-    console.log('리 로딩')
     console.log(route.params.isRe);
   }
 
@@ -141,8 +109,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 50,
-    // position: 'absolute',
-    // bottom: 20,
   },
 });
 
