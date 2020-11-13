@@ -65,15 +65,16 @@ export default function Header(props) {
             </View>
           )}
       </View>
-      <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
         <View style={{ marginRight: 15 }}>
-          <TouchableHighlight onPress={() => { }} underlayColor="#dfdfdf">
+          <TouchableHighlight style={{ borderRadius: 25, padding: 5 }} onPress={() => { }} underlayColor="#dfdfdf">
             <Icon style={{ color: 'white' }} name="search-outline" size={30} />
           </TouchableHighlight>
         </View>
 
         <View style={{}}>
-          <TouchableHighlight onPress={() => props.navigation.navigate('MyPage')} underlayColor="#dfdfdf">
+          <TouchableHighlight
+            style={{ borderRadius: 25, padding: 5 }} onPress={() => props.navigation.navigate('MyPage')} underlayColor="#dfdfdf">
             <Icon style={{ color: 'white' }} name="person-outline" size={30} />
           </TouchableHighlight>
         </View>
