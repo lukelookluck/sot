@@ -24,7 +24,6 @@ export default function ({ navigation, route }) {
     getArticleInfo();
   }, []);
 
-  console.log(article)
 
   // 게시글 조회
   function getArticleInfo() {

@@ -13,6 +13,7 @@ export default function Header(props) {
     props.setMyloading(false);
     props.setTemp(null);
     props.refreshWholeArticleList()
+    props.setClick(null)
   };
 
   return (

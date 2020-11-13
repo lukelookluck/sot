@@ -11,10 +11,9 @@ import {
 import axios from 'axios';
 import Header from '../../components/Header';
 import PartBoard from '../../components/PartBoard/Box';
-import Icon from 'react-native-vector-icons/Ionicons';
-import LinearGradient from 'react-native-linear-gradient';
+import FavBoardList from '../../components/FavBoardList';
+
 import { CommonContext } from '../../context/CommonContext';
-import SingleArticle from '../../components/PartBoard/SingleArticle';
 
 
 export default function Home({ navigation }) {
@@ -126,61 +125,8 @@ export default function Home({ navigation }) {
     }
   }
 
-  const a = boardList.map((data) => {
-    return (
-      <View key={data.id} style={{}}>
-        <TouchableHighlight
-          onPress={() => {
-            initHeader(data);
-          }}
-          activeOpacity={0.6}
-          underlayColor="#dfdfdf">
-          <View
-            style={{
-              margin: 7,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <LinearGradient
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              colors={['#ff8000', '#ffff57']}
-              style={{
-                borderRadius: 30,
-              }}>
-              <Icon
-                name="star-outline"
-                color="#058AB3"
-                style={{
-                  fontSize: 40,
-                  paddingHorizontal: 5,
-                  paddingVertical: 2.5,
-                  margin: 3,
-                  borderRadius: 30,
-                  // paddingVertical: 10,
-                  backgroundColor: 'white',
-                }}></Icon>
-            </LinearGradient>
-            {(data.name.length > 7 && (
-              <Text
-                style={{
-                  fontSize: 12,
-                }}>
-                {data.name.substring(0, 6) + '..'}
-              </Text>
-            )) || (
-                <Text
-                  style={{
-                    fontSize: 12,
-                  }}>
-                  {data.name}
-                </Text>
-              )}
-          </View>
-        </TouchableHighlight>
-      </View>
-    );
-  });
+  const [click, setClick] = useState(null)
+
 
   return (
     <View>
@@ -188,6 +134,7 @@ export default function Home({ navigation }) {
         pressed === false && <Header name={user.schoolName} pressed={pressed} navigation={navigation} />) || (
           <Header
             name={temp}
+            setClick={setClick}
             pressed={pressed}
             setTemp={setTemp}
             setPressed={setPressed}
@@ -202,8 +149,9 @@ export default function Home({ navigation }) {
         style={{ marginBottom: 50 }}
         showsHorizontalScrollIndicator={false}>
         {(myLoading2 === true && (
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View style={{ flexDirection: 'row', paddingLeft: 10 }}>{a}</View>
+          <ScrollView style={{ borderBottomWidth: 1, borderColor: '#dbdbdb' }} horizontal={true} showsHorizontalScrollIndicator={false}>
+            <FavBoardList
+              click={click} setClick={setClick} initHeader={initHeader} boardList={boardList} />
           </ScrollView>
 
         )) || (
@@ -221,12 +169,16 @@ export default function Home({ navigation }) {
             pressed={pressed}
             myLoading={myLoading}
             setMyloading={setMyloading}
-          />
-          <PartBoard
+          /> */}
+          {/* <PartBoard
             PartName="HOT 게시글"
-            pressed={pressed}
+            BoardId={tempId}
+            pressed={true}
             myLoading={myLoading}
             setMyloading={setMyloading}
+            wholeArticleList={wholeArticleList}
+            certainArticleList={certainArticleList}
+            navigation={navigation}
           /> */}
           <PartBoard
             PartName={temp}
@@ -242,7 +194,7 @@ export default function Home({ navigation }) {
 
         </View>
       </ScrollView>
-    </View>
+    </View >
   );
 }
 
