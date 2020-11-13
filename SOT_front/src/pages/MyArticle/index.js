@@ -4,17 +4,13 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   ScrollView,
-  FlatList,
 } from 'react-native';
 import 'react-native-gesture-handler';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {CommonContext} from '../../context/CommonContext';
-import {color} from 'react-native-reanimated';
 import SingleArticle from '../../components/PartBoard/SingleArticle'
 
-
+// 내가 쓴 게시글 목록
 const MyArticle = ({navigation}) => {
   const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
   const [postList, setPostList] = useState([]);
@@ -34,13 +30,11 @@ const MyArticle = ({navigation}) => {
         // },
       })
       .then((response) => {
-        console.log('here????');
         setPostList([]);
         console.log(response.data);
         setPostList(response.data);
       })
       .catch((error) => {
-        console.log('why???');
         console.log(error);
       });
   }

@@ -3,26 +3,24 @@ import axios from 'axios';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  FlatList,
 } from 'react-native';
-import {SearchBar, Input} from 'react-native-elements';
+import {Input} from 'react-native-elements';
 import 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {CommonContext} from '../../context/CommonContext';
 
+// 회원가입
 const SignUp = ({navigation, route}) => {
-  const [key, setKey] = useState('');
+
   const [userId, setUserId] = useState('');
   const [userNick, setUserNick] = useState('');
   const [userPw, setUserPw] = useState('');
   const [userSchoolId, setUserSchoolId] = useState('');
 
   const {serverUrl, user, setUser} = useContext(CommonContext);
-  // const [userConPw, setUserConPw] = useState('');
 
   const userIdHandler = (id) => {
     setUserId(id);
@@ -41,11 +39,10 @@ const SignUp = ({navigation, route}) => {
   };
 
   const goSchoolSearch = () => {
-    navigation.navigate('schoolsearch');
+    navigation.navigate('schoolsearch'); // 학교명 검색 화면으로
   };
 
   const signUpHandler = () => {
-    console.log('클릭했어요!!!');
 
     axios
       .post(`${serverUrl}/user/`, {
@@ -55,15 +52,13 @@ const SignUp = ({navigation, route}) => {
         schoolId: route.params.s_id,
       })
       .then(function (response) {
-        console.log('제대로간겨??');
         console.log(response.data);
         setUser({...response.data});
-        navigation.navigate('Main');
+        navigation.navigate('Main'); // 회원가입 성공 시 자동 로그인 후 메인화면으로
       })
       .catch(function (error) {
         alert('사용할 수 없는 아이디입니다.');
         setUserId('');
-        console.log('에러난겨??');
         console.log(error);
       });
   };
@@ -97,8 +92,8 @@ const SignUp = ({navigation, route}) => {
 
         <View style={styles.box}>
           <Input
-            placeholder="아이디"
-            label="아이디를 입력해주세요"
+            placeholder="이메일"
+            label="이메일을 입력해주세요"
             onChangeText={userIdHandler}
             value={userId}></Input>
           <Input
@@ -112,7 +107,6 @@ const SignUp = ({navigation, route}) => {
             secureTextEntry={true}
             onChangeText={userPwHandler}
             value={userPw}></Input>
-          {/* <Input placeholder="비밀번호 확인" label="비밀번호를 다시 입력해주세요" secureTextEntry={true}></Input> */}
         </View>
 
         <View style={styles.btnbox}>
@@ -149,18 +143,6 @@ const styles = StyleSheet.create({
     height: 40,
   },
 
-  s_text: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 200,
-    height: 40,
-    borderBottomWidth: 1.2,
-    borderBottomColor: 'lightslategray',
-    fontSize: 20,
-    textAlignVertical: 'center',
-    // marginRight: 5,
-  },
-
   btn: {
     width: 180,
     height: 40,
@@ -184,21 +166,6 @@ const styles = StyleSheet.create({
 
   box: {
     width: 320,
-  },
-
-  search: {
-    backgroundColor: '#FFFFE0',
-    borderWidth: 0,
-    borderRadius: 5,
-    borderColor: 'gray',
-  },
-
-  search2: {
-    backgroundColor: '#FFFFE0',
-  },
-
-  search3: {
-    backgroundColor: '#FFFFE0',
   },
 });
 

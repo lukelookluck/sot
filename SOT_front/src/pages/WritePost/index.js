@@ -12,6 +12,7 @@ import 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {CommonContext} from "../../context/CommonContext";
 
+// 게시글 작성 화면
 const WritePost = ({navigation, route}) => {
 
   const { serverUrl, user, setUser } = useContext(CommonContext);

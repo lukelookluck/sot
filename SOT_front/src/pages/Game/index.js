@@ -4,6 +4,7 @@ import {DataTable} from 'react-native-paper';
 import axios from 'axios';
 import { CommonContext } from "../../context/CommonContext";
 
+// 게임 탭 화면 - 아직 게임 개발이 진행중이라 우선은 랜덤하게 오늘의 간식을 추천함. 
 const Game = () => {
 
   const { serverUrl, user, setUser } = useContext(CommonContext);

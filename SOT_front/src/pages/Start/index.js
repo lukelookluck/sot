@@ -11,6 +11,7 @@ import {
 import 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+// 시작화면
 const Start = ({ navigation }) => {
   const { serverUrl, user, setUser } = useContext(CommonContext);
   const [email, setEmail] = useState('');
@@ -36,13 +37,12 @@ const Start = ({ navigation }) => {
         },
       })
       .then((response) => {
-        console.log('here????');
         console.log(response.data);
         setUser({ ...response.data });
-        navigation.navigate('Main');
+        navigation.navigate('Main'); // 로그인 성공시 메인화면으로
       })
       .catch((error) => {
-        alert('아이디와 비밀번호를 확인해주세요!');
+        alert('이메일과 비밀번호를 확인해주세요!');
         setEmail('');
         setPw('');
         console.log(error);
@@ -62,7 +62,7 @@ const Start = ({ navigation }) => {
           <View style={styles.inputbox}>
             <TextInput
               style={styles.textinput}
-              placeholder="아이디"
+              placeholder="이메일"
               onChangeText={emailHandler}
               value={email}></TextInput>
             <TextInput

@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
   }
 });
 
+// 게시판 목록
 const List = ({navigation, route}) => {
 
   const [boardList, setBoardList] = useState([]);
@@ -51,7 +52,6 @@ const List = ({navigation, route}) => {
   }
 
   const goBoard = (b_name, b_id) => {
-    console.log('유저의 아이디는');
     console.log(user.id);
 
     axios

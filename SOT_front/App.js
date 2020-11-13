@@ -1,10 +1,5 @@
 import React, {Component, useContext, useState} from 'react';
 import {
-  StyleSheet,
-  Text,
-  Button,
-  TouchableHighlight,
-  FlatList,
   View,
   TouchableOpacity,
 } from 'react-native';
@@ -34,20 +29,18 @@ import axios from 'axios';
 
 const Stack = createStackNavigator();
 
+// stack navitation 정리
 function MyStack() {
   
   const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
 
+  // 게시판 북마크 등록
   const addBookmark = (b_id, u_id) => {
-
-    console.log('등록!');
-    
     axios
     .post(`${serverUrl}/board/${b_id}/fav/`, {
       userId: u_id,
     })
     .then(function (response) {
-      console.log('제대로간겨??');
       console.log(response.data);
       setFav(true);
     })
@@ -56,14 +49,11 @@ function MyStack() {
     });
   }
   
+  // 게시판 북마크 삭제
   const deleteBookmark = (b_id, u_id) => {
-  
-    console.log('삭제!');
-    
     axios
     .delete(`${serverUrl}/board/${b_id}/fav?userId=${u_id}`)
     .then(function (response) {
-      console.log('제대로간겨??');
       console.log(response.data);
       setFav(false);
     })
@@ -73,13 +63,9 @@ function MyStack() {
   }
   
   const whatBook = (isfav, b_id, u_id) => {
-  
     if(isfav) {
-      console.log("여기입니다");
       deleteBookmark(b_id, u_id);
-      
     } else {
-      console.log("저기입니다");
       addBookmark(b_id, u_id);
     }
   }
@@ -130,7 +116,6 @@ function MyStack() {
           },
           headerRight: () => (
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-              {/* <TouchableOpacity onPress={() => fav ? deleteBookmark(route.params.id, route.params.u_id) : addBookmark(route.params.id, route.params.u_id)}> */}
               <TouchableOpacity onPress={() => whatBook(fav, route.params.id, route.params.u_id)}>
                 <Icon
                   name={fav ? "bookmark" : "bookmark-outline"}
@@ -164,18 +149,6 @@ function MyStack() {
           headerStyle: {
             backgroundColor: '#FACA0F',
           },
-          // headerRight: () => (
-          //   <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          //     <Button
-          //       onPress={() => navigation.navigate('WritePost')}
-          //       title="글쓰기로 감(임시)"
-          //     />
-          //     <Icon
-          //       name="ellipsis-vertical"
-          //       style={{fontSize: 22.5, marginHorizontal: 10}}
-          //     />
-          //   </View>
-          // ),
         })}
         component={ArticleDisplay}
       />
@@ -290,7 +263,7 @@ export default function App() {
     'user',
   );
 
-  const HOST = '192.168.100.72:8090';
+  const HOST = '118.45.110.147:8090';
   const serverUrl = `http://${HOST}`;
   const [fav, setFav] = useLocalStorageSetState(false, "fav");
 

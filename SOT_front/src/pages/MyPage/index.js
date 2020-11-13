@@ -3,15 +3,14 @@ import axios from 'axios';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
 import 'react-native-gesture-handler';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {CommonContext} from "../../context/CommonContext";
 
+// 마이페이지
 const MyPage = ({navigation}) => {
 
   const { serverUrl, user, setUser } = useContext(CommonContext);
@@ -100,7 +99,6 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   }
   
-
 });
 
 export default MyPage;
