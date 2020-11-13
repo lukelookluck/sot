@@ -240,17 +240,20 @@ export default function ({ navigation, route }) {
               </Text>
             </View>
           </View>
-          <TouchableHighlight
-            style={{
-              borderRadius: 20,
-            }}
-            onPress={() => setModalVisible2(true)}
-            underlayColor="#dfdfdf">
-            <Icon
-              name="ellipsis-vertical"
-              style={{ fontSize: 22.5, paddingVertical: 4, paddingHorizontal: 5 }}
-            />
-          </TouchableHighlight>
+          {article.userId === user.id && (
+            <TouchableHighlight
+              style={{
+                borderRadius: 20,
+              }}
+              onPress={() => setModalVisible2(true)}
+              underlayColor="#dfdfdf">
+              <Icon
+                name="ellipsis-vertical"
+                style={{ fontSize: 22.5, paddingVertical: 4, paddingHorizontal: 5 }}
+              />
+            </TouchableHighlight>
+
+          )}
           {/* 수정/삭제 모달 */}
           <Modal
             style={{
