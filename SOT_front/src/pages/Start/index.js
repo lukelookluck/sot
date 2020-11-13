@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, {useState, useContext} from 'react';
 import axios from 'axios';
-import { CommonContext } from '../../context/CommonContext';
+import {CommonContext} from '../../context/CommonContext';
 import {
   View,
   Text,
@@ -9,11 +9,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 // 시작화면
-const Start = ({ navigation }) => {
-  const { serverUrl, user, setUser } = useContext(CommonContext);
+const Start = ({navigation}) => {
+  const {serverUrl, user, setUser} = useContext(CommonContext);
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
 
@@ -38,7 +38,7 @@ const Start = ({ navigation }) => {
       })
       .then((response) => {
         console.log(response.data);
-        setUser({ ...response.data });
+        setUser({...response.data});
         navigation.navigate('Main'); // 로그인 성공시 메인화면으로
       })
       .catch((error) => {
@@ -54,7 +54,8 @@ const Start = ({ navigation }) => {
       style={styles.page}
       scrollEnabled={true}
       contentContainerStyle={styles.screen}
-      keyboardShouldPersistTaps={'always'}>
+      // keyboardShouldPersistTaps={'always'}
+    >
       <View>
         <View style={styles.loginbox}>
           <Text style={styles.title}>SOT</Text>
@@ -77,7 +78,7 @@ const Start = ({ navigation }) => {
             <TouchableOpacity
               style={styles.btn}
               onPress={() =>
-                navigation.navigate('회원가입', { s_name: '', s_id: '' })
+                navigation.navigate('회원가입', {s_name: '', s_id: ''})
               }>
               <Text style={styles.btntext}>회원가입</Text>
             </TouchableOpacity>
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Lemonada-SemiBold',
     textShadowColor: '#F14E23',
     textShadowRadius: 1,
-    textShadowOffset: { width: 3, height: 3 },
+    textShadowOffset: {width: 3, height: 3},
   },
   loginbox: {
     justifyContent: 'center',

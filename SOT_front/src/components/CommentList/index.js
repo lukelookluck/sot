@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   StyleSheet,
@@ -12,15 +12,11 @@ import {
 import axios from 'axios';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import { CommonContext } from '../../context/CommonContext';
-import ReplyList from '../../components/ReplyList'
-
-
+import {CommonContext} from '../../context/CommonContext';
+import ReplyList from '../../components/ReplyList';
 
 export default function (props) {
-  const { serverUrl, user, setUser } = useContext(CommonContext);
-
-
+  const {serverUrl, user, setUser} = useContext(CommonContext);
 
   function getTime(myTime) {
     let theTime = null;
@@ -58,29 +54,29 @@ export default function (props) {
     return theTime;
   }
 
-  let comments = null
+  let comments = null;
   if (props.comments.length > 0) {
     comments = props.comments.map((comment) => {
       const [like, setLike] = useState(comment.isLiked);
-      const [likeCnt, setLikeCnt] = useState(comment.likesCnt)
-
+      const [likeCnt, setLikeCnt] = useState(comment.likesCnt);
 
       function likeComment(data) {
         axios
-          .post(`${serverUrl}/board/${props.boardId}/${data.articleId}/${data.id}/like?userId=${user.id}`,)
+          .post(
+            `${serverUrl}/board/${props.boardId}/${data.articleId}/${data.id}/like?userId=${user.id}`,
+          )
           .then((res) => {
             if (like === true) {
-              setLike(false)
-              setLikeCnt(likeCnt - 1)
+              setLike(false);
+              setLikeCnt(likeCnt - 1);
             } else {
-              setLike(true)
-              setLikeCnt(likeCnt + 1)
-
+              setLike(true);
+              setLikeCnt(likeCnt + 1);
             }
           })
           .catch((err) => {
-            console.log(err)
-          })
+            console.log(err);
+          });
       }
       return (
         <View
@@ -99,12 +95,13 @@ export default function (props) {
             <View
               style={{
                 flexDirection: 'row',
+                flex: 1,
               }}>
               <Icon
                 name="person-circle"
-                style={{ fontSize: 40, color: '#919191' }}
+                style={{fontSize: 40, color: '#919191'}}
               />
-              <View style={{ flexDirection: 'column', marginLeft: 5 }}>
+              <View style={{flexDirection: 'column', marginLeft: 5, flex: 1}}>
                 <Text
                   style={{
                     fontWeight: '700',
@@ -115,16 +112,15 @@ export default function (props) {
                   }}>
                   {comment.nickname}
                 </Text>
-                <Text style={{ fontSize: 13 }}>{comment.content}</Text>
-                <View style={{ flexDirection: 'row', paddingVertical: 5 }}>
-                  {(likeCnt > 0) && (
-                    <Text style={{ marginRight: 10, fontSize: 12, color: '#5e5e5e' }}>
+                <Text style={{fontSize: 13}}>{comment.content}</Text>
+                <View style={{flexDirection: 'row', paddingVertical: 5}}>
+                  {(likeCnt > 0 && (
+                    <Text
+                      style={{marginRight: 10, fontSize: 12, color: '#5e5e5e'}}>
                       좋아요 {likeCnt}개
                     </Text>
-
-                  ) || (
-                      <Text ></Text>)}
-                  <Text style={{ fontSize: 12, color: '#5e5e5e' }}>
+                  )) || <Text></Text>}
+                  <Text style={{fontSize: 12, color: '#5e5e5e'}}>
                     {getTime(comment.created_at)}
                   </Text>
 
@@ -134,23 +130,22 @@ export default function (props) {
                     }}
                     onPress={() => props.writeReply(comment)}
                     activeOpacity={1}>
-                    <Text style={{ fontSize: 12, color: '#5e5e5e' }}>
+                    <Text style={{fontSize: 12, color: '#5e5e5e'}}>
                       답글 달기..
                     </Text>
                   </TouchableOpacity>
                 </View>
               </View>
             </View>
-            {(like === false) && (
+            {(like === false && (
               <TouchableHighlight
                 style={{
                   borderRadius: 20,
                 }}
                 onPress={() => {
-                  likeComment(comment)
+                  likeComment(comment);
                 }}
                 underlayColor="#dfdfdf">
-
                 <Icon
                   name="heart-outline"
                   color="#ff8000"
@@ -163,42 +158,32 @@ export default function (props) {
                   }}
                 />
               </TouchableHighlight>
-            ) || (
-                <TouchableHighlight
+            )) || (
+              <TouchableHighlight
+                style={{
+                  borderRadius: 20,
+                }}
+                onPress={() => likeComment(comment)}
+                underlayColor="#dfdfdf">
+                <Icon
+                  name="heart"
+                  color="#ff8000"
                   style={{
+                    fontSize: 22.5,
+                    paddingVertical: 5,
+                    paddingHorizontal: 6,
+                    // backgroundColor: 'white',
                     borderRadius: 20,
                   }}
-                  onPress={() => likeComment(comment)}
-                  underlayColor="#dfdfdf">
-
-                  <Icon
-                    name="heart"
-                    color="#ff8000"
-                    style={{
-                      fontSize: 22.5,
-                      paddingVertical: 5,
-                      paddingHorizontal: 6,
-                      // backgroundColor: 'white',
-                      borderRadius: 20,
-                    }}
-                  />
-                </TouchableHighlight>
-              )}
+                />
+              </TouchableHighlight>
+            )}
           </View>
           <ReplyList comment={comment.replies} boardId={props.boardId} />
         </View>
       );
     });
-
   }
 
-
-
-
-
-  return (
-    <View>
-      {comments}
-    </View>
-  )
+  return <View>{comments}</View>;
 }
