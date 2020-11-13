@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.sot.dto.ArticleDTO;
 import com.ssafy.sot.dto.ArticleFullInfo;
 import com.ssafy.sot.dto.IdWithIndexDTO;
+import com.ssafy.sot.dto.SearchDTO;
 
 @Repository
 public class ArticleDAOImpl implements ArticleDAO {
@@ -84,6 +85,16 @@ public class ArticleDAOImpl implements ArticleDAO {
 	@Override
 	public List<ArticleFullInfo> selectLikedArticles(int userId) {
 		return sqlSession.selectList("article.selectLikedArticles", userId);
+	}
+
+	@Override
+	public List<ArticleFullInfo> searchTitle(SearchDTO searchDTO) {
+		return sqlSession.selectList("article.searchTitle", searchDTO);
+	}
+
+	@Override
+	public List<ArticleFullInfo> searchTitleOrContent(SearchDTO searchDTO) {
+		return sqlSession.selectList("article.searchTitleOrContent", searchDTO);
 	}
 
 }

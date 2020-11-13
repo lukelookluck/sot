@@ -27,4 +27,6 @@ public interface ArticleService {
 
 	public List<ArticleFullInfo> showMyArticles(int userId);
 	public List<ArticleFullInfo> showLikedArticles(int userId);
+	public List<ArticleFullInfo> searchTitle(int schoolId, String keyword);
+	public List<ArticleFullInfo> searchTitleOrContent(int schoolId, String keyword);
 }
