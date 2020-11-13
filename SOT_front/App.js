@@ -1,11 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component, useContext, useState } from 'react';
 import {
-  StyleSheet,
-  Text,
-  Button,
-  TouchableHighlight,
-  FlatList,
   View,
+  TouchableOpacity,
 } from 'react-native';
 import Start from './src/pages/Start';
 import SignUp from './src/pages/SignUp';
@@ -17,24 +13,70 @@ import Board from './src/pages/Board';
 import ArticleDisplay from './src/pages/ArticleDisplay';
 import SchoolSearch from './src/pages/SchoolSearch';
 import ReqNewBoard from './src/pages/ReqNewBoard';
-import {NavigationContainer} from '@react-navigation/native';
+import MyPage from './src/pages/MyPage';
+import MyArticle from './src/pages/MyArticle';
+import LikeArticle from './src/pages/LikeArticle';
+import { NavigationContainer } from '@react-navigation/native';
 import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {CommonContext} from './src/context/CommonContext';
-import {useLocalStorageSetState} from './src/common/CommonHooks';
+import { CommonContext } from './src/context/CommonContext';
+import { useLocalStorageSetState } from './src/common/CommonHooks';
+import Search from './src/pages/Search'
+
+import axios from 'axios';
 
 const Stack = createStackNavigator();
 
+// stack navitation 정리
 function MyStack() {
+
+  const { serverUrl, user, setUser, fav, setFav } = useContext(CommonContext);
+
+  // 게시판 북마크 등록
+  const addBookmark = (b_id, u_id) => {
+    axios
+      .post(`${serverUrl}/board/${b_id}/fav/`, {
+        userId: u_id,
+      })
+      .then(function (response) {
+        console.log(response.data);
+        setFav(true);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  // 게시판 북마크 삭제
+  const deleteBookmark = (b_id, u_id) => {
+    axios
+      .delete(`${serverUrl}/board/${b_id}/fav?userId=${u_id}`)
+      .then(function (response) {
+        console.log(response.data);
+        setFav(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  const whatBook = (isfav, b_id, u_id) => {
+    if (isfav) {
+      deleteBookmark(b_id, u_id);
+    } else {
+      addBookmark(b_id, u_id);
+    }
+  }
+
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Start"
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
         component={Start}
       />
       <Stack.Screen
@@ -62,18 +104,28 @@ function MyStack() {
       />
       <Stack.Screen
         name="Main"
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
         component={TabsScreen}
       />
       <Stack.Screen
         name="Board"
-        options={({route}) => ({
+        options={({ route }) => ({
           title: route.params.name,
           headerShown: true,
           headerTintColor: 'white',
           headerStyle: {
             backgroundColor: '#FACA0F',
           },
+          headerRight: () => (
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+              <TouchableOpacity onPress={() => whatBook(fav, route.params.id, route.params.u_id)}>
+                <Icon
+                  name={fav ? "bookmark" : "bookmark-outline"}
+                  style={{ fontSize: 23, color: 'white', marginRight: 15 }}
+                />
+              </TouchableOpacity>
+            </View>
+          ),
         })}
         component={Board}
       />
@@ -91,22 +143,14 @@ function MyStack() {
       />
       <Stack.Screen
         name="ArticleDisplay"
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           title: '',
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           headerShown: true,
-          headerRight: () => (
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Button
-                onPress={() => navigation.navigate('WritePost')}
-                title="글쓰기로 감(임시)"
-              />
-              <Icon
-                name="ellipsis-vertical"
-                style={{fontSize: 22.5, marginHorizontal: 10}}
-              />
-            </View>
-          ),
+          headerTintColor: 'white',
+          headerStyle: {
+            backgroundColor: '#FACA0F',
+          },
         })}
         component={ArticleDisplay}
       />
@@ -122,6 +166,54 @@ function MyStack() {
         }}
         component={ReqNewBoard}
       />
+      <Stack.Screen
+        name="MyPage"
+        options={{
+          title: '마이 페이지',
+          headerShown: true,
+          headerTintColor: 'white',
+          headerStyle: {
+            backgroundColor: '#FACA0F',
+          },
+        }}
+        component={MyPage}
+      />
+      <Stack.Screen
+        name="MyArticle"
+        options={{
+          title: '내가 쓴 글',
+          headerShown: true,
+          headerTintColor: 'white',
+          headerStyle: {
+            backgroundColor: '#FACA0F',
+          },
+        }}
+        component={MyArticle}
+      />
+      <Stack.Screen
+        name="LikeArticle"
+        options={{
+          title: '좋아요 한 글',
+          headerShown: true,
+          headerTintColor: 'white',
+          headerStyle: {
+            backgroundColor: '#FACA0F',
+          },
+        }}
+        component={LikeArticle}
+      />
+      <Stack.Screen
+        name="Search"
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          headerShown: false,
+          headerTintColor: 'white',
+          headerStyle: {
+            backgroundColor: '#FACA0F',
+          },
+        }}
+        component={Search}
+      />
     </Stack.Navigator>
   );
 }
@@ -130,8 +222,8 @@ const Tab = createBottomTabNavigator();
 
 const TabsScreen = () => (
   <Tab.Navigator
-    screenOptions={({route}) => ({
-      tabBarIcon: ({focused, color, size}) => {
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ focused, color, size }) => {
         if (route.name === '홈') {
           return (
             <Icon
@@ -187,6 +279,7 @@ export default function App() {
 
   const HOST = '118.45.110.147:8090';
   const serverUrl = `http://${HOST}`;
+  const [fav, setFav] = useLocalStorageSetState(false, "fav");
 
   return (
     <CommonContext.Provider
@@ -194,6 +287,8 @@ export default function App() {
         serverUrl,
         user,
         setUser,
+        fav,
+        setFav,
       }}>
       <NavigationContainer>
         <MyStack />

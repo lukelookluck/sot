@@ -1,12 +1,19 @@
-import React from 'react';
-import {Text, View, TouchableHighlight} from 'react-native';
+import React, { useContext } from 'react';
+import { Text, View, TouchableHighlight } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { CommonContext } from "../../context/CommonContext";
 
 export default function Header(props) {
+
+  const { serverUrl, user, setUser } = useContext(CommonContext);
+
+
   const onPress = () => {
     props.setPressed(false);
     props.setMyloading(false);
     props.setTemp(null);
+    props.refreshWholeArticleList()
+    props.setClick(null)
   };
 
   return (
@@ -19,6 +26,7 @@ export default function Header(props) {
         backgroundColor: '#ff8000',
         borderBottomWidth: 1,
         borderBottomColor: '#df380f',
+        height: 56,
       }}>
       <View>
         {(props.pressed === true && (
@@ -29,12 +37,12 @@ export default function Header(props) {
               paddingLeft: 6.5,
             }}>
             <TouchableHighlight
-              style={{padding: 3.5, borderRadius: 25}}
+              style={{ padding: 3.5, borderRadius: 25 }}
               onPress={onPress}
               underlayColor="#dfdfdf">
               <Icon
                 name="arrow-back-circle-outline"
-                style={{color: 'white'}}
+                style={{ color: 'white' }}
                 size={30}
               />
             </TouchableHighlight>
@@ -49,24 +57,25 @@ export default function Header(props) {
             </Text>
           </View>
         )) || (
-          <View style={{paddingLeft: 15}}>
-            <Text style={{fontSize: 12, color: 'white'}}>S.O.T</Text>
-            <Text style={{color: 'white', fontWeight: '700', fontSize: 18}}>
-              {props.name}
-            </Text>
-          </View>
-        )}
+            <View style={{ paddingLeft: 15 }}>
+              <Text style={{ fontSize: 12, color: 'white' }}>SOT</Text>
+              <Text style={{ color: 'white', fontWeight: '700', fontSize: 18 }}>
+                {props.name}
+              </Text>
+            </View>
+          )}
       </View>
-      <View style={{flexDirection: 'row', marginVertical: 5}}>
-        <View style={{marginRight: 15}}>
-          <TouchableHighlight onPress={() => {}} underlayColor="#dfdfdf">
-            <Icon style={{color: 'white'}} name="search-outline" size={30} />
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
+        <View style={{ marginRight: 15 }}>
+          <TouchableHighlight style={{ borderRadius: 25, padding: 5 }} onPress={() => props.navigation.navigate('Search')} underlayColor="#dfdfdf">
+            <Icon style={{ color: 'white' }} name="search-outline" size={30} />
           </TouchableHighlight>
         </View>
 
         <View style={{}}>
-          <TouchableHighlight onPress={() => {}} underlayColor="#dfdfdf">
-            <Icon style={{color: 'white'}} name="person-outline" size={30} />
+          <TouchableHighlight
+            style={{ borderRadius: 25, padding: 5 }} onPress={() => props.navigation.navigate('MyPage')} underlayColor="#dfdfdf">
+            <Icon style={{ color: 'white' }} name="person-outline" size={30} />
           </TouchableHighlight>
         </View>
       </View>

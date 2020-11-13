@@ -12,6 +12,7 @@ import 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {CommonContext} from "../../context/CommonContext";
 
+// 게시판 신청 화면
 const ReqNewBoard = ({navigation, route}) => {
 
   const { serverUrl, user, setUser } = useContext(CommonContext);
@@ -32,12 +33,12 @@ const ReqNewBoard = ({navigation, route}) => {
     axios.post(`${serverUrl}/board`, {
         name: title,
         description: content,
-        userId: user.id, // user의 id 받아서 넣기
+        userId: user.id,
         schoolId: user.schoolId,
     })
       .then((response) => {
         console.log(response.data);
-        navigation.navigate('Main');
+        navigation.navigate("게시판 목록");
       })
       .catch((error) => {
         console.log(error);

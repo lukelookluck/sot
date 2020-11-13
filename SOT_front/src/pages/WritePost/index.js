@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import {
   View,
@@ -12,12 +12,27 @@ import 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {CommonContext} from "../../context/CommonContext";
 
-const WritePost = ({navigation, route}) => {
-
+// 게시글 작성 화면
+const WritePost = ({ navigation, route }) => {
   const { serverUrl, user, setUser } = useContext(CommonContext);
-
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [articleId, setArticleId] = useState(null)
+
+  console.log(route.params, 'dasndjas')
+
+  function refreshList() {
+    if (route.params.articleId) {
+      setArticleId(route.params.articleId)
+      setTitle(route.params.title)
+      setContent(route.params.content)
+    }
+  }
+
+  useEffect(() => {
+    refreshList();
+  }, []);
+
 
   const titleHandler = (text) => {
     setTitle(text);
@@ -28,15 +43,30 @@ const WritePost = ({navigation, route}) => {
   }
 
   const addPost = () => {
-
+    if (articleId) {
+      axios
+        .put(`${serverUrl}/board/${route.params.boardid}/${articleId}`, {
+          content: content,
+          title: title,
+          userId: user.id,
+        })
+        .then((response) => {
+          console.log(response.data);
+          navigation.navigate('Board', { name: route.params.boardname, id: route.params.boardid, isRe: 'yes' });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      return
+    }
     axios.post(`${serverUrl}/board/${route.params.boardid}`, {
-        content: content,
-        title: title,
-        userId: user.id, // user의 id 받아서 넣기
+      content: content,
+      title: title,
+      userId: user.id,
     })
       .then((response) => {
         console.log(response.data);
-        navigation.navigate('Board', {name: route.params.boardname, id: route.params.boardid});
+        navigation.navigate('Board', { name: route.params.boardname, id: route.params.boardid, isRe: 'yes' });
       })
       .catch((error) => {
         console.log(error);
@@ -56,9 +86,9 @@ const WritePost = ({navigation, route}) => {
           <TextInput placeholder="내용" onChangeText={contentHandler} value={content}></TextInput>
         </View>
 
-        <View style={{alignItems: 'center'}}>
+        <View style={{ alignItems: 'center' }}>
           <TouchableOpacity onPress={addPost} style={styles.btn}>
-            <Text style={{fontSize: 18, color: 'white'}}>글 작성</Text>
+            <Text style={{ fontSize: 18, color: 'white' }}>글 작성</Text>
           </TouchableOpacity>
         </View>
 

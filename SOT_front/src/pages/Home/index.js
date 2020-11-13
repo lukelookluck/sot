@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,20 +6,25 @@ import {
   ScrollView,
   TouchableHighlight,
   FlatList,
+  Image,
 } from 'react-native';
 import axios from 'axios';
 import Header from '../../components/Header';
 import PartBoard from '../../components/PartBoard/Box';
-import Icon from 'react-native-vector-icons/Ionicons';
-import LinearGradient from 'react-native-linear-gradient';
-import {CommonContext} from '../../context/CommonContext';
+import FavBoardList from '../../components/FavBoardList';
 
-export default function Home({navigation}) {
-  const {serverUrl, user, setUser} = useContext(CommonContext);
+import { CommonContext } from '../../context/CommonContext';
+
+
+export default function Home({ navigation }) {
+  const { serverUrl, user, setUser } = useContext(CommonContext);
 
   const [temp, setTemp] = useState(null);
+  const [tempId, setTempId] = useState(null);
   const [pressed, setPressed] = useState(false);
   const [myLoading, setMyloading] = useState(false);
+  const [myLoading2, setMyloading2] = useState(false);
+
 
   const [boardList, setBoardList] = useState([]);
 
@@ -28,26 +33,31 @@ export default function Home({navigation}) {
   // 특정게시글
   const [certainArticleList, setCertainArticleList] = useState([]);
 
+
   useEffect(() => {
-    refreshBoardList();
+    refreshFavBoardList();
     refreshWholeArticleList();
+    navigation.addListener('focus', () => {
+      refreshFavBoardList();
+      refreshWholeArticleList();
+    });
   }, []);
 
-  // 게시판 리스트 불러오기
-  function refreshBoardList() {
+  // 즐찾 게시판 리스트 불러오기
+  function refreshFavBoardList() {
     axios
-      .get(`${serverUrl}/boards`, {
+      .get(`${serverUrl}/board/fav?userId=${user.id}`, {
         // headers: {
         //   Authorization: `JWT ${user.token}`,
         // },
-        params: {
-          id: user.schoolId, // user의 schoolId 받아서 넣기
-        },
+        // params: {
+        //   id: user.schoolId, // user의 schoolId 받아서 넣기
+        // },
       })
       .then((response) => {
-        // console.log('here????');
-        // console.log(response.data);
         setBoardList(response.data);
+        setMyloading2(true);
+
       })
       .catch((error) => {
         console.log('why???');
@@ -67,8 +77,13 @@ export default function Home({navigation}) {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log('adasdas222')
+
+        setwholeArticleList([])
+        // console.log("전체 새로고침", res.data);
         setwholeArticleList(res.data);
+        setMyloading(true);
+
       })
       .catch((err) => {
         console.log(err.data);
@@ -78,110 +93,75 @@ export default function Home({navigation}) {
   // 특정 게시판 게시글 불러오기
   function refreshCertainArticleList(data) {
     axios
-      .get(`${serverUrl}/board/${data.id}`, {
+      .get(`${serverUrl}/board/${data.id}/?userId=${user.id}`, {
         // headers: {
         //     Authorization: `JWT ${user.token}`,
         //   },
       })
       .then((res) => {
-        // console.log(res.data);
+        // console.log(res.data)
         setCertainArticleList(res.data);
+        setMyloading(true);
       })
       .catch((err) => {
-        console.log(err.data);
+        console.log(err);
       });
   }
 
   function initHeader(data) {
+    console.log(data, temp, tempId)
     if (temp === data.name) {
       setTemp(null);
+      setTempId(null)
       setPressed(false);
       setMyloading(false);
       refreshWholeArticleList();
     } else {
       setTemp(data.name);
+      setTempId(data.id)
       setPressed(true);
       setMyloading(false);
       refreshCertainArticleList(data);
     }
   }
 
-  const a = boardList.map((data) => {
-    return (
-      <View key={data.id} style={{}}>
-        <TouchableHighlight
-          onPress={() => {
-            initHeader(data);
-          }}
-          activeOpacity={0.6}
-          underlayColor="#dfdfdf">
-          <View
-            style={{
-              margin: 7,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 1}}
-              colors={['#ff8000', '#ffff57']}
-              style={{
-                borderRadius: 30,
-              }}>
-              <Icon
-                name="star-outline"
-                color="#058AB3"
-                style={{
-                  fontSize: 40,
-                  paddingHorizontal: 5,
-                  paddingVertical: 2.5,
-                  margin: 3,
-                  borderRadius: 30,
-                  // paddingVertical: 10,
-                  backgroundColor: 'white',
-                }}></Icon>
-            </LinearGradient>
-            {(data.name.length > 7 && (
-              <Text
-                style={{
-                  fontSize: 12,
-                }}>
-                {data.name.substring(0, 6) + '..'}
-              </Text>
-            )) || (
-              <Text
-                style={{
-                  fontSize: 12,
-                }}>
-                {data.name}
-              </Text>
-            )}
-          </View>
-        </TouchableHighlight>
-      </View>
-    );
-  });
+  const [click, setClick] = useState(null)
+
 
   return (
     <View>
       {(temp === null,
-      pressed === false && <Header name="경북대학교" pressed={pressed} />) || (
-        <Header
-          name={temp}
-          pressed={pressed}
-          setTemp={setTemp}
-          setPressed={setPressed}
-          setMyloading={setMyloading}
-        />
-      )}
+        pressed === false && <Header name={user.schoolName} pressed={pressed} navigation={navigation} />) || (
+          <Header
+            name={temp}
+            setClick={setClick}
+            pressed={pressed}
+            setTemp={setTemp}
+            setPressed={setPressed}
+            setMyloading={setMyloading}
+            navigation={navigation}
+            refreshWholeArticleList={refreshWholeArticleList}
+          />
+        )}
 
       {/* 무한스크롤 = Flatlist 인듯, 따라서 ScrollView를 Flatlist로 바꿔야함 */}
       <ScrollView
-        style={{marginBottom: 50}}
+        style={{ marginBottom: 50 }}
         showsHorizontalScrollIndicator={false}>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <View style={{flexDirection: 'row', paddingLeft: 10}}>{a}</View>
-        </ScrollView>
+        {(myLoading2 === true && (
+          <ScrollView style={{ borderBottomWidth: 1, borderColor: '#dbdbdb' }} horizontal={true} showsHorizontalScrollIndicator={false}>
+            <FavBoardList
+              click={click} setClick={setClick} initHeader={initHeader} boardList={boardList} />
+          </ScrollView>
+
+        )) || (
+            <View style={{ marginTop: 10, flex: 1, alignItems: 'center' }}>
+              <Image
+                source={require('../../components/PartBoard/Box/spiner.gif')}
+                style={{ width: 50, height: 50 }}
+              />
+            </View>
+          )}
 
         <View>
           {/* <PartBoard
@@ -189,15 +169,20 @@ export default function Home({navigation}) {
             pressed={pressed}
             myLoading={myLoading}
             setMyloading={setMyloading}
-          />
-          <PartBoard
+          /> */}
+          {/* <PartBoard
             PartName="HOT 게시글"
-            pressed={pressed}
+            BoardId={tempId}
+            pressed={true}
             myLoading={myLoading}
             setMyloading={setMyloading}
+            wholeArticleList={wholeArticleList}
+            certainArticleList={certainArticleList}
+            navigation={navigation}
           /> */}
           <PartBoard
             PartName={temp}
+            BoardId={tempId}
             pressed={pressed}
             myLoading={myLoading}
             setMyloading={setMyloading}
@@ -206,9 +191,10 @@ export default function Home({navigation}) {
             navigation={navigation}
           />
           {/* <PartBoard PartName="즐겨찾는 게시판" /> */}
+
         </View>
       </ScrollView>
-    </View>
+    </View >
   );
 }
 

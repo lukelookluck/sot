@@ -3,20 +3,16 @@ import axios from 'axios';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
-  TouchableOpacity,
-  ScrollView,
   FlatList,
 } from 'react-native';
-import {SearchBar, Input} from 'react-native-elements';
+import {SearchBar} from 'react-native-elements';
 import 'react-native-gesture-handler';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {CommonContext} from '../../context/CommonContext';
 
+// 학교명 검색
 const SchoolSearch = ({navigation}) => {
   const [key, setKey] = useState('');
-  const [userSchoolId, setUserSchoolId] = useState('');
   const [searchList, setSearchList] = useState([]);
 
   const {serverUrl} = useContext(CommonContext);
@@ -60,6 +56,7 @@ const SchoolSearch = ({navigation}) => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (
           <View style={styles.s_box}>
+            <Text style={styles.sido}>{item.sido}</Text>
             <Text style={styles.item} onPress={() => navigation.navigate("회원가입", {s_name: item.name, s_id: item.id})}>{item.name}</Text>
           </View>
         )}></FlatList>
@@ -93,9 +90,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 10,
   },
+  
+  sido: {
+    fontSize: 15,
+    marginLeft: 10,
+  },
+
   s_box : {
     justifyContent: 'center',
-    height: 50,
+    height: 60,
     borderBottomWidth: 1,
     borderBottomColor: 'silver',
     borderLeftWidth: 1,
