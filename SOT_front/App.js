@@ -1,4 +1,4 @@
-import React, {Component, useContext, useState} from 'react';
+import React, { Component, useContext, useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -31,8 +31,8 @@ const Stack = createStackNavigator();
 
 // stack navitation 정리
 function MyStack() {
-  
-  const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
+
+  const { serverUrl, user, setUser, fav, setFav } = useContext(CommonContext);
 
   // 게시판 북마크 등록
   const addBookmark = (b_id, u_id) => {
@@ -61,7 +61,7 @@ function MyStack() {
       console.log(error);
     });
   }
-  
+
   const whatBook = (isfav, b_id, u_id) => {
     if(isfav) {
       deleteBookmark(b_id, u_id);
@@ -76,7 +76,7 @@ function MyStack() {
         name="Start"
         options={{ headerShown: false }}
         component={Start}
-        />
+      />
       <Stack.Screen
         name="회원가입"
         options={{
@@ -119,7 +119,7 @@ function MyStack() {
               <TouchableOpacity onPress={() => whatBook(fav, route.params.id, route.params.u_id)}>
                 <Icon
                   name={fav ? "bookmark" : "bookmark-outline"}
-                  style={{fontSize: 23, color: 'white', marginRight: 15}}
+                  style={{ fontSize: 23, color: 'white', marginRight: 15 }}
                 />
               </TouchableOpacity>
             </View>
@@ -273,7 +273,7 @@ export default function App() {
         serverUrl,
         user,
         setUser,
-        fav, 
+        fav,
         setFav,
       }}>
       <NavigationContainer>
