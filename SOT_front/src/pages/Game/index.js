@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   snackbox: {
     width: 300,
     height: 100,
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 30,
