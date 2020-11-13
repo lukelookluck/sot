@@ -178,14 +178,9 @@ export default function ({navigation, route}) {
             // console.log(data)
             axios
               .delete(`${serverUrl}/board/${data.boardId}/${data.id}`)
-              .then((res) => {
-                console.log(res);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+              .then((res) => {})
+              .catch((err) => {});
           },
-          style: {backgroundColor: 'red'},
         },
       ],
       {cancelable: true},

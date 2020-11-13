@@ -14,11 +14,11 @@ const MyArticle = ({navigation}) => {
     refreshList();
     navigation.addListener('focus', () => {
       refreshList();
-      refreshList();
     });
   }, []);
 
   function refreshList() {
+    setPostList([]);
     axios
       .get(`${serverUrl}/myarticles?id=${user.id}`, {
         // headers: {
@@ -26,7 +26,6 @@ const MyArticle = ({navigation}) => {
         // },
       })
       .then((response) => {
-        setPostList([]);
         console.log(response.data);
         setPostList(response.data);
       })
