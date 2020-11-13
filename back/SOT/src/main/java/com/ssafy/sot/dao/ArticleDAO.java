@@ -5,6 +5,7 @@ import java.util.List;
 import com.ssafy.sot.dto.ArticleDTO;
 import com.ssafy.sot.dto.ArticleFullInfo;
 import com.ssafy.sot.dto.IdWithIndexDTO;
+import com.ssafy.sot.dto.SearchDTO;
 
 public interface ArticleDAO {
 	
@@ -24,4 +25,6 @@ public interface ArticleDAO {
 	
 	List<ArticleFullInfo> selectMyArticles(int userId);
 	List<ArticleFullInfo> selectLikedArticles(int userId);
+	List<ArticleFullInfo> searchTitle(SearchDTO searchDTO);
+	List<ArticleFullInfo> searchTitleOrContent(SearchDTO searchDTO);
 }

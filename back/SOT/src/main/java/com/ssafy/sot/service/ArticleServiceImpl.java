@@ -22,6 +22,7 @@ import com.ssafy.sot.dto.CommentLikeDTO;
 import com.ssafy.sot.dto.CommentWithReply;
 import com.ssafy.sot.dto.IdWithIndexDTO;
 import com.ssafy.sot.dto.Like;
+import com.ssafy.sot.dto.SearchDTO;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -192,6 +193,20 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public List<ArticleFullInfo> showLikedArticles(int userId) {
 		return articleDAO.selectLikedArticles(userId);
+	}
+
+	@Override
+	public List<ArticleFullInfo> searchTitle(int schoolId, String keyword) {
+		keyword = "%" + keyword + "%";
+		SearchDTO dto = new SearchDTO(schoolId, keyword);
+		return articleDAO.searchTitle(dto);
+	}
+
+	@Override
+	public List<ArticleFullInfo> searchTitleOrContent(int schoolId, String keyword) {
+		keyword = "%" + keyword + "%";
+		SearchDTO dto = new SearchDTO(schoolId, keyword);
+		return articleDAO.searchTitleOrContent(dto);
 	}
 
 }

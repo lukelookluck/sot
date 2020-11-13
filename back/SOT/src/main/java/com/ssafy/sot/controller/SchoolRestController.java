@@ -83,6 +83,24 @@ public class SchoolRestController {
 		}
 		return new ResponseEntity<>(schoolService.searchSchool(keyword), HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "전체 게시글 검색 (제목만)")
+	@GetMapping("/searchtitle")
+	public Object searchTitle(@RequestParam(value="keyword") String keyword, @RequestParam(value="schoolId") int schoolId) {
+		if(keyword == null || keyword == "") {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(articleService.searchTitle(schoolId, keyword), HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "전체 게시글 검색 (제목 + 내용)")
+	@GetMapping("/searchtitlecontent")
+	public Object searchTitleOrContent(@RequestParam(value="keyword") String keyword, @RequestParam(value="schoolId") int schoolId) {
+		if(keyword == null || keyword == "") {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(articleService.searchTitleOrContent(schoolId, keyword), HttpStatus.OK);
+	}
 
 	@ApiOperation(value = "학교id로 게시판 목록 가져오기")
 	@GetMapping("/boards")
