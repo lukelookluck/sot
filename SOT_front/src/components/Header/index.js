@@ -67,7 +67,7 @@ export default function Header(props) {
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
         <View style={{ marginRight: 15 }}>
-          <TouchableHighlight style={{ borderRadius: 25, padding: 5 }} onPress={() => { }} underlayColor="#dfdfdf">
+          <TouchableHighlight style={{ borderRadius: 25, padding: 5 }} onPress={() => props.navigation.navigate('Search')} underlayColor="#dfdfdf">
             <Icon style={{ color: 'white' }} name="search-outline" size={30} />
           </TouchableHighlight>
         </View>

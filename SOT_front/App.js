@@ -25,6 +25,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CommonContext } from './src/context/CommonContext';
 import { useLocalStorageSetState } from './src/common/CommonHooks';
+import Search from './src/pages/Search'
+
 import axios from 'axios';
 
 const Stack = createStackNavigator();
@@ -37,33 +39,33 @@ function MyStack() {
   // 게시판 북마크 등록
   const addBookmark = (b_id, u_id) => {
     axios
-    .post(`${serverUrl}/board/${b_id}/fav/`, {
-      userId: u_id,
-    })
-    .then(function (response) {
-      console.log(response.data);
-      setFav(true);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+      .post(`${serverUrl}/board/${b_id}/fav/`, {
+        userId: u_id,
+      })
+      .then(function (response) {
+        console.log(response.data);
+        setFav(true);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
-  
+
   // 게시판 북마크 삭제
   const deleteBookmark = (b_id, u_id) => {
     axios
-    .delete(`${serverUrl}/board/${b_id}/fav?userId=${u_id}`)
-    .then(function (response) {
-      console.log(response.data);
-      setFav(false);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+      .delete(`${serverUrl}/board/${b_id}/fav?userId=${u_id}`)
+      .then(function (response) {
+        console.log(response.data);
+        setFav(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   const whatBook = (isfav, b_id, u_id) => {
-    if(isfav) {
+    if (isfav) {
       deleteBookmark(b_id, u_id);
     } else {
       addBookmark(b_id, u_id);
@@ -199,6 +201,18 @@ function MyStack() {
           },
         }}
         component={LikeArticle}
+      />
+      <Stack.Screen
+        name="Search"
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          headerShown: false,
+          headerTintColor: 'white',
+          headerStyle: {
+            backgroundColor: '#FACA0F',
+          },
+        }}
+        component={Search}
       />
     </Stack.Navigator>
   );
