@@ -7,6 +7,8 @@ public class PlayerMovement : MonoBehaviour
 
     public float speed;
     public MyJoystick myJoystick;
+    public GameObject character;
+    public GameObject gun;
     Rigidbody rb;
 
     public float rotateSpeed = 5f;
@@ -65,7 +67,8 @@ public class PlayerMovement : MonoBehaviour
         {
             newRotation = Quaternion.LookRotation(direction);
         }
-        rb.rotation = Quaternion.Slerp(rb.rotation, newRotation, rotateSpeed * Time.deltaTime);
+        character.transform.rotation = Quaternion.Slerp(character.transform.rotation, newRotation, rotateSpeed * Time.deltaTime);
+        gun.transform.rotation = newRotation;
     }
 
 }

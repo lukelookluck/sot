@@ -17,10 +17,12 @@ public class SpawnProjectiles : MonoBehaviour {
 	public Text effectName;
 	public RotateToMouseScript rotateToMouse;
 	public GameObject firePoint;
-	public GameObject playerHolder;
+	public GameObject inputDirection;
 	public GameObject cameras;
     public GameObject target;
     public List<GameObject> VFXs = new List<GameObject> ();
+
+	public MyJoybutton1 myJoybutton1;
 
 	private int count = 0;
 	private float timeToFire = 0f;
@@ -52,7 +54,7 @@ public class SpawnProjectiles : MonoBehaviour {
 		
 		if (effectName != null) effectName.text = effectToSpawn.name;
 
-		if (camerasList.Count > 0) {
+		if (rotateToMouse != null && camerasList.Count > 0) {
 			rotateToMouse.SetCamera (camerasList [camerasList.Count - 1]);
 			if(use2D)
 				rotateToMouse.Set2D (true);
@@ -72,8 +74,8 @@ public class SpawnProjectiles : MonoBehaviour {
     }
 
 	void Update () {
-		if (Input.GetKey (KeyCode.Space) && Time.time >= timeToFire) {
-			timeToFire = Time.time + 1f / effectToSpawn.GetComponent<ProjectileMoveScript>().fireRate;
+		if ((Input.GetKey (KeyCode.Space) || myJoybutton1.pressed) && Time.time >= timeToFire) {
+			timeToFire = Time.time + 1f / effectToSpawn.GetComponent<ProjectileMove>().fireRate;
 			SpawnVFX ();	
 		}
 
@@ -103,7 +105,7 @@ public class SpawnProjectiles : MonoBehaviour {
 			vfx = Instantiate (effectToSpawn, firePoint.transform.position, Quaternion.identity);
             if (!useTarget)
             {
-				vfx.transform.localRotation = playerHolder.transform.rotation;
+				vfx.transform.localRotation = inputDirection.transform.rotation;
 
                 //if (rotateToMouse != null)
                 //{

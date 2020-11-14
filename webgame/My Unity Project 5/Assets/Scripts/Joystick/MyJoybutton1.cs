@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class MyJoybutton1 : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
 {
+    public bool pressed = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,16 +21,16 @@ public class MyJoybutton1 : MonoBehaviour, IDragHandler, IPointerUpHandler, IPoi
 
     public void OnDrag(PointerEventData eventData)
     {
-        throw new System.NotImplementedException();
+
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        throw new System.NotImplementedException();
+        pressed = true;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        throw new System.NotImplementedException();
+        pressed = false;
     }
 }
