@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.sot.dto.UserDTO;
+import com.ssafy.sot.dto.UserInfoDTO;
 import com.ssafy.sot.dto.UserLoginDTO;
 
 @Repository
@@ -36,7 +37,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public UserDTO login(UserLoginDTO loginDTO) {
+	public UserInfoDTO login(UserLoginDTO loginDTO) {
 		return sqlsession.selectOne("user.login", loginDTO);
 	}
 

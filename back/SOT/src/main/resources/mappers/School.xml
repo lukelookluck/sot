@@ -15,4 +15,15 @@
 		from school
 		where name like #{keyword}
 	</select>
+	
+	<insert id="addNewSchool" parameterType="schoolDTO">
+		insert into school(sido, name)
+		values(#{sido}, #{name})
+	</insert>
+	
+	<!-- 시도 목록 가져오기 -->
+	<select id="selectSidoList" resultType="String">
+		select distinct sido
+		from school
+	</select>
 </mapper>

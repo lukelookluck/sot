@@ -8,16 +8,25 @@ drop table if exists school;
 create table `school` (
 	`id` int NOT NULL AUTO_INCREMENT,
     `sido` varchar(20) NOT NULL,
-    `name` varchar(100) NOT NULL,
+    `name` varchar(50),
     
     PRIMARY KEY (`id`)
 );
 
+insert into school (sido, `name`) values ("관리", "");
 insert into school (sido, `name`) values ("서울", "개포고등학교");
 insert into school (sido, `name`) values ("서울", "경기고등학교");
 insert into school (sido, `name`) values ("제주", "제주여자고등학교");
 insert into school (sido, `name`) values ("제주", "서귀포고등학교");
 insert into school (sido, `name`) values ("경남", "거창중앙고등학교");
+insert into school (sido, `name`) values ("서울", "강동고등학교");
+insert into school (sido, `name`) values ("대구", "강동고등학교");
+insert into school (sido, `name`) values ("구미", "구미강동고등학교");
+insert into school (sido, `name`) values ("Seoul", "GandongHighSchool");
+insert into school (sido, `name`) values ("Gumi", "GandongHighSchool");
+insert into school (sido, `name`) values ("Daegu", "GandongHighSchool");
+insert into school (sido, `name`) values ("Daegu", "GangseoHighSchool");
+
 
 drop table if exists `user`;
 create table `user` (
@@ -34,11 +43,14 @@ create table `user` (
     FOREIGN KEY (`school_id`) REFERENCES school (`id`)
 );
 
+insert into `user`(nickname, email, `password`, school_id) values("토마토", "tomato", "tomato", 2);
+insert into `user`(nickname, email, `password`, school_id) values("김싸피", "ssafy", "ssafy", 2);
 
 drop table if exists `comment`;
 drop table if exists article;
 drop table if exists board;
 
+# 1번 게시판은 공지사항, 2번 게시판은 QnA로 활용, 전체 사용자가 이용 가능
 create table `board` (
 	`id` int NOT NULL AUTO_INCREMENT,
     `name` varchar(100) NOT NULL,
@@ -48,12 +60,22 @@ create table `board` (
     FOREIGN KEY (`school_id`) REFERENCES school (`id`) ON DELETE CASCADE
 );
 
-insert into `board` (`name`, school_id) values ("익명게시판", 1);
-insert into `board` (`name`, school_id) values ("자유게시판", 1);
-insert into `board` (`name`, school_id) values ("1학년게시판", 1);
-insert into `board` (`name`, school_id) values ("2학년게시판", 1);
-insert into `board` (`name`, school_id) values ("3학년게시판", 1);
-insert into `board` (`name`, school_id) values ("묻고답해요", 1);
+insert into `board` (`name`, school_id) values ("공지사항", 1);
+insert into `board` (`name`, school_id) values ("QnA", 1);
+insert into `board` (`name`, school_id) values ("자유게시판", 2);
+insert into `board` (`name`, school_id) values ("익명게시판", 2);
+insert into `board` (`name`, school_id) values ("1학년게시판", 2);
+insert into `board` (`name`, school_id) values ("2학년게시판", 2);
+insert into `board` (`name`, school_id) values ("3학년게시판", 2);
+insert into `board` (`name`, school_id) values ("묻고답해요", 2);
+insert into `board` (`name`, school_id) values ("자유게시판", 10);
+insert into `board` (`name`, school_id) values ("익명게시판", 10);
+insert into `board` (`name`, school_id) values ("1학년게시판", 10);
+insert into `board` (`name`, school_id) values ("2학년게시판", 10);
+insert into `board` (`name`, school_id) values ("3학년게시판", 10);
+insert into `board` (`name`, school_id) values ("묻고답해요", 10);
+
+select * from user;
 
 create table `article` (
 	`id` int NOT NULL AUTO_INCREMENT,
@@ -69,6 +91,20 @@ create table `article` (
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 );
 
+insert into article(title, content, board_id, user_id)
+	values ("공지사항입니다.", "공지사항 내용입니다. 공지사항 내용입니다.", 1, 1);
+    insert into article(title, content, board_id, user_id)
+	values ("업데이트 예정.", "업데이트 예정입니다. 업데이트 예정은 다음과 같습니다.", 1, 1);
+insert into article (title, content, board_id, user_id)
+	values ("질문드립니다.", "질문 있는데 질문 게시판이 어딘가요?", 2, 1);
+insert into article (title, content, board_id, user_id)
+	values ("탈퇴...", "탈퇴하고 싶은데 어떻게 하나요?", 2, 1);
+
+insert into article (title, content, board_id, user_id)
+	values ("제목", "내용입니다. 내용입니다. 내용입니다. 내용입니다. 내용입니다. 내용입니다. 내용입니다. 내용입니다. 내용입니다. 내용입니다. 내용입니다. 내용입니다.", 3, 1);
+insert into article (title, content, board_id, user_id)
+	values ("테스트", "잘 되나요?", 3, 2);
+
 create table `comment` (
 	`id` int NOT NULL AUTO_INCREMENT,
     `content` text NOT NULL,
@@ -76,12 +112,20 @@ create table `comment` (
     `user_id` int NOT NULL,
     `created_at` timestamp default current_timestamp,
     `updated_at` timestamp,
+    `parent_id` int,
     
     PRIMARY KEY (`id`),
     FOREIGN KEY (`article_id`) REFERENCES `article` (`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`parent_id`) REFERENCES `comment` (`id`) ON DELETE CASCADE
 );
 
+insert into comment (content, article_id, user_id)
+	values("탈퇴 기능은 딱히 없습니다.", 2, 2);
+insert into comment (content, article_id, user_id)
+	values("좋은 글 감사합니다.", 3, 2);
+insert into comment (content, article_id, user_id)
+    values("글 많이 남겨주세요.", 3, 1);
 
 drop table if exists articlelike;
 drop table if exists commentlike;
@@ -95,6 +139,9 @@ create table `articlelike` (
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 );
 
+insert into articlelike(`article_id`, `user_id`) values(3, 1);
+insert into articlelike(`article_id`, `user_id`) values(3, 2);
+
 create table `commentlike` (
 	`id` int NOT NULL AUTO_INCREMENT,
     `comment_id` int NOT NULL,
@@ -105,6 +152,10 @@ create table `commentlike` (
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 );
 
+insert into commentlike(`comment_id`, `user_id`) values(3, 1);
+insert into commentlike(`comment_id`, `user_id`) values(3, 2);
+
+# 유저 알림 (댓글이 달렸습니다~ 같은 거)
 drop table if exists usernotice;
 create table `usernotice` (
 	`id` int NOT NULL AUTO_INCREMENT,
@@ -119,6 +170,7 @@ create table `usernotice` (
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 );
 
+# 게임 랭킹 기록 (수정 가능성 있음)
 drop table if exists ranking;
 create table `ranking` (
 	`id` int NOT NULL AUTO_INCREMENT,
@@ -130,3 +182,33 @@ create table `ranking` (
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
     FOREIGN KEY (`school_id`) REFERENCES `school` (`id`) ON DELETE CASCADE
 );
+
+# 유저의 게시판 즐겨찾기 (게시글이 아님)
+drop table if exists boardfav;
+create table `boardfav` (
+	`id` int NOT NULL AUTO_INCREMENT,
+    `board_id` int not null,
+    `user_id` int not null,
+    
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`board_id`) REFERENCES `board` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+);
+
+insert into boardfav(board_id, user_id) values(3, 1);
+
+# 게시판 생성자 정보 저장
+drop table if exists boardcreator;
+create table `boardcreator` (
+	`id` int NOT NULL AUTO_INCREMENT,
+    `school_id` int not null,
+    `name` varchar(50),
+    `user_id` int not null,
+    `description` text,
+    
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`school_id`) REFERENCES `school` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+);
+
+select * from boardcreator;

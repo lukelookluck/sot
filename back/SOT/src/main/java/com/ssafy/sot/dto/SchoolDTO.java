@@ -3,7 +3,9 @@ package com.ssafy.sot.dto;
 public class SchoolDTO {
 	
 	int id;
+	String sido;
 	String name;
+	
 	public int getId() {
 		return id;
 	}
@@ -16,8 +18,15 @@ public class SchoolDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getSido() {
+		return sido;
+	}
+	public void setSido(String sido) {
+		this.sido = sido;
+	}
 	@Override
 	public String toString() {
-		return "SchoolDTO [id=" + id + ", name=" + name + "]";
+		return "SchoolDTO [id=" + id + ", sido=" + sido + ", name=" + name + "]";
 	}
 }

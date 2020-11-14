@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mappers/UserNotice.xml -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="usernotice">
+
+	<select id="selectUserNotices" resultType="UserNoticeDTO">
+		select id, user_id as userId, msg, article_id as articleId, created_at, read
+		from usernotice
+	</select>
+	
+	<select id="selectUserNoticeByUserId" resultType="UserNoticeDTO">
+		select id, user_id as userId, msg, article_id as articleId, created_at, read
+		from usernotice
+		where user_id = #{userId} 
+	</select>
+	
+	<insert id="insertUserNotice" parameterType="UserNoticeDTO">
+		insert into usernotice(user_id, msg, article_id)
+		values(#{userId}, #{msg}, #{articleId})
+	</insert>
+	
+	<update id="updateReadById">
+		update usernotice
+		set read = true
+		where id = #{id}
+	</update>
+	
+	<delete id="deleteUserNotice">
+		delete from usernotice
+		where id = #{id}
+	</delete>
+
+</mapper>
