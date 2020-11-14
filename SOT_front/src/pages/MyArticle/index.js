@@ -1,14 +1,9 @@
 import React, {useState, useEffect, useContext} from 'react';
 import axios from 'axios';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import 'react-native-gesture-handler';
 import {CommonContext} from '../../context/CommonContext';
-import SingleArticle from '../../components/PartBoard/SingleArticle'
+import SingleArticle from '../../components/PartBoard/SingleArticle';
 
 // 내가 쓴 게시글 목록
 const MyArticle = ({navigation}) => {
@@ -19,10 +14,11 @@ const MyArticle = ({navigation}) => {
     refreshList();
     navigation.addListener('focus', () => {
       refreshList();
-    })
+    });
   }, []);
 
   function refreshList() {
+    setPostList([]);
     axios
       .get(`${serverUrl}/myarticles?id=${user.id}`, {
         // headers: {
@@ -30,7 +26,6 @@ const MyArticle = ({navigation}) => {
         // },
       })
       .then((response) => {
-        setPostList([]);
         console.log(response.data);
         setPostList(response.data);
       })
@@ -42,24 +37,26 @@ const MyArticle = ({navigation}) => {
   return (
     <View style={styles.box}>
       <ScrollView>
-        {
-          postList.length === 0
-          ? (<View style={{justifyContent: 'center', alignItems: 'center', flex: 1,}}>
-              <Text style={{fontSize: 25, marginTop: 70,}}>작성한 게시글이 없습니다</Text>
-            </View>)
-          : (<></>) 
-        }
-        {
-          postList.map((item, index) => (
-            <View key={index} style={{borderBottomWidth: 0.5, borderBottomColor: "gray"}}>
-              <SingleArticle
+        {postList.length === 0 ? (
+          <View
+            style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+            <Text style={{fontSize: 25, marginTop: 70}}>
+              작성한 게시글이 없습니다
+            </Text>
+          </View>
+        ) : (
+          <></>
+        )}
+        {postList.map((item, index) => (
+          <View
+            key={index}
+            style={{borderBottomWidth: 0.5, borderBottomColor: 'gray'}}>
+            <SingleArticle
               idx={index}
               article={item}
-              navigation={navigation}
-              ></SingleArticle>
-            </View>
-          ))
-        }
+              navigation={navigation}></SingleArticle>
+          </View>
+        ))}
       </ScrollView>
     </View>
   );
@@ -70,10 +67,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  container: {
-    
-  },
-
+  container: {},
 });
 
 export default MyArticle;

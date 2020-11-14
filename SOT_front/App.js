@@ -1,8 +1,5 @@
-import React, { Component, useContext, useState } from 'react';
-import {
-  View,
-  TouchableOpacity,
-} from 'react-native';
+import React, {Component, useContext, useState} from 'react';
+import {View, TouchableOpacity} from 'react-native';
 import Start from './src/pages/Start';
 import SignUp from './src/pages/SignUp';
 import Home from './src/pages/Home';
@@ -16,16 +13,16 @@ import ReqNewBoard from './src/pages/ReqNewBoard';
 import MyPage from './src/pages/MyPage';
 import MyArticle from './src/pages/MyArticle';
 import LikeArticle from './src/pages/LikeArticle';
-import { NavigationContainer } from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { CommonContext } from './src/context/CommonContext';
-import { useLocalStorageSetState } from './src/common/CommonHooks';
-import Search from './src/pages/Search'
+import {CommonContext} from './src/context/CommonContext';
+import {useLocalStorageSetState} from './src/common/CommonHooks';
+import Search from './src/pages/Search';
 
 import axios from 'axios';
 
@@ -33,8 +30,7 @@ const Stack = createStackNavigator();
 
 // stack navitation 정리
 function MyStack() {
-
-  const { serverUrl, user, setUser, fav, setFav } = useContext(CommonContext);
+  const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
 
   // 게시판 북마크 등록
   const addBookmark = (b_id, u_id) => {
@@ -49,7 +45,7 @@ function MyStack() {
       .catch(function (error) {
         console.log(error);
       });
-  }
+  };
 
   // 게시판 북마크 삭제
   const deleteBookmark = (b_id, u_id) => {
@@ -62,7 +58,7 @@ function MyStack() {
       .catch(function (error) {
         console.log(error);
       });
-  }
+  };
 
   const whatBook = (isfav, b_id, u_id) => {
     if (isfav) {
@@ -70,13 +66,13 @@ function MyStack() {
     } else {
       addBookmark(b_id, u_id);
     }
-  }
+  };
 
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Start"
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
         component={Start}
       />
       <Stack.Screen
@@ -104,24 +100,33 @@ function MyStack() {
       />
       <Stack.Screen
         name="Main"
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
         component={TabsScreen}
       />
       <Stack.Screen
         name="Board"
-        options={({ route }) => ({
+        options={({route}) => ({
           title: route.params.name,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           headerShown: true,
           headerTintColor: 'white',
           headerStyle: {
             backgroundColor: '#FACA0F',
           },
           headerRight: () => (
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-              <TouchableOpacity onPress={() => whatBook(fav, route.params.id, route.params.u_id)}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <TouchableOpacity
+                onPress={() =>
+                  whatBook(fav, route.params.id, route.params.u_id)
+                }>
                 <Icon
-                  name={fav ? "bookmark" : "bookmark-outline"}
-                  style={{ fontSize: 23, color: 'white', marginRight: 15 }}
+                  name={fav ? 'bookmark' : 'bookmark-outline'}
+                  style={{fontSize: 23, color: 'white', marginRight: 15}}
                 />
               </TouchableOpacity>
             </View>
@@ -133,6 +138,7 @@ function MyStack() {
         name="WritePost"
         options={{
           title: '글 쓰기',
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           headerShown: true,
           headerTintColor: 'white',
           headerStyle: {
@@ -143,7 +149,7 @@ function MyStack() {
       />
       <Stack.Screen
         name="ArticleDisplay"
-        options={({ navigation }) => ({
+        options={({navigation}) => ({
           title: '',
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           headerShown: true,
@@ -158,6 +164,7 @@ function MyStack() {
         name="ReqNewBoard"
         options={{
           title: '게시판 신청',
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           headerShown: true,
           headerTintColor: 'white',
           headerStyle: {
@@ -170,6 +177,7 @@ function MyStack() {
         name="MyPage"
         options={{
           title: '마이 페이지',
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           headerShown: true,
           headerTintColor: 'white',
           headerStyle: {
@@ -182,6 +190,7 @@ function MyStack() {
         name="MyArticle"
         options={{
           title: '내가 쓴 글',
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           headerShown: true,
           headerTintColor: 'white',
           headerStyle: {
@@ -194,6 +203,7 @@ function MyStack() {
         name="LikeArticle"
         options={{
           title: '좋아요 한 글',
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           headerShown: true,
           headerTintColor: 'white',
           headerStyle: {
@@ -222,8 +232,8 @@ const Tab = createBottomTabNavigator();
 
 const TabsScreen = () => (
   <Tab.Navigator
-    screenOptions={({ route }) => ({
-      tabBarIcon: ({ focused, color, size }) => {
+    screenOptions={({route}) => ({
+      tabBarIcon: ({focused, color, size}) => {
         if (route.name === '홈') {
           return (
             <Icon
@@ -279,7 +289,7 @@ export default function App() {
 
   const HOST = '118.45.110.147:8090';
   const serverUrl = `http://${HOST}`;
-  const [fav, setFav] = useLocalStorageSetState(false, "fav");
+  const [fav, setFav] = useLocalStorageSetState(false, 'fav');
 
   return (
     <CommonContext.Provider
