@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   StyleSheet,
@@ -12,16 +12,13 @@ import {
 import axios from 'axios';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import { CommonContext } from '../../context/CommonContext';
-
+import {CommonContext} from '../../context/CommonContext';
 
 export default function (props) {
-  const { serverUrl, user, setUser } = useContext(CommonContext);
+  const {serverUrl, user, setUser} = useContext(CommonContext);
 
   const [myIndex, setMyIndex] = useState(2);
   const [showReplysBool, setshowReplysBool] = useState(false);
-
-
 
   function moreComment() {
     setMyIndex(myIndex + 2);
@@ -39,13 +36,11 @@ export default function (props) {
         <TouchableHighlight
           style={{
             paddingVertical: 10,
-            paddingLeft: 50
+            paddingLeft: 50,
           }}
           onPress={() => moreComment()}
           underlayColor="#dfdfdf">
-          <Text >
-            이전 답글 {props.comment.length - myIndex}개 보기
-        </Text>
+          <Text>이전 답글 {props.comment.length - myIndex}개 보기</Text>
         </TouchableHighlight>
       );
     }
@@ -55,13 +50,11 @@ export default function (props) {
         <TouchableHighlight
           style={{
             paddingVertical: 10,
-            paddingLeft: 50
+            paddingLeft: 50,
           }}
           onPress={() => switcher()}
           underlayColor="#dfdfdf">
-          <Text >
-            답글 숨기기
-          </Text>
+          <Text>답글 숨기기</Text>
         </TouchableHighlight>
       );
     }
@@ -70,13 +63,13 @@ export default function (props) {
       <TouchableHighlight
         style={{
           paddingVertical: 10,
-          paddingLeft: 50
+          paddingLeft: 50,
         }}
         onPress={() => switcher()}
         underlayColor="#dfdfdf">
         <Text onPress={() => switcher()}>
           답글 {props.comment.length}개 보기
-      </Text>
+        </Text>
       </TouchableHighlight>
     );
   }
@@ -117,29 +110,27 @@ export default function (props) {
     return theTime;
   }
 
-
-
-  let replies = props.comment.map((reply, idx) => {
+  const replies = (props.comment || []).map((reply, idx) => {
     const [like, setLike] = useState(reply.isLiked);
-    const [likeCnt, setLikeCnt] = useState(reply.likesCnt)
+    const [likeCnt, setLikeCnt] = useState(reply.likesCnt);
 
     function likeComment(data) {
       axios
-        .post(`${serverUrl}/board/${props.boardId}/${data.articleId}/${data.id}/like?userId=${user.id}`,)
+        .post(
+          `${serverUrl}/board/${props.boardId}/${data.articleId}/${data.id}/like?userId=${user.id}`,
+        )
         .then((res) => {
           if (like === true) {
-            setLike(!like)
-            setLikeCnt(likeCnt - 1)
+            setLike(!like);
+            setLikeCnt(likeCnt - 1);
           } else {
-            setLike(!like)
-            setLikeCnt(likeCnt + 1)
-
+            setLike(!like);
+            setLikeCnt(likeCnt + 1);
           }
         })
         .catch((err) => {
-          console.log(err)
-        })
-
+          console.log(err);
+        });
     }
 
     if (showReplysBool === false && idx < myIndex) {
@@ -164,9 +155,9 @@ export default function (props) {
               }}>
               <Icon
                 name="person-circle"
-                style={{ fontSize: 40, color: '#919191' }}
+                style={{fontSize: 40, color: '#919191'}}
               />
-              <View style={{ flexDirection: 'column', marginLeft: 5 }}>
+              <View style={{flexDirection: 'column', marginLeft: 5}}>
                 <Text
                   style={{
                     fontWeight: '700',
@@ -177,30 +168,29 @@ export default function (props) {
                   }}>
                   {reply.nickname}
                 </Text>
-                <Text style={{ fontSize: 13 }}>{reply.content}</Text>
-                <View style={{ flexDirection: 'row', paddingVertical: 5 }}>
-                  {(likeCnt > 0) && (
-                    <Text style={{ marginRight: 10, fontSize: 12, color: '#5e5e5e' }}>
+                <Text style={{fontSize: 13}}>{reply.content}</Text>
+                <View style={{flexDirection: 'row', paddingVertical: 5}}>
+                  {likeCnt > 0 && (
+                    <Text
+                      style={{marginRight: 10, fontSize: 12, color: '#5e5e5e'}}>
                       좋아요 {likeCnt}개
                     </Text>
-
                   )}
-                  <Text style={{ fontSize: 12, color: '#5e5e5e' }}>
+                  <Text style={{fontSize: 12, color: '#5e5e5e'}}>
                     {getTime(reply.created_at)}
                   </Text>
                 </View>
               </View>
             </View>
-            {(like === false) && (
+            {(like === false && (
               <TouchableHighlight
                 style={{
                   borderRadius: 20,
                 }}
                 onPress={() => {
-                  likeComment(reply)
+                  likeComment(reply);
                 }}
                 underlayColor="#dfdfdf">
-
                 <Icon
                   name="heart-outline"
                   color="#ff8000"
@@ -213,35 +203,31 @@ export default function (props) {
                   }}
                 />
               </TouchableHighlight>
-            ) || (
-                <TouchableHighlight
+            )) || (
+              <TouchableHighlight
+                style={{
+                  borderRadius: 20,
+                }}
+                onPress={() => likeComment(reply)}
+                underlayColor="#dfdfdf">
+                <Icon
+                  name="heart"
+                  color="#ff8000"
                   style={{
+                    fontSize: 22.5,
+                    paddingVertical: 5,
+                    paddingHorizontal: 6,
+                    // backgroundColor: 'white',
                     borderRadius: 20,
                   }}
-                  onPress={() => likeComment(reply)}
-                  underlayColor="#dfdfdf">
-
-                  <Icon
-                    name="heart"
-                    color="#ff8000"
-                    style={{
-                      fontSize: 22.5,
-                      paddingVertical: 5,
-                      paddingHorizontal: 6,
-                      // backgroundColor: 'white',
-                      borderRadius: 20,
-                    }}
-                  />
-                </TouchableHighlight>
-              )}
+                />
+              </TouchableHighlight>
+            )}
           </View>
-        </View >
-      )
+        </View>
+      );
     }
-  })
-
-
-
+  });
 
   return (
     <View>
@@ -249,7 +235,6 @@ export default function (props) {
       {/* {replyWord} */}
       {showReplys}
       {replies}
-
     </View>
-  )
+  );
 }

@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
+  Pressable,
   StyleSheet,
   ScrollView,
   TextInput,
@@ -54,136 +55,138 @@ export default function (props) {
     return theTime;
   }
 
-  let comments = null;
-  if (props.comments.length > 0) {
-    comments = props.comments.map((comment) => {
-      const [like, setLike] = useState(comment.isLiked);
-      const [likeCnt, setLikeCnt] = useState(comment.likesCnt);
+  // let comments = null;
+  // if (props.comments.length > 0) {
+  const comments = (props.comments || []).map((comment) => {
+    const [like, setLike] = useState(comment.isLiked);
+    const [likeCnt, setLikeCnt] = useState(comment.likesCnt);
 
-      function likeComment(data) {
-        axios
-          .post(
-            `${serverUrl}/board/${props.boardId}/${data.articleId}/${data.id}/like?userId=${user.id}`,
-          )
-          .then((res) => {
-            if (like === true) {
-              setLike(false);
-              setLikeCnt(likeCnt - 1);
-            } else {
-              setLike(true);
-              setLikeCnt(likeCnt + 1);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-      return (
-        <View
-          key={comment.id}
+    function likeComment(data) {
+      axios
+        .post(
+          `${serverUrl}/board/${props.boardId}/${data.articleId}/${data.id}/like?userId=${user.id}`,
+        )
+        .then((res) => {
+          if (like === true) {
+            setLike(false);
+            setLikeCnt(likeCnt - 1);
+          } else {
+            setLike(true);
+            setLikeCnt(likeCnt + 1);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    return (
+      <View
+        key={comment.id}
+        style={{
+          paddingTop: 5,
+          borderBottomWidth: 2,
+          borderBottomColor: '#dbdbdb',
+        }}>
+        <Pressable
+          onLongPress={() => Alert.alert('하이')}
           style={{
-            paddingTop: 5,
-            borderBottomWidth: 2,
-            borderBottomColor: '#dbdbdb',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            // backgroundColor: 'red'
           }}>
           <View
             style={{
               flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
+              flex: 1,
             }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                flex: 1,
-              }}>
-              <Icon
-                name="person-circle"
-                style={{fontSize: 40, color: '#919191'}}
-              />
-              <View style={{flexDirection: 'column', marginLeft: 5, flex: 1}}>
-                <Text
-                  style={{
-                    fontWeight: '700',
-                    fontSize: 12,
-                    color: '#5e5e5e',
-                    paddingTop: 5,
-                    paddingBottom: 2,
-                  }}>
-                  {comment.nickname}
-                </Text>
-                <Text style={{fontSize: 13}}>{comment.content}</Text>
-                <View style={{flexDirection: 'row', paddingVertical: 5}}>
-                  {(likeCnt > 0 && (
-                    <Text
-                      style={{marginRight: 10, fontSize: 12, color: '#5e5e5e'}}>
-                      좋아요 {likeCnt}개
-                    </Text>
-                  )) || <Text></Text>}
-                  <Text style={{fontSize: 12, color: '#5e5e5e'}}>
-                    {getTime(comment.created_at)}
+            <Icon
+              name="person-circle"
+              style={{fontSize: 40, color: '#919191'}}
+            />
+            <View style={{flexDirection: 'column', marginLeft: 5, flex: 1}}>
+              <Text
+                style={{
+                  fontWeight: '700',
+                  fontSize: 12,
+                  color: '#5e5e5e',
+                  paddingTop: 5,
+                  paddingBottom: 2,
+                }}>
+                {comment.nickname}
+              </Text>
+              <Text style={{fontSize: 13}}>{comment.content}</Text>
+              <View style={{flexDirection: 'row', paddingVertical: 5}}>
+                {(likeCnt > 0 && (
+                  <Text
+                    style={{marginRight: 10, fontSize: 12, color: '#5e5e5e'}}>
+                    좋아요 {likeCnt}개
                   </Text>
+                )) || <Text></Text>}
+                <Text style={{fontSize: 12, color: '#5e5e5e'}}>
+                  {getTime(comment.created_at)}
+                </Text>
 
-                  <TouchableOpacity
-                    style={{
-                      marginLeft: 15,
-                    }}
-                    onPress={() => props.writeReply(comment)}
-                    activeOpacity={1}>
-                    <Text style={{fontSize: 12, color: '#5e5e5e'}}>
-                      답글 달기..
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  style={{
+                    marginLeft: 15,
+                  }}
+                  onPress={() => props.writeReply(comment)}
+                  activeOpacity={1}>
+                  <Text style={{fontSize: 12, color: '#5e5e5e'}}>
+                    답글 달기..
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
-            {(like === false && (
-              <TouchableHighlight
-                style={{
-                  borderRadius: 20,
-                }}
-                onPress={() => {
-                  likeComment(comment);
-                }}
-                underlayColor="#dfdfdf">
-                <Icon
-                  name="heart-outline"
-                  color="#ff8000"
-                  style={{
-                    fontSize: 22.5,
-                    paddingVertical: 5,
-                    paddingHorizontal: 6,
-                    // backgroundColor: 'white',
-                    borderRadius: 20,
-                  }}
-                />
-              </TouchableHighlight>
-            )) || (
-              <TouchableHighlight
-                style={{
-                  borderRadius: 20,
-                }}
-                onPress={() => likeComment(comment)}
-                underlayColor="#dfdfdf">
-                <Icon
-                  name="heart"
-                  color="#ff8000"
-                  style={{
-                    fontSize: 22.5,
-                    paddingVertical: 5,
-                    paddingHorizontal: 6,
-                    // backgroundColor: 'white',
-                    borderRadius: 20,
-                  }}
-                />
-              </TouchableHighlight>
-            )}
           </View>
-          <ReplyList comment={comment.replies} boardId={props.boardId} />
-        </View>
-      );
-    });
-  }
+          {(like === false && (
+            <TouchableHighlight
+              style={{
+                borderRadius: 20,
+              }}
+              onPress={() => {
+                likeComment(comment);
+              }}
+              underlayColor="#dfdfdf">
+              <Icon
+                name="heart-outline"
+                color="#ff8000"
+                style={{
+                  fontSize: 22.5,
+                  paddingVertical: 5,
+                  paddingHorizontal: 6,
+                  // backgroundColor: 'white',
+                  borderRadius: 20,
+                }}
+              />
+            </TouchableHighlight>
+          )) || (
+            <TouchableHighlight
+              style={{
+                borderRadius: 20,
+              }}
+              onPress={() => likeComment(comment)}
+              underlayColor="#dfdfdf">
+              <Icon
+                name="heart"
+                color="#ff8000"
+                style={{
+                  fontSize: 22.5,
+                  paddingVertical: 5,
+                  paddingHorizontal: 6,
+                  // backgroundColor: 'white',
+                  borderRadius: 20,
+                }}
+              />
+            </TouchableHighlight>
+          )}
+        </Pressable>
+        <ReplyList comment={comment.replies} boardId={props.boardId} />
+      </View>
+    );
+  });
+  // }
 
   return <View>{comments}</View>;
 }

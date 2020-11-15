@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useRef, useContext} from 'react';
 import {
   Text,
   StyleSheet,
@@ -51,6 +51,9 @@ export default function ({navigation, route}) {
         {
           text: '네',
           onPress: () => {
+            setTimeout(() => {
+              textInput.current.focus();
+            }, 100);
             setModalVisible(true);
             setIsReply(true);
             setReplyId(data.id);
@@ -205,7 +208,8 @@ export default function ({navigation, route}) {
   const [isReply, setIsReply] = useState(false);
   const [replyId, setReplyId] = useState(null);
   const [textInput2, setTextInput2] = useState(null);
-  let textInput = '';
+  // let textInput = '';
+  const textInput = useRef(null);
 
   // 게시글 수정/삭제 모달 관련
   const [modalVisible2, setModalVisible2] = useState(false);
@@ -259,9 +263,9 @@ export default function ({navigation, route}) {
               margin: 0,
             }}
             animationIn="slideInUp"
-            animationInTiming={500}
-            animationOut="fadeOut"
-            animationOutTiming={500}
+            animationInTiming={300}
+            animationOut="slideOutDown"
+            animationOutTiming={300}
             isVisible={modalVisible2}
             useNativeDriver={true}
             // hideModalContentWhileAnimating={true}
@@ -491,6 +495,9 @@ export default function ({navigation, route}) {
               <Text
                 onPress={() => {
                   setModalVisible(true);
+                  setTimeout(() => {
+                    textInput.current.focus();
+                  }, 100);
                 }}
                 style={{
                   flex: 1,
@@ -505,21 +512,23 @@ export default function ({navigation, route}) {
                 margin: 0,
               }}
               animationIn="slideInUp"
-              animationInTiming={500}
-              animationOut="fadeOut"
-              animationOutTiming={500}
+              animationInTiming={300}
+              animationOut="slideOutDown"
+              animationOutTiming={300}
               isVisible={modalVisible}
               useNativeDriver={true}
               // hideModalContentWhileAnimating={true}
               onModalShow={() => {
-                textInput.focus();
+                // textInput.focus();
               }}
               onBackdropPress={() => {
+                textInput.current.blur();
                 setModalVisible(false);
                 setIsReply(false);
                 setTextInput2(null);
               }}
               onBackButtonPress={() => {
+                textInput.current.blur();
                 setModalVisible(false);
                 setIsReply(false);
                 setTextInput2(null);
@@ -544,6 +553,7 @@ export default function ({navigation, route}) {
                     <TouchableOpacity
                       activeOpacity={1}
                       onPress={() => {
+                        textInput.current.blur();
                         setIsReply(false);
                         setModalVisible(false);
                         setTextInput2(null);
@@ -570,9 +580,7 @@ export default function ({navigation, route}) {
                     <TextInput
                       multiline={true}
                       placeholder="댓글 작성하기.."
-                      ref={(input) => {
-                        textInput = input;
-                      }}
+                      ref={textInput}
                       style={{flex: 1, color: 'black', fontSize: 15}}
                       onChangeText={(text) => {
                         setTextInput2(text);
@@ -583,10 +591,11 @@ export default function ({navigation, route}) {
                     <TextInput
                       multiline={true}
                       placeholder="답글 작성하기.."
-                      ref={(input) => {
-                        textInput = input;
-                      }}
-                      style={{flex: 1, color: 'red', fontSize: 15}}
+                      ref={textInput}
+                      // ref={(input) => {
+                      //   textInput = input;
+                      // }}
+                      style={{flex: 1, color: 'black', fontSize: 15}}
                       onChangeText={(text) => {
                         setTextInput2(text);
                       }}
