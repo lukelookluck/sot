@@ -237,9 +237,7 @@ public class SchoolRestController {
 	public Object likeComment(@PathVariable("boardId") int boardId,
 							@PathVariable("articleId") int articleId,
 							@PathVariable("commentId") int commentId,
-//							HttpServletRequest request,
 							@RequestParam("userId") int userId) {
-//		System.out.println("boardId:" + boardId + ", articleId: " + articleId + "commentId: " + commentId + "userId:" + userId);
 		return new ResponseEntity<>(likeService.likeComment(commentId, userId), HttpStatus.OK);
 	}
 	
@@ -248,7 +246,6 @@ public class SchoolRestController {
 	public Object cancelLikeComment(@PathVariable("boardId") int boardId,
 							@PathVariable("articleId") int articleId,
 							@PathVariable("commentId") int commentId,
-//							HttpServletRequest request,
 							@RequestParam("userId") int userId) {
 		return new ResponseEntity<>(likeService.cancelLikeComment(commentId, userId), HttpStatus.OK);
 	}
@@ -276,7 +273,6 @@ public class SchoolRestController {
 		return new ResponseEntity<>(likeService.cancelLikeArticle(articleId, userId), HttpStatus.OK);
 	}
 	
-	// JWT 토큰에서 userId(PK) 가져오는 메소드
 	private int getUserPK(HttpServletRequest request) {
 		String token = request.getHeader("Authorization");
 		if(token == null) {
