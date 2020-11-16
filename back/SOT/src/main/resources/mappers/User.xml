@@ -46,14 +46,17 @@
 	</update>
 	
 	<!-- 유저 로그인 -->
-	<select id="login" parameterType="UserLoginDTO" resultType="UserDTO">
-		select id,
-			nickname,
-			email,
-			school_id as schoolId,
-			is_admin
+	<select id="login" parameterType="UserLoginDTO" resultType="UserInfoDTO">
+		select user.id,
+			user.nickname,
+			user.email,
+			user.school_id as schoolId,
+			school.name as schoolName,
+			user.is_admin
 		from user
-		where email = #{email}
+		join school
+		on user.school_id = school.id
+		where user.email = #{email}
 		and password = #{password}
 	</select>
 

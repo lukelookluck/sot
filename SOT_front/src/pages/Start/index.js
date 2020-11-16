@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useState, useContext} from 'react';
+import axios from 'axios';
+import {CommonContext} from '../../context/CommonContext';
 import {
   View,
   Text,
@@ -9,12 +11,51 @@ import {
 import 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
+// 시작화면
 const Start = ({navigation}) => {
+  const {serverUrl, user, setUser} = useContext(CommonContext);
+  const [email, setEmail] = useState('');
+  const [pw, setPw] = useState('');
+
+  const emailHandler = (text) => {
+    setEmail(text);
+  };
+
+  const pwHandler = (text) => {
+    setPw(text);
+  };
+
+  const loginHandler = () => {
+    axios
+      .get(`${serverUrl}/user/login`, {
+        headers: {
+          Authorization: `JWT ${user.token}`,
+        },
+        params: {
+          email: email,
+          password: pw,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setUser({...response.data});
+        navigation.navigate('Main'); // 로그인 성공시 메인화면으로
+      })
+      .catch((error) => {
+        alert('이메일과 비밀번호를 확인해주세요!');
+        setEmail('');
+        setPw('');
+        console.log(error);
+      });
+  };
+
   return (
     <KeyboardAwareScrollView
       style={styles.page}
       scrollEnabled={true}
-      contentContainerStyle={styles.screen}>
+      contentContainerStyle={styles.screen}
+      // keyboardShouldPersistTaps={'always'}
+    >
       <View>
         <View style={styles.loginbox}>
           <Text style={styles.title}>SOT</Text>
@@ -22,23 +63,27 @@ const Start = ({navigation}) => {
           <View style={styles.inputbox}>
             <TextInput
               style={styles.textinput}
-              placeholder="아이디"></TextInput>
+              placeholder="이메일"
+              onChangeText={emailHandler}
+              value={email}></TextInput>
             <TextInput
               style={styles.textinput}
               placeholder="비밀번호"
-              secureTextEntry={true}></TextInput>
+              secureTextEntry={true}
+              onChangeText={pwHandler}
+              value={pw}></TextInput>
           </View>
 
           <View style={styles.btnbox}>
             <TouchableOpacity
               style={styles.btn}
-              onPress={() => navigation.navigate('회원가입')}>
+              onPress={() =>
+                navigation.navigate('회원가입', {s_name: '', s_id: ''})
+              }>
               <Text style={styles.btntext}>회원가입</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.btn}
-              onPress={() => navigation.navigate('Main')}>
+            <TouchableOpacity style={styles.btn} onPress={loginHandler}>
               <Text style={styles.btntext}>로그인</Text>
             </TouchableOpacity>
           </View>

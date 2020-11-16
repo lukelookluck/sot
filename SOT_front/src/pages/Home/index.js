@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,88 +6,204 @@ import {
   ScrollView,
   TouchableHighlight,
   FlatList,
+  Image,
 } from 'react-native';
+import axios from 'axios';
 import Header from '../../components/Header';
 import PartBoard from '../../components/PartBoard/Box';
-import Icon from 'react-native-vector-icons/Ionicons';
-import LinearGradient from 'react-native-linear-gradient';
+import FavBoardList from '../../components/FavBoardList';
 
-export default function Home() {
-  const [temp, setTemp] = useState('게시판1');
+import {CommonContext} from '../../context/CommonContext';
 
-  function a(data) {
-    return (
-      <View>
-        <TouchableHighlight
-          onPress={() => {
-            alert(data);
-            setTemp(data);
-          }}
-          underlayColor="#dfdfdf">
-          <View
-            style={{
-              margin: 7,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 1}}
-              colors={['#ff8000', '#ffff57']}
-              style={{
-                borderRadius: 30,
-              }}>
-              <Icon
-                name="people-outline"
-                color="#058AB3"
-                style={{
-                  fontSize: 40,
-                  padding: 5,
-                  margin: 3,
-                  borderRadius: 30,
-                  // paddingVertical: 10,
-                  backgroundColor: 'white',
-                }}></Icon>
-            </LinearGradient>
-            <Text
-              style={{
-                fontSize: 12,
-              }}>
-              {data}
-            </Text>
-          </View>
-        </TouchableHighlight>
-      </View>
-    );
+export default function Home({navigation}) {
+  const {serverUrl, user, setUser} = useContext(CommonContext);
+
+  const [temp, setTemp] = useState(null);
+  const [tempId, setTempId] = useState(null);
+  const [pressed, setPressed] = useState(false);
+  const [myLoading, setMyloading] = useState(false);
+  const [myLoading2, setMyloading2] = useState(false);
+
+  const [boardList, setBoardList] = useState([]);
+
+  // 전체게시글
+  const [wholeArticleList, setwholeArticleList] = useState([]);
+  // 특정게시글
+  const [certainArticleList, setCertainArticleList] = useState([]);
+
+  useEffect(() => {
+    refreshFavBoardList();
+    refreshWholeArticleList();
+    navigation.addListener('blur', () => {
+      setTemp(null);
+      setTempId(null);
+      setPressed(false);
+      setMyloading(false);
+    });
+    navigation.addListener('focus', () => {
+      refreshFavBoardList();
+      refreshWholeArticleList();
+    });
+  }, []);
+
+  // 즐찾 게시판 리스트 불러오기
+  function refreshFavBoardList() {
+    axios
+      .get(`${serverUrl}/board/fav?userId=${user.id}`, {
+        // headers: {
+        //   Authorization: `JWT ${user.token}`,
+        // },
+        // params: {
+        //   id: user.schoolId, // user의 schoolId 받아서 넣기
+        // },
+      })
+      .then((response) => {
+        setBoardList([]);
+        setBoardList(response.data);
+        setMyloading2(true);
+      })
+      .catch((error) => {
+        console.log('why???');
+        console.log(error);
+      });
   }
+
+  // 전체 게시글 불러오기
+  function refreshWholeArticleList() {
+    axios
+      .get(`${serverUrl}/board/all`, {
+        // headers: {
+        //     Authorization: `JWT ${user.token}`,
+        //   },
+        params: {
+          schoolId: user.schoolId, // user의 schoolId 받아서 넣기
+        },
+      })
+      .then((res) => {
+        // console.log('adasdas222')
+
+        setwholeArticleList([]);
+        // console.log("전체 새로고침", res.data);
+        setwholeArticleList(res.data);
+        setMyloading(true);
+      })
+      .catch((err) => {
+        console.log(err.data);
+      });
+  }
+
+  // 특정 게시판 게시글 불러오기
+  function refreshCertainArticleList(data) {
+    axios
+      .get(`${serverUrl}/board/${data.id}/?userId=${user.id}`, {
+        // headers: {
+        //     Authorization: `JWT ${user.token}`,
+        //   },
+      })
+      .then((res) => {
+        // console.log(res.data)
+        setCertainArticleList(res.data);
+        setMyloading(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function initHeader(data) {
+    console.log(data, temp, tempId);
+    if (temp === data.name) {
+      setTemp(null);
+      setTempId(null);
+      setPressed(false);
+      setMyloading(false);
+      refreshWholeArticleList();
+    } else {
+      setTemp(data.name);
+      setTempId(data.id);
+      setPressed(true);
+      setMyloading(false);
+      refreshCertainArticleList(data);
+    }
+  }
+
+  const [click, setClick] = useState(null);
 
   return (
     <View>
-      <Header name="경북대학교" />
+      {(temp === null,
+      pressed === false && (
+        <Header
+          name={user.schoolName}
+          pressed={pressed}
+          navigation={navigation}
+        />
+      )) || (
+        <Header
+          name={temp}
+          setClick={setClick}
+          pressed={pressed}
+          setTemp={setTemp}
+          setPressed={setPressed}
+          setMyloading={setMyloading}
+          navigation={navigation}
+          refreshWholeArticleList={refreshWholeArticleList}
+        />
+      )}
 
       {/* 무한스크롤 = Flatlist 인듯, 따라서 ScrollView를 Flatlist로 바꿔야함 */}
       <ScrollView
         style={{marginBottom: 50}}
         showsHorizontalScrollIndicator={false}>
-        <ScrollView
-          horizontal={true}
-          style={{marginLeft: 10}}
-          showsHorizontalScrollIndicator={false}>
-          <View style={{flexDirection: 'row'}}>
-            {a('게시판1')}
-            {a('게시판2')}
-            {a('게시판3')}
-            {a('게시판4')}
-            {a('게시판5')}
-            {a('게시판6')}
+        {(myLoading2 === true && (
+          <ScrollView
+            style={{borderBottomWidth: 1, borderColor: '#dbdbdb'}}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}>
+            <FavBoardList
+              click={click}
+              setClick={setClick}
+              initHeader={initHeader}
+              boardList={boardList}
+            />
+          </ScrollView>
+        )) || (
+          <View style={{marginTop: 10, flex: 1, alignItems: 'center'}}>
+            <Image
+              source={require('../../components/PartBoard/Box/spiner.gif')}
+              style={{width: 50, height: 50}}
+            />
           </View>
-        </ScrollView>
+        )}
 
         <View>
-          <PartBoard PartName={temp} />
-          <PartBoard PartName="즐겨찾는 게시판" />
-          <PartBoard PartName="실시간 인기 글" />
-          <PartBoard PartName="HOT 게시글" />
+          {/* <PartBoard
+            PartName="실시간 인기 글"
+            pressed={pressed}
+            myLoading={myLoading}
+            setMyloading={setMyloading}
+          /> */}
+          {/* <PartBoard
+            PartName="HOT 게시글"
+            BoardId={tempId}
+            pressed={true}
+            myLoading={myLoading}
+            setMyloading={setMyloading}
+            wholeArticleList={wholeArticleList}
+            certainArticleList={certainArticleList}
+            navigation={navigation}
+          /> */}
+          <PartBoard
+            PartName={temp}
+            BoardId={tempId}
+            pressed={pressed}
+            myLoading={myLoading}
+            setMyloading={setMyloading}
+            wholeArticleList={wholeArticleList}
+            certainArticleList={certainArticleList}
+            navigation={navigation}
+          />
+          {/* <PartBoard PartName="즐겨찾는 게시판" /> */}
         </View>
       </ScrollView>
     </View>

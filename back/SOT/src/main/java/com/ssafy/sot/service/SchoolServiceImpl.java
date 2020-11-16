@@ -24,4 +24,14 @@ public class SchoolServiceImpl implements SchoolService {
 		return schoolDao.searchWithKeyword(keyword);
 	}
 
+	@Override
+	public List<String> showSidoList() {
+		return schoolDao.selectSidos();
+	}
+
+	@Override
+	public boolean addNewSchool(SchoolDTO schoolDTO) {
+		return schoolDao.insertNewSchool(schoolDTO) == 1;
+	}
+
 }

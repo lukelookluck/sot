@@ -10,4 +10,49 @@
 		from board
 		where school_id = #{schoolId}
 	</select>
+	
+	<insert id="insertNewBoard" >
+		insert into board(name, school_id)
+		values(#{name}, #{schoolId})
+	</insert>
+	
+	<delete id="deleteBoard">
+		delete from board
+		where id = #{id}
+	</delete>
+	
+	<!-- 유저 아이디로 유저가 즐겨찾기 한 게시판 리스트 가져오기 -->
+	<select id="selectBoardFavList" resultType="BoardFavReturnDTO">
+		select boardfav.board_id as id, board.name as name
+		from boardfav
+		join board
+		on boardfav.board_id = board.id
+		where user_id = #{userId}
+	</select>
+	
+	<!-- 이미 즐겨찾기 한 게시판인지 검사할 때 쓸 select -->
+	<select id="selectBoardFav" parameterType="BoardFavDTO" resultType="BoardFavDTO">
+		select id, user_id as userId, board_id as boardId
+		from boardfav
+		where user_id = #{userId}
+		and board_id = #{boardId}
+	</select>
+	
+	<!-- 게시판 즐겨찾기 -->
+	<insert id="insertBoardFav" parameterType="BoardFavDTO">
+		insert into boardfav(user_id, board_id)
+		values(#{userId}, #{boardId})
+	</insert>
+	
+	<!-- 게시판 즐겨찾기 취소 -->
+	<delete id="deleteBoardFav" parameterType="BoardFavDTO">
+		delete from boardfav
+		where user_id = #{userId}
+		and board_id = #{boardId}
+	</delete>
+	
+	<insert id="insertBoardCreator" parameterType="BoardNewDTO">
+		insert into boardcreator(school_id, name, user_id, description)
+		values(#{schoolId}, #{name}, #{userId}, #{description})
+	</insert>
 </mapper>

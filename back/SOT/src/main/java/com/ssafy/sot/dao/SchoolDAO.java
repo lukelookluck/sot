@@ -8,5 +8,7 @@ public interface SchoolDAO {
 	
 	List<SchoolDTO> searchAll();
 	List<SchoolDTO> searchWithKeyword(String keyword);
+	int insertNewSchool(SchoolDTO schoolDTO);
+	List<String> selectSidos();
 
 }

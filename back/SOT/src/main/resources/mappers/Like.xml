@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mappers/Like.xml -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="like">
+
+	<insert id="likeComment" parameterType="CommentLikeDTO">
+		insert into commentlike(comment_id, user_id)
+		values(#{commentId}, #{userId})
+	</insert>
+
+	<delete id="deleteCommentLike" parameterType="CommentLikeDTO">
+		delete from commentlike
+		where comment_id = #{commentId}
+		and user_id = #{userId}
+	</delete>
+	
+	<insert id="likeArticle" parameterType="ArticleLikeDTO">
+		insert into articlelike(article_id, user_id)
+		values(#{articleId}, #{userId})
+	</insert>
+
+	<delete id="deleteArticleLike" parameterType="ArticleLikeDTO">
+		delete from articlelike
+		where article_id = #{articleId}
+		and user_id = #{userId}
+	</delete>
+	
+	<select id="selectLikesByArticleId" resultType="Like">
+		select id, user_id as userId
+		from articlelike
+		where article_id = #{articleId}
+	</select>
+	
+	<select id="selectLikesByCommentId" resultType="Like">
+		select id, user_id as userId
+		from commentlike
+		where comment_id = #{commentId}
+	</select>
+	
+	<select id="articleLikeCheck" parameterType="ArticleLikeDTO" resultType="ArticleLikeDTO">
+		select article_id as articleId, user_id as userId
+		from articlelike
+		where article_id = #{articleId}
+		and user_id = #{userId}
+	</select>
+	
+	<select id="commentLikeCheck" parameterType="commentLikeDTO" resultType="commentLikeDTO">
+		select comment_id as commentId, user_id as userId
+		from commentlike
+		where comment_id = #{commentId}
+		and user_id = #{userId}
+	</select>
+	
+</mapper>
