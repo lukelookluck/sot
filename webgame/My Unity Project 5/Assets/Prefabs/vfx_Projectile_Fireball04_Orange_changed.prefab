@@ -38317,7 +38317,7 @@ MonoBehaviour:
   bounce: 0
   bounceForce: 10
   speed: 23
-  knockBack: 800
+  knockBack: 500
   accuracy: 100
   fireRate: 1
   lifeTime: 1

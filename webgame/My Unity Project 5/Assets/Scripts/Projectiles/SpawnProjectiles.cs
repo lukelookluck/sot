@@ -74,12 +74,13 @@ public class SpawnProjectiles : MonoBehaviour {
     }
 
 	void Update () {
-		if ((Input.GetKey (KeyCode.Space) || myJoybutton1.pressed) && Time.time >= timeToFire) {
-			timeToFire = Time.time + 1f / effectToSpawn.GetComponent<ProjectileMove>().fireRate;
-			SpawnVFX ();	
-		}
+        //if ((Input.GetKey(KeyCode.Space) || myJoybutton1.pressed) && Time.time >= timeToFire)
+        //{
+        //    timeToFire = Time.time + 1f / effectToSpawn.GetComponent<ProjectileMove>().fireRate;
+        //    SpawnVFX();
+        //}
 
-		if (Input.GetKeyDown (KeyCode.D))
+        if (Input.GetKeyDown (KeyCode.D))
 			Next ();
 		if (Input.GetKeyDown (KeyCode.A)) 
 			Previous ();	
@@ -132,6 +133,25 @@ public class SpawnProjectiles : MonoBehaviour {
 		}
 		else
 			vfx = Instantiate (effectToSpawn);		
+	}
+	public void SpawnVFXs(Quaternion direction)
+	{
+		GameObject vfx;
+
+		var cameraShakeScript = cameras.GetComponent<CameraShakeSimpleScript>();
+
+		if (cameraShake && cameraShakeScript != null)
+			cameraShakeScript.ShakeCamera();
+
+		if (firePoint != null)
+		{
+			vfx = Instantiate(effectToSpawn, firePoint.transform.position, Quaternion.identity);
+			vfx.transform.rotation = direction;
+			Debug.Log(firePoint.transform.position);
+			Debug.Log(direction);
+		}
+		else
+			vfx = Instantiate(effectToSpawn);
 	}
 
 	public void Next () {

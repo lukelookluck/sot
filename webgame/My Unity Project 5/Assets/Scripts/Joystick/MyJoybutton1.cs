@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MyJoybutton1 : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
+public class MyJoybutton1 : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler, IBeginDragHandler
 {
-    public bool pressed = false;
+    public GameObject indicator;
+    public GameObject playerHolder;
+    public Vector3 direction;
+
 
     // Start is called before the first frame update
     void Start()
@@ -19,18 +22,30 @@ public class MyJoybutton1 : MonoBehaviour, IDragHandler, IPointerUpHandler, IPoi
         
     }
 
-    public void OnDrag(PointerEventData eventData)
-    {
-
-    }
-
     public void OnPointerDown(PointerEventData eventData)
     {
-        pressed = true;
+        indicator.SetActive(true);
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        playerHolder.GetComponent<PlayerMovement>().dragged = true;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        Vector2 value = eventData.position - (Vector2)transform.position;
+
+        direction = Vector3.up * Vector2.SignedAngle(value, Vector2.up);
+        indicator.transform.rotation = Quaternion.Euler(direction);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        pressed = false;
+        indicator.SetActive(false);
+        playerHolder.GetComponent<SpawnProjectiles>().SpawnVFXs(indicator.transform.rotation);
+        playerHolder.GetComponent<PlayerMovement>().dragged = false;
     }
+
+    
 }
