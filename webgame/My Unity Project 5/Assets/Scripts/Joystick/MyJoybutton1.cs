@@ -9,6 +9,7 @@ public class MyJoybutton1 : MonoBehaviour, IDragHandler, IPointerUpHandler, IPoi
     public GameObject playerHolder;
     public Vector3 direction;
 
+    public Sprite[] images;
 
     // Start is called before the first frame update
     void Start()

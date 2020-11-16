@@ -74,24 +74,24 @@ public class SpawnProjectiles : MonoBehaviour {
     }
 
 	void Update () {
-        //if ((Input.GetKey(KeyCode.Space) || myJoybutton1.pressed) && Time.time >= timeToFire)
-        //{
-        //    timeToFire = Time.time + 1f / effectToSpawn.GetComponent<ProjectileMove>().fireRate;
-        //    SpawnVFX();
-        //}
+		if (Input.GetKey(KeyCode.Space) && Time.time >= timeToFire)
+		{
+			timeToFire = Time.time + 1f / effectToSpawn.GetComponent<ProjectileMove>().fireRate;
+			SpawnVFX();
+		}
 
-        if (Input.GetKeyDown (KeyCode.D))
+		if (Input.GetKeyDown (KeyCode.Period))
 			Next ();
-		if (Input.GetKeyDown (KeyCode.A)) 
+		if (Input.GetKeyDown (KeyCode.Comma)) 
 			Previous ();	
-		if (Input.GetKeyDown (KeyCode.C))
-			SwitchCamera ();	
-		if (Input.GetKeyDown (KeyCode.Alpha1))
-			CameraShake ();
-		if (Input.GetKeyDown (KeyCode.X))
-			ZoomIn ();
-		if (Input.GetKeyDown (KeyCode.Z))
-			ZoomOut ();
+		//if (Input.GetKeyDown (KeyCode.Period))
+		//	SwitchCamera ();	
+		//if (Input.GetKeyDown (KeyCode.Alpha1))
+		//	CameraShake ();
+		//if (Input.GetKeyDown (KeyCode.X))
+		//	ZoomIn ();
+		//if (Input.GetKeyDown (KeyCode.Z))
+		//	ZoomOut ();
 	}
 
 	public void SpawnVFX () {
@@ -157,25 +157,31 @@ public class SpawnProjectiles : MonoBehaviour {
 	public void Next () {
 		count++;
 
-		if (count > VFXs.Count)
+		if (count >= VFXs.Count)
 			count = 0;
 
-		for(int i = 0; i < VFXs.Count; i++){
-			if (count == i)	effectToSpawn = VFXs [i];
-			if (effectName != null)	effectName.text = effectToSpawn.name;
-		}
+		effectToSpawn = VFXs [count];
+		myJoybutton1.GetComponent<Image>().sprite = myJoybutton1.GetComponent<MyJoybutton1>().images[count];
+
+		//for(int i = 0; i < VFXs.Count; i++){
+		//	if (count == i)	effectToSpawn = VFXs [i];
+		//	if (effectName != null)	effectName.text = effectToSpawn.name;
+		//}
 	}
 
 	public void Previous () {
 		count--;
 
 		if (count < 0)
-			count = VFXs.Count;
+			count = VFXs.Count - 1;
 
-		for (int i = 0; i < VFXs.Count; i++) {
-			if (count == i) effectToSpawn = VFXs [i];
-			if (effectName != null)	effectName.text = effectToSpawn.name;
-		}
+		effectToSpawn = VFXs[count];
+		myJoybutton1.GetComponent<Image>().sprite = myJoybutton1.GetComponent<MyJoybutton1>().images[count];
+
+		//for (int i = 0; i < VFXs.Count; i++) {
+		//	if (count == i) effectToSpawn = VFXs [i];
+		//	if (effectName != null)	effectName.text = effectToSpawn.name;
+		//}
 	}
 
 	public void CameraShake () {

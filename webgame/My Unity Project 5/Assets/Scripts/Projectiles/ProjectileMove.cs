@@ -93,7 +93,7 @@ public class ProjectileMove: MonoBehaviour {
     }
 
 	void OnCollisionEnter (Collision co) {
-
+        Debug.Log("충돌");
         if (!bounce)
         {
             if (co.gameObject.tag != "Bullet" && !collided)
