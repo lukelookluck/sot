@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   TextInput,
+  Modal,
   View,
   Alert,
   TouchableHighlight,
@@ -79,6 +80,7 @@ export default function (props) {
           console.log(err);
         });
     }
+
     return (
       <View
         key={comment.id}
@@ -88,7 +90,10 @@ export default function (props) {
           borderBottomColor: '#dbdbdb',
         }}>
         <Pressable
-          onLongPress={() => Alert.alert('하이')}
+          onLongPress={() => {
+            props.setModalVisible3(true);
+            props.setMyComment(comment);
+          }}
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -182,7 +187,13 @@ export default function (props) {
             </TouchableHighlight>
           )}
         </Pressable>
-        <ReplyList comment={comment.replies} boardId={props.boardId} />
+        <ReplyList
+          comment={comment.replies}
+          boardId={props.boardId}
+          modalVisible3={props.modalVisible3}
+          setModalVisible3={props.setModalVisible3}
+          setMyComment={props.setMyComment}
+        />
       </View>
     );
   });

@@ -264,6 +264,7 @@ const TabsScreen = () => (
     tabBarOptions={{
       activeTintColor: 'tomato',
       inactiveTintColor: 'gray',
+      style: {height: 56.5, paddingBottom: 5},
     }}>
     <Tab.Screen name="홈" component={Home} />
     <Tab.Screen name="게임" component={Game} />

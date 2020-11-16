@@ -53,7 +53,7 @@ export default function ({navigation, route}) {
           onPress: () => {
             setTimeout(() => {
               textInput.current.focus();
-            }, 100);
+            }, 200);
             setModalVisible(true);
             setIsReply(true);
             setReplyId(data.id);
@@ -190,6 +190,7 @@ export default function ({navigation, route}) {
     );
   }
 
+  // 게시글 수정
   function reviseArticle(data) {
     console.log(data);
     setModalVisible2(false);
@@ -203,6 +204,42 @@ export default function ({navigation, route}) {
     });
   }
 
+  // 댓글 삭제
+  const [myComment, setMyComment] = useState(null);
+  function deleteComment(data) {
+    Alert.alert(
+      '삭제 확인',
+      '해당 댓글이 삭제됩니다.',
+      [
+        {
+          text: '취소',
+          onPress: () => {
+            setMyComment(null);
+          },
+        },
+        {
+          text: '삭제',
+          onPress: () => {
+            console.log(data, article.boardId);
+            axios
+              .delete(
+                `${serverUrl}/board/${article.boardId}/${data.articleId}/${data.id}`,
+              )
+              .then((res) => {
+                getArticleInfo();
+                Alert.alert('댓글이 삭제되었습니다.', '', [{text: '확인'}], {
+                  cancelable: true,
+                });
+              })
+              .catch((err) => {});
+            setMyComment(null);
+          },
+        },
+      ],
+      {cancelable: true},
+    );
+  }
+
   // 댓글작성폼 관련
   const [modalVisible, setModalVisible] = useState(false);
   const [isReply, setIsReply] = useState(false);
@@ -213,6 +250,8 @@ export default function ({navigation, route}) {
 
   // 게시글 수정/삭제 모달 관련
   const [modalVisible2, setModalVisible2] = useState(false);
+
+  const [modalVisible3, setModalVisible3] = useState(false);
 
   return (
     <ScrollView keyboardShouldPersistTaps={'always'}>
@@ -263,9 +302,9 @@ export default function ({navigation, route}) {
               margin: 0,
             }}
             animationIn="slideInUp"
-            animationInTiming={300}
+            animationInTiming={500}
             animationOut="slideOutDown"
-            animationOutTiming={300}
+            animationOutTiming={500}
             isVisible={modalVisible2}
             useNativeDriver={true}
             // hideModalContentWhileAnimating={true}
@@ -497,7 +536,7 @@ export default function ({navigation, route}) {
                   setModalVisible(true);
                   setTimeout(() => {
                     textInput.current.focus();
-                  }, 100);
+                  }, 200);
                 }}
                 style={{
                   flex: 1,
@@ -512,9 +551,9 @@ export default function ({navigation, route}) {
                 margin: 0,
               }}
               animationIn="slideInUp"
-              animationInTiming={300}
+              animationInTiming={500}
               animationOut="slideOutDown"
-              animationOutTiming={300}
+              animationOutTiming={500}
               isVisible={modalVisible}
               useNativeDriver={true}
               // hideModalContentWhileAnimating={true}
@@ -625,6 +664,107 @@ export default function ({navigation, route}) {
                 </View>
               </View>
             </Modal>
+            <Modal
+              style={{
+                margin: 30,
+              }}
+              animationIn="flipInX"
+              animationInTiming={500}
+              animationOut="flipOutX"
+              animationOutTiming={500}
+              isVisible={modalVisible3}
+              useNativeDriver={true}
+              // hideModalContentWhileAnimating={true}
+              // onModalShow={() => {
+              //   textInput.focus();
+              // }}
+              onBackdropPress={() => {
+                setModalVisible3(false);
+              }}
+              onBackButtonPress={() => {
+                setModalVisible3(false);
+              }}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  // backgroundColor: 'rgba(52, 52, 52, 0.5)',
+                }}>
+                <View
+                  style={{
+                    backgroundColor: 'white',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                  }}>
+                  {/* <TouchableHighlight
+                    onPress={() => {
+                      // reviseArticle(article);
+                    }}
+                    underlayColor="#dfdfdf"
+                    style={{
+                      backgroundColor: 'white',
+                      paddingVertical: 15,
+                      flexDirection: 'row',
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        flex: 1,
+                      }}>
+                      <Icon
+                        name="build"
+                        color="#ff8000"
+                        style={{
+                          fontSize: 27.5,
+                          marginVertical: 5,
+                          marginLeft: 10,
+                          marginRight: 25,
+                          borderRadius: 20,
+                        }}
+                      />
+                      <Text style={{fontSize: 19.5, color: 'black'}}>
+                        댓글 수정
+                      </Text>
+                    </View>
+                  </TouchableHighlight> */}
+                  <TouchableHighlight
+                    onPress={() => {
+                      // deleteArticle(article);
+                      setModalVisible3(false);
+                      deleteComment(myComment);
+                    }}
+                    underlayColor="#dfdfdf"
+                    style={{
+                      backgroundColor: 'white',
+                      paddingVertical: 15,
+                      flexDirection: 'row',
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        flex: 1,
+                      }}>
+                      <Icon
+                        name="trash"
+                        color="#ff8000"
+                        style={{
+                          fontSize: 27.5,
+                          marginVertical: 5,
+                          marginLeft: 10,
+                          marginRight: 25,
+                          borderRadius: 20,
+                        }}
+                      />
+                      <Text style={{fontSize: 19.5, color: 'black'}}>
+                        댓글 삭제
+                      </Text>
+                    </View>
+                  </TouchableHighlight>
+                </View>
+              </View>
+            </Modal>
           </View>
         </View>
         {/* 댓글목록 파트 */}
@@ -632,6 +772,9 @@ export default function ({navigation, route}) {
           comments={comments}
           boardId={article.boardId}
           writeReply={writeReply}
+          modalVisible3={modalVisible3}
+          setModalVisible3={setModalVisible3}
+          setMyComment={setMyComment}
         />
       </View>
     </ScrollView>

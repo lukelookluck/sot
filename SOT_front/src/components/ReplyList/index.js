@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
+  Pressable,
   StyleSheet,
   ScrollView,
   TextInput,
@@ -135,7 +136,11 @@ export default function (props) {
 
     if (showReplysBool === false && idx < myIndex) {
       return (
-        <View
+        <Pressable
+          onLongPress={() => {
+            props.setModalVisible3(true);
+            props.setMyComment(reply);
+          }}
           key={reply.id}
           style={{
             paddingVertical: 5,
@@ -224,7 +229,7 @@ export default function (props) {
               </TouchableHighlight>
             )}
           </View>
-        </View>
+        </Pressable>
       );
     }
   });
