@@ -103,6 +103,7 @@
     <Compile Include="Assets\YT Character Series (E01-E08)\Scripts\PlayerHealthSlider.cs" />
     <Compile Include="Assets\YT Character Series (E01-E08)\Scripts\Stats.cs" />
     <Compile Include="Assets\YT Character Series (E01-E08)\Scripts\Targetable.cs" />
+    <None Include="Assets\MLAPI\Lib\MLAPI.xml" />
     <None Include="Assets\GabrielAguiarProductions\Unique_Projectiles_Volume_2\Shaders\Additive_Scroll01.shader" />
     <None Include="Assets\ShootingSound\ReadMe.txt" />
     <None Include="Assets\YT Character Series (E01-E08)\Models &amp; Terrain\Fantasy Chess RPG Character - Arthur\readme.txt" />
@@ -288,6 +289,9 @@
     </Reference>
     <Reference Include="UnityEditor">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.13f1/Editor/Data/Managed/UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="MLAPI">
+      <HintPath>C:/Users/hongs/s03p31d208/webgame/My Unity Project 5/Assets/MLAPI/Lib/MLAPI.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.13f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

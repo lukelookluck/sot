@@ -63,6 +63,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Editor\MLAPI\MLAPIProfiler.cs" />
+    <Compile Include="Assets\Editor\MLAPI\NetworkedAnimatorEditor.cs" />
+    <Compile Include="Assets\Editor\MLAPI\NetworkedBehaviourEditor.cs" />
+    <Compile Include="Assets\Editor\MLAPI\NetworkedObjectEditor.cs" />
+    <Compile Include="Assets\Editor\MLAPI\NetworkingManagerEditor.cs" />
+    <Compile Include="Assets\Editor\MLAPI\PostProcessScene.cs" />
+    <Compile Include="Assets\Editor\MLAPI\TrackedObjectEditor.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Editor\DynamicJoystickEditor.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Editor\FloatingJoystickEditor.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Editor\JoystickEditor.cs" />
@@ -270,6 +277,9 @@
     </Reference>
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/16.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
+    </Reference>
+    <Reference Include="MLAPI">
+      <HintPath>C:/Users/hongs/s03p31d208/webgame/My Unity Project 5/Assets/MLAPI/Lib/MLAPI.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>C:/Users/hongs/s03p31d208/webgame/My Unity Project 5/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>
