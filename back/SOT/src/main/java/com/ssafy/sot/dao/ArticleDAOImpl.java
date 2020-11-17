@@ -97,4 +97,14 @@ public class ArticleDAOImpl implements ArticleDAO {
 		return sqlSession.selectList("article.searchTitleOrContent", searchDTO);
 	}
 
+	@Override
+	public List<ArticleFullInfo> selectMyArticles(int userId, IdWithIndexDTO idWithIndexDTO) {
+		return sqlSession.selectList("article.selectMyArticlesWithLimit", idWithIndexDTO);
+	}
+
+	@Override
+	public List<ArticleFullInfo> selectLikedArticles(int userId, IdWithIndexDTO idWithIndexDTO) {
+		return sqlSession.selectList("article.selectLikedArticlesWithLimit", idWithIndexDTO);
+	}
+
 }

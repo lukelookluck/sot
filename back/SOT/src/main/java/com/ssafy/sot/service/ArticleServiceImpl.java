@@ -209,4 +209,16 @@ public class ArticleServiceImpl implements ArticleService {
 		return articleDAO.searchTitleOrContent(dto);
 	}
 
+	@Override
+	public List<ArticleFullInfo> showMyArticles(int userId, int startIdx, int amount) {
+		IdWithIndexDTO idWithIndexDTO = new IdWithIndexDTO(userId, startIdx, amount);
+		return articleDAO.selectMyArticles(userId, idWithIndexDTO);
+	}
+
+	@Override
+	public List<ArticleFullInfo> showLikedArticles(int userId, int startIdx, int amount) {
+		IdWithIndexDTO idWithIndexDTO = new IdWithIndexDTO(userId, startIdx, amount);
+		return articleDAO.selectLikedArticles(userId, idWithIndexDTO);
+	}
+
 }

@@ -52,11 +52,13 @@ public class SchoolRestController {
 	@Autowired
 	JWTUtil jwtUtil;
 	
+	@ApiOperation(value = "내가 쓴 글 가져오기")
 	@GetMapping("/myarticles")
 	public Object myArticles(@RequestParam("id") int userId) {
 		return new ResponseEntity<>(articleService.showMyArticles(userId), HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "좋아요 한 게시글 가져오기")
 	@GetMapping("/likedarticles")
 	public Object likedArticles(@RequestParam("id") int userId) {
 		return new ResponseEntity<>(articleService.showLikedArticles(userId), HttpStatus.OK);
