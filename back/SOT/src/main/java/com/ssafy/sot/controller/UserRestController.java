@@ -100,6 +100,7 @@ public class UserRestController {
 	@GetMapping("login")
 	public Object login(@RequestParam String email, @RequestParam String password) {
 		try {
+			System.out.println("email: " + email);
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 			System.out.println("currentTimeStamp: " + timestamp);
 			UserLoginDTO loginDTO = new UserLoginDTO(email, password);

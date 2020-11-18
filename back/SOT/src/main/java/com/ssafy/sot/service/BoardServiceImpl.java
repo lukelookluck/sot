@@ -1,5 +1,6 @@
 package com.ssafy.sot.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,17 @@ public class BoardServiceImpl implements BoardService {
 	BoardDAO boardDAO;
 	
 	@Override
-	public List<BoardDTO> showSchoolBoards(int schoolId) {
-		return boardDAO.selectBoardsBySchoolId(schoolId);
+	public List<BoardDTO> showSchoolBoards(int schoolId, int userId) {
+		List<BoardDTO> originalBoards = boardDAO.selectBoardsBySchoolId(schoolId);
+		List<BoardDTO> boards = new ArrayList<BoardDTO>();
+		for(BoardDTO board : originalBoards) {
+			BoardFavDTO boardFavDTO = new BoardFavDTO();
+			boardFavDTO.setBoardId(board.getId());
+			boardFavDTO.setUserId(userId);
+			board.setIsFaved(boardDAO.alreadyFaved(boardFavDTO));
+			boards.add(board);
+		}
+		return boards;
 	}
 
 	@Override

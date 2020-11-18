@@ -5,7 +5,16 @@ public class BoardDTO {
 	int id;
 	String name;
 	int schoolId;
+	boolean isFaved;
 	
+	public boolean getIsFaved() {
+		return isFaved;
+	}
+
+	public void setIsFaved(boolean isFaved) {
+		this.isFaved = isFaved;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -32,7 +41,7 @@ public class BoardDTO {
 
 	@Override
 	public String toString() {
-		return "BoardDTO [id=" + id + ", name=" + name + ", schoolId=" + schoolId + "]";
+		return "BoardDTO [id=" + id + ", name=" + name + ", schoolId=" + schoolId + ", isFaved=" + isFaved + "]";
 	}
 
 

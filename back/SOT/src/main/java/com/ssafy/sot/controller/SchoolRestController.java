@@ -141,9 +141,9 @@ public class SchoolRestController {
 
 	@ApiOperation(value = "학교id로 게시판 목록 가져오기")
 	@GetMapping("/boards")
-	public Object boardList(@RequestParam(value="id") int id) {
+	public Object boardList(@RequestParam(value="id") int id, @RequestParam(value="userId") int userId) {
 		try {
-			return new ResponseEntity<>(boardService.showSchoolBoards(id), HttpStatus.OK);			
+			return new ResponseEntity<>(boardService.showSchoolBoards(id, userId), HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
