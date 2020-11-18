@@ -61,11 +61,11 @@ const Board = ({navigation, route}) => {
   return (
     <View style={styles.box}>
       <ScrollView>
-        {(msg === 'no' &&
+        {/* {(msg === 'no' &&
           route.params.isRe &&
           route.params.isRe === 'yes' &&
           reLoad()) ||
-          noLoad()}
+          noLoad()} */}
         {postList.length === 0 ? (
           <View
             style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>

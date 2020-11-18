@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import 'react-native-gesture-handler';
 import {CommonContext} from "../../context/CommonContext";
+import AsyncStorage from '@react-native-community/async-storage';
 
 // 마이페이지
 const MyPage = ({navigation}) => {
@@ -17,9 +18,26 @@ const MyPage = ({navigation}) => {
 
   const goLogout = () => {
     setUser({});
+
+    AsyncStorage.clear();
+
     alert('로그아웃 되었습니다');
+    
     navigation.navigate('Start');
   };
+
+  useEffect(() => {
+
+    navigation.addListener('focus', () => {
+      
+      AsyncStorage.getItem('testToken', (err, result) => {
+        const UserInfo = JSON.parse(result);
+        console.log('닉네임 : ' + UserInfo.nickname);
+        console.log('토큰 : ' + UserInfo.token);
+      });
+
+    })
+  }, []);
 
   return (
     <ScrollView>

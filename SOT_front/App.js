@@ -23,8 +23,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {CommonContext} from './src/context/CommonContext';
 import {useLocalStorageSetState} from './src/common/CommonHooks';
 import Search from './src/pages/Search';
-
 import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Stack = createStackNavigator();
 
@@ -70,11 +70,33 @@ function MyStack() {
 
   return (
     <Stack.Navigator>
+      {user.token !== null 
+      ? (<>
+
+      <Stack.Screen
+        name="Main"
+        options={{headerShown: false}}
+        component={TabsScreen}
+      />
       <Stack.Screen
         name="Start"
         options={{headerShown: false}}
         component={Start}
       />
+      </>) 
+      : (<>
+      <Stack.Screen
+        name="Start"
+        options={{headerShown: false}}
+        component={Start}
+      />
+      <Stack.Screen
+        name="Main"
+        options={{headerShown: false}}
+        component={TabsScreen}
+      />
+      </>)}
+      
       <Stack.Screen
         name="회원가입"
         options={{
@@ -97,11 +119,6 @@ function MyStack() {
           },
         }}
         component={SchoolSearch}
-      />
-      <Stack.Screen
-        name="Main"
-        options={{headerShown: false}}
-        component={TabsScreen}
       />
       <Stack.Screen
         name="Board"
@@ -288,9 +305,16 @@ export default function App() {
     'user',
   );
 
-  const HOST = '118.45.110.147:8090';
+  const HOST = '192.168.100.72:8090';
   const serverUrl = `http://${HOST}`;
   const [fav, setFav] = useLocalStorageSetState(false, 'fav');
+
+  AsyncStorage.getItem('testToken', (err, result) => {
+    const UserInfo = JSON.parse(result);
+    if(result !== null){
+      setUser(UserInfo);
+    }
+  });
 
   return (
     <CommonContext.Provider
