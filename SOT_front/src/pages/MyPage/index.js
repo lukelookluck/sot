@@ -17,12 +17,8 @@ const MyPage = ({navigation}) => {
   const { serverUrl, user, setUser } = useContext(CommonContext);
 
   const goLogout = () => {
-    setUser({});
-
     AsyncStorage.clear();
-
     alert('로그아웃 되었습니다');
-    
     navigation.navigate('Start');
   };
 
@@ -30,11 +26,14 @@ const MyPage = ({navigation}) => {
 
     navigation.addListener('focus', () => {
       
-      AsyncStorage.getItem('testToken', (err, result) => {
-        const UserInfo = JSON.parse(result);
-        console.log('닉네임 : ' + UserInfo.nickname);
-        console.log('토큰 : ' + UserInfo.token);
-      });
+      // AsyncStorage.getItem('testToken', (err, result) => {
+      //   const UserInfo = JSON.parse(result);
+      //   console.log('닉네임 : ' + UserInfo.nickname);
+      //   console.log('토큰 : ' + UserInfo.token);
+      // });
+
+      console.log(user.email);
+      console.log(user.id);
 
     })
   }, []);

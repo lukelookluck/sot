@@ -55,10 +55,10 @@ const Start = ({ navigation }) => {
       .then((response) => {
         console.log(response.data);
         setUser({...response.data});
-        setArticleStartIdx(5)
+        setArticleStartIdx(5);
         
         AsyncStorage.setItem('testToken', JSON.stringify(response.data), () => {
-          console.log('테스트 저장 완료')
+          console.log('테스트 저장 완료');
         });
 
         navigation.navigate('Main'); // 로그인 성공시 메인화면으로

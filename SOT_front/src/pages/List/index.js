@@ -33,13 +33,13 @@ const List = ({navigation, route}) => {
   }, []);
 
   function refreshList() {
-    axios.get(`${serverUrl}/boards`, {
+    axios.get(`${serverUrl}/boards?id=${user.schoolId}&userId=${user.id}`, {
       // headers: {
       //   Authorization: `JWT ${user.token}`,
       // },
-      params: {
-        id : user.schoolId
-      },
+      // params: {
+      //   id : user.schoolId
+      // },
     })
       .then((response) => {
         setBoardList([]);

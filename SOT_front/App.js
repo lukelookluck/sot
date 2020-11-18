@@ -70,9 +70,18 @@ function MyStack() {
 
   return (
     <Stack.Navigator>
-      {user.token !== null 
+      <Stack.Screen
+        name="Start"
+        options={{ headerShown: false }}
+        component={Start}
+      />
+      <Stack.Screen
+        name="Main"
+        options={{headerShown: false}}
+        component={TabsScreen}
+      />
+      {/* {user.token !== null 
       ? (<>
-
       <Stack.Screen
         name="Main"
         options={{headerShown: false}}
@@ -95,7 +104,7 @@ function MyStack() {
         options={{headerShown: false}}
         component={TabsScreen}
       />
-      </>)}
+      </>)} */}
       
       <Stack.Screen
         name="회원가입"
