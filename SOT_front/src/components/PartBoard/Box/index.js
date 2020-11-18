@@ -5,10 +5,14 @@ import SingleArticle from '../SingleArticle';
 import { CommonContext } from '../../../context/CommonContext';
 
 export default function PartBoard(props) {
-  const { serverUrl, user, setUser } = useContext(CommonContext);
+  const { serverUrl, user, setUser, articleStartIdx, setArticleStartIdx } = useContext(CommonContext);
 
   function onPress() {
     props.navigation.navigate('Board', { name: props.PartName, id: props.BoardId, u_id: user.id, isRe: 'no' });
+  }
+  function moreArticles() {
+    props.refreshWholeArticleList()
+
   }
 
   // const certainArticleList = props.certainArticleList.map((article) => {
@@ -85,6 +89,21 @@ export default function PartBoard(props) {
                       />
                     </View>
                   ))}
+                  <TouchableHighlight onPress={() => moreArticles()}
+                    underlayColor="#dfdfdf">
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        marginVertical: 20,
+                        paddingHorizontal: 10,
+                      }}>
+                      <Text style={{ fontSize: 16, fontWeight: '700' }}>
+                        {props.PartName}
+                      </Text>
+                      <Text style={{ color: '#ff8000' }}>게시글 더 보기</Text>
+                    </View>
+                  </TouchableHighlight>
                 </View>
               )}
           </View>

@@ -5,9 +5,9 @@ export const useLocalStorageSetState = (initialValue, name) => {
   if (!name) {
     throw new Error('Name must be provided to persist to localStorage');
   }
-  
+
   const actualInitialValue =
-  AsyncStorage.getItem(name) !== undefined ? AsyncStorage.getItem(name) : initialValue;
+    AsyncStorage.getItem(name) !== undefined ? AsyncStorage.getItem(name) : initialValue;
   const [value, setValue] = useState(actualInitialValue);
 
   useEffect(() => {
