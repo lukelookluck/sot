@@ -28,26 +28,76 @@ public class InfiniteScrollRestController {
 	
 	@ApiOperation(value = "전체 게시글 가져오기")
 	@GetMapping("/board/all")
-	public Object allArticles(@RequestParam("schoolId") int schoolId, @RequestParam("startIdx") int startIdx, @RequestParam("anount") int amount) {
-		return new ResponseEntity<>(articleService.showAllArticles(schoolId, startIdx, amount), HttpStatus.OK);
+	public Object allArticles(@RequestParam("schoolId") int schoolId, @RequestParam("startIdx") int startIdx,
+			@RequestParam("anount") int amount) {
+		try {
+			return new ResponseEntity<>(articleService.showAllArticles(schoolId, startIdx, amount), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "전체 베스트 게시글 가져오기")
 	@GetMapping("/board/all/best")
-	public Object allBestArticles(@RequestParam("schoolId") int schoolId, @RequestParam("startIdx") int startIdx, @RequestParam("anount") int amount) {
-		return new ResponseEntity<>(articleService.showAllBestArticles(schoolId, startIdx, amount), HttpStatus.OK);
+	public Object allBestArticles(@RequestParam("schoolId") int schoolId, @RequestParam("startIdx") int startIdx,
+			@RequestParam("anount") int amount) {
+		try {
+			return new ResponseEntity<>(articleService.showAllBestArticles(schoolId, startIdx, amount), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "특정 게시판 베스트 게시글 가져오기")
 	@GetMapping("/board/{boardId}/best")
-	public Object boardBestArticles(@PathVariable("boardId") int boardId, @RequestParam("startIdx") int startIdx, @RequestParam("anount") int amount) {
-		return new ResponseEntity<>(articleService.showBestArticles(boardId, startIdx, amount), HttpStatus.OK);
+	public Object boardBestArticles(@PathVariable("boardId") int boardId, @RequestParam("startIdx") int startIdx,
+			@RequestParam("anount") int amount) {
+		try {
+			return new ResponseEntity<>(articleService.showBestArticles(boardId, startIdx, amount), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		
 	}
 	
 	@ApiOperation(value = "게시판의 게시글 리스트 읽기")
 	@GetMapping("/board/{boardId}")
-	public Object articleList(@PathVariable("boardId") int boardId, HttpServletRequest request, @RequestParam("startIdx") int startIdx, @RequestParam("anount") int amount) {
-		return new ResponseEntity<>(articleService.showArticles(boardId, startIdx, amount), HttpStatus.OK);
+	public Object articleList(@PathVariable("boardId") int boardId, HttpServletRequest request,
+			@RequestParam("startIdx") int startIdx, @RequestParam("anount") int amount) {
+		try {
+			return new ResponseEntity<>(articleService.showArticles(boardId, startIdx, amount), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-
+	
+	/////////new
+	@ApiOperation(value = "내가 쓴 글")
+	@GetMapping("/myarticles")
+	public Object articleList(@RequestParam("id") int userId,
+			@RequestParam("startIdx") int startIdx, @RequestParam("anount") int amount) {
+		try {
+			return new ResponseEntity<>(articleService.showMyArticles(userId, startIdx, amount), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ApiOperation(value = "좋아요 한 게시글 가져오기")
+	@GetMapping("/likedarticles")
+	public Object likedArticles(@RequestParam("id") int userId,
+			@RequestParam("startIdx") int startIdx, @RequestParam("anount") int amount) {
+		try {
+			return new ResponseEntity<>(articleService.showLikedArticles(userId, startIdx, amount), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		
+	}
 }

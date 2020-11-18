@@ -52,117 +52,204 @@ public class SchoolRestController {
 	@Autowired
 	JWTUtil jwtUtil;
 	
+	@ApiOperation(value = "내가 쓴 글 가져오기")
 	@GetMapping("/myarticles")
 	public Object myArticles(@RequestParam("id") int userId) {
-		return new ResponseEntity<>(articleService.showMyArticles(userId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(articleService.showMyArticles(userId), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
+	@ApiOperation(value = "좋아요 한 게시글 가져오기")
 	@GetMapping("/likedarticles")
 	public Object likedArticles(@RequestParam("id") int userId) {
-		return new ResponseEntity<>(articleService.showLikedArticles(userId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(articleService.showLikedArticles(userId), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	
 	@ApiOperation(value = "시도 리스트 (없는 학교 신청시 시도 선택용)")
 	@GetMapping("/sido")
 	public Object sidoList() {
-		return new ResponseEntity<>(schoolService.showSidoList(), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(schoolService.showSidoList(), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "새로운 학교 추가")
 	@PostMapping("/school")
 	public Object newSchool(@RequestBody SchoolDTO schoolDTO) {
-		return new ResponseEntity<>(schoolService.addNewSchool(schoolDTO), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(schoolService.addNewSchool(schoolDTO), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "학교 검색, keyword 파라미터에 넣어서 보내면 검색함")
 	@GetMapping("/search")
 	public Object searchSchool(@RequestParam(value="keyword") String keyword) {
-		if(keyword == null || keyword == "") {
-			return new ResponseEntity<>(null, HttpStatus.OK);
+		try {
+			if(keyword == null || keyword == "") {
+				return new ResponseEntity<>(null, HttpStatus.OK);
+			}
+			return new ResponseEntity<>(schoolService.searchSchool(keyword), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
-		return new ResponseEntity<>(schoolService.searchSchool(keyword), HttpStatus.OK);
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "전체 게시글 검색 (제목만)")
 	@GetMapping("/searchtitle")
 	public Object searchTitle(@RequestParam(value="keyword") String keyword, @RequestParam(value="schoolId") int schoolId) {
-		if(keyword == null || keyword == "") {
-			return new ResponseEntity<>(null, HttpStatus.OK);
+		try {
+			if(keyword == null || keyword == "") {
+				return new ResponseEntity<>(null, HttpStatus.OK);
+			}
+			return new ResponseEntity<>(articleService.searchTitle(schoolId, keyword), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
-		return new ResponseEntity<>(articleService.searchTitle(schoolId, keyword), HttpStatus.OK);
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@ApiOperation(value = "전체 게시글 검색 (제목 + 내용)")
 	@GetMapping("/searchtitlecontent")
 	public Object searchTitleOrContent(@RequestParam(value="keyword") String keyword, @RequestParam(value="schoolId") int schoolId) {
-		if(keyword == null || keyword == "") {
-			return new ResponseEntity<>(null, HttpStatus.OK);
+		try {
+			if(keyword == null || keyword == "") {
+				return new ResponseEntity<>(null, HttpStatus.OK);
+			}
+			return new ResponseEntity<>(articleService.searchTitleOrContent(schoolId, keyword), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
-		return new ResponseEntity<>(articleService.searchTitleOrContent(schoolId, keyword), HttpStatus.OK);
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@ApiOperation(value = "학교id로 게시판 목록 가져오기")
 	@GetMapping("/boards")
 	public Object boardList(@RequestParam(value="id") int id) {
-		return new ResponseEntity<>(boardService.showSchoolBoards(id), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(boardService.showSchoolBoards(id), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "새로운 게시판 생성")
 	@PostMapping("/board")
 	public Object createNewBoard(@RequestBody BoardNewDTO boardNewDTO) {
 		// 일단 관리자 동의 없이 새 게시판 생성
-		return new ResponseEntity<>(boardService.createNewBoard(boardNewDTO), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(boardService.createNewBoard(boardNewDTO), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "즐겨찾기한 게시판 목록 가져오기")
 	@GetMapping("/board/fav")
 	public Object showBoardFavs(@RequestParam int userId) {
-		return new ResponseEntity<>(boardService.showFavBoards(userId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(boardService.showFavBoards(userId), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "전체 게시글 가져오기")
 	@GetMapping("/board/all")
 	public Object allArticles(@RequestParam("schoolId") int schoolId) {
-		return new ResponseEntity<>(articleService.showAllArticles(schoolId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(articleService.showAllArticles(schoolId), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "전체 베스트 게시글 가져오기")
 	@GetMapping("/board/all/best")
 	public Object allBestArticles(@RequestParam("schoolId") int schoolId) {
-		return new ResponseEntity<>(articleService.showAllBestArticles(schoolId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(articleService.showAllBestArticles(schoolId), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "특정 게시판 베스트 게시글 가져오기")
 	@GetMapping("/board/{boardId}/best")
 	public Object boardBestArticles(@PathVariable("boardId") int boardId) {
-		return new ResponseEntity<>(articleService.showBestArticles(boardId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(articleService.showBestArticles(boardId), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "게시판 즐겨찾기")
 	@PostMapping("/board/{boardId}/fav")
 	public Object favBoard(@PathVariable("boardId") int boardId, @RequestBody UserIdDTO userId) {
-		int id = userId.getUserId();
-		return new ResponseEntity<>(boardService.favBoard(boardId, id), HttpStatus.OK);
+		try {
+			int id = userId.getUserId();
+			return new ResponseEntity<>(boardService.favBoard(boardId, id), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "게시판 즐겨찾기 취소")
 	@DeleteMapping("/board/{boardId}/fav")
 	public Object unfavBoard(@PathVariable("boardId") int boardId, @RequestParam("userId") int userId) {
 //		int id = userId.getUserId();
-		return new ResponseEntity<>(boardService.unfavBoard(boardId, userId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(boardService.unfavBoard(boardId, userId), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "게시판의 게시글 리스트 읽기")
 	@GetMapping("/board/{boardId}")
 	public Object articleList(@PathVariable("boardId") int boardId, HttpServletRequest request) {
-		return new ResponseEntity<>(articleService.showArticles(boardId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(articleService.showArticles(boardId), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "게시판 즐겨찾기 여부 확인")
 	@GetMapping("/board/{boardId}/isfaved")
 	public Object checkBoardIsFaved(@PathVariable("boardId") int boardId, @RequestParam("userId") int userId) {
-		return new ResponseEntity<>(boardService.isFaved(boardId, userId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(boardService.isFaved(boardId, userId), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "게시글 하나 읽기 (댓글 리스트도 가져옴)")
@@ -170,38 +257,63 @@ public class SchoolRestController {
 	public Object showArticle(@PathVariable("boardId") int boardId,
 								@PathVariable("articleId") int articleId,
 								@RequestParam("userId") int userId) {
-		return new ResponseEntity<>(articleService.showArticle(articleId, userId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(articleService.showArticle(articleId, userId), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "게시글 생성, 필요값: title, content, boardId,")
 	@PostMapping("/board/{boardId}")
 	public Object writeArticle(@PathVariable("boardId") int boardId, @RequestBody ArticleDTO articleDTO) {
-		articleDTO.setBoardId(boardId);
-		return new ResponseEntity<>(articleService.createArticle(articleDTO), HttpStatus.CREATED);
+		try {
+			articleDTO.setBoardId(boardId);
+			return new ResponseEntity<>(articleService.createArticle(articleDTO), HttpStatus.CREATED);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "게시글 수정, (created_at, updated_at 같은 것들은 무시하고 필수값만 넣으면 됨)")
 	@PutMapping("/board/{boardId}/{articleId}")
 	public Object modifyArticle(@PathVariable("boardId") int boardId,
 								@PathVariable("articleId") int articleId, @RequestBody ArticleDTO articleDTO) {
-		articleDTO.setBoardId(boardId);
-		articleDTO.setId(articleId);
-		return new ResponseEntity<>(articleService.updateArticle(articleDTO), HttpStatus.CREATED);
+		try {
+			articleDTO.setBoardId(boardId);
+			articleDTO.setId(articleId);
+			return new ResponseEntity<>(articleService.updateArticle(articleDTO), HttpStatus.CREATED);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "게시글 삭제")
 	@DeleteMapping("/board/{boardId}/{articleId}")
 	public Object deleteArticle(@PathVariable("boardId") int boardId,
 								@PathVariable("articleId") int articleId) {
-		return new ResponseEntity<>(articleService.deleteArticle(articleId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(articleService.deleteArticle(articleId), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "댓글 작성, (created_at, updated_at 같은 것들은 무시하고 필수값만 넣으면 됨)")
 	@PostMapping("/board/{boardId}/{articleId}")
 	public Object createComment(@PathVariable("boardId") int boardId,
 								@PathVariable("articleId") int articleId, CommentDTO commentDTO) {
-		commentDTO.setArticleId(articleId);
-		return new ResponseEntity<>(commentService.createComment(commentDTO), HttpStatus.OK);
+		try {
+			commentDTO.setArticleId(articleId);
+			return new ResponseEntity<>(commentService.createComment(commentDTO), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "답댓글 작성, (created_at, updated_at 같은 것들은 무시하고 필수값만 넣으면 됨)")
@@ -209,19 +321,29 @@ public class SchoolRestController {
 	public Object createReplyComment(@PathVariable("boardId") int boardId,
 								@PathVariable("articleId") int articleId,
 								@PathVariable("commentId") int commentId, CommentDTO commentDTO) {
-		commentDTO.setArticleId(articleId);
-		commentDTO.setParentId(commentId);
-		return new ResponseEntity<>(commentService.createReplyComment(commentDTO), HttpStatus.OK);
+		try {
+			commentDTO.setArticleId(articleId);
+			commentDTO.setParentId(commentId);
+			return new ResponseEntity<>(commentService.createReplyComment(commentDTO), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "댓글 수정, (created_at, updated_at 같은 것들은 무시하고 필수값만 넣으면 됨)")
 	@PutMapping("/board/{boardId}/{articleId}/{commentId}")
 	public Object updateComment(@PathVariable("boardId") int boardId,
 								@PathVariable("articleId") int articleId,
-								@PathVariable("commentId") int commentId, CommentDTO commentDTO) {
-		commentDTO.setArticleId(articleId);
-		commentDTO.setId(commentId);
-		return new ResponseEntity<>(commentService.updateComment(commentDTO), HttpStatus.OK);
+								@PathVariable("commentId") int commentId, CommentDTO commentDTO) { 
+		try {
+			commentDTO.setArticleId(articleId);
+			commentDTO.setId(commentId);
+			return new ResponseEntity<>(commentService.updateComment(commentDTO), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "댓글 삭제")
@@ -229,7 +351,12 @@ public class SchoolRestController {
 	public Object deleteComment(@PathVariable("boardId") int boardId,
 								@PathVariable("articleId") int articleId,
 								@PathVariable("commentId") int commentId) {
-		return new ResponseEntity<>(commentService.deleteComment(commentId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(commentService.deleteComment(commentId), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "댓글 좋아요 (로그인 필요)")
@@ -237,10 +364,13 @@ public class SchoolRestController {
 	public Object likeComment(@PathVariable("boardId") int boardId,
 							@PathVariable("articleId") int articleId,
 							@PathVariable("commentId") int commentId,
-//							HttpServletRequest request,
 							@RequestParam("userId") int userId) {
-//		System.out.println("boardId:" + boardId + ", articleId: " + articleId + "commentId: " + commentId + "userId:" + userId);
-		return new ResponseEntity<>(likeService.likeComment(commentId, userId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(likeService.likeComment(commentId, userId), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "댓글 좋아요 취소 (로그인 필요)")
@@ -248,9 +378,13 @@ public class SchoolRestController {
 	public Object cancelLikeComment(@PathVariable("boardId") int boardId,
 							@PathVariable("articleId") int articleId,
 							@PathVariable("commentId") int commentId,
-//							HttpServletRequest request,
 							@RequestParam("userId") int userId) {
-		return new ResponseEntity<>(likeService.cancelLikeComment(commentId, userId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(likeService.cancelLikeComment(commentId, userId), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "게시글 좋아요 (로그인 필요)")
@@ -259,7 +393,12 @@ public class SchoolRestController {
 							@PathVariable("articleId") int articleId,
 //							HttpServletRequest request,
 							@RequestParam("userId") int userId) {
-		return new ResponseEntity<>(likeService.likeArticle(articleId, userId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(likeService.likeArticle(articleId, userId), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "게시글 좋아요 취소 (로그인 필요)")
@@ -273,10 +412,14 @@ public class SchoolRestController {
 //		if(userId == -1) {
 //			return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
 //		}
-		return new ResponseEntity<>(likeService.cancelLikeArticle(articleId, userId), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(likeService.cancelLikeArticle(articleId, userId), HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	// JWT 토큰에서 userId(PK) 가져오는 메소드
 	private int getUserPK(HttpServletRequest request) {
 		String token = request.getHeader("Authorization");
 		if(token == null) {

@@ -22,6 +22,8 @@ public interface ArticleDAO {
 	List<ArticleFullInfo> selectBestArticlesBySchoolId(int schoolId, IdWithIndexDTO idWithIndexDTO);
 	List<ArticleFullInfo> selectBestArticlesByBoardId(int boardId, IdWithIndexDTO idWithIndexDTO);
 	List<ArticleFullInfo> selectArticlesByBoardId(int boardId, IdWithIndexDTO idWithIndexDTO);
+	List<ArticleFullInfo> selectMyArticles(int userId, IdWithIndexDTO idWithIndexDTO);
+	List<ArticleFullInfo> selectLikedArticles(int userId, IdWithIndexDTO idWithIndexDTO);
 	
 	List<ArticleFullInfo> selectMyArticles(int userId);
 	List<ArticleFullInfo> selectLikedArticles(int userId);
