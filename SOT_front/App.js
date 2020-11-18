@@ -70,33 +70,33 @@ function MyStack() {
 
   return (
     <Stack.Navigator>
-      {user.token !== null 
-      ? (<>
+      {user.token !== null
+        ? (<>
 
-      <Stack.Screen
-        name="Main"
-        options={{headerShown: false}}
-        component={TabsScreen}
-      />
-      <Stack.Screen
-        name="Start"
-        options={{headerShown: false}}
-        component={Start}
-      />
-      </>) 
-      : (<>
-      <Stack.Screen
-        name="Start"
-        options={{ headerShown: false }}
-        component={Start}
-      />
-      <Stack.Screen
-        name="Main"
-        options={{headerShown: false}}
-        component={TabsScreen}
-      />
-      </>)}
-      
+          <Stack.Screen
+            name="Main"
+            options={{ headerShown: false }}
+            component={TabsScreen}
+          />
+          <Stack.Screen
+            name="Start"
+            options={{ headerShown: false }}
+            component={Start}
+          />
+        </>)
+        : (<>
+          <Stack.Screen
+            name="Start"
+            options={{ headerShown: false }}
+            component={Start}
+          />
+          <Stack.Screen
+            name="Main"
+            options={{ headerShown: false }}
+            component={TabsScreen}
+          />
+        </>)}
+
       <Stack.Screen
         name="회원가입"
         options={{
@@ -308,13 +308,11 @@ export default function App() {
   const HOST = '192.168.100.72:8090';
   const serverUrl = `http://${HOST}`;
   const [fav, setFav] = useLocalStorageSetState(false, 'fav');
-  const [articleStartIdx, setArticleStartIdx] = useLocalStorageSetState(false, 'fav');
+  const [articleStartIdx, setArticleStartIdx] = useLocalStorageSetState(false, 'articleStartIdx');
 
   AsyncStorage.getItem('testToken', (err, result) => {
     const UserInfo = JSON.parse(result);
-    if(result !== null){
-      setUser(UserInfo);
-    }
+    return setUser(UserInfo);
   });
 
   return (

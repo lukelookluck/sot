@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { CommonContext } from '../../context/CommonContext';
 import {
@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import 'react-native-gesture-handler';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-community/async-storage';
 
 // 시작화면
@@ -23,11 +23,12 @@ const Start = ({ navigation }) => {
     navigation.addListener('focus', () => {
       AsyncStorage.getItem('testToken', (err, result) => {
         const UserInfo = JSON.parse(result);
-        if(result !== null){
+        if (result !== null) {
           setUser(UserInfo);
           // navigation.navigate('Main');
           console.log('닉네임 : ' + UserInfo.nickname);
           console.log('토큰 : ' + UserInfo.token);
+
         }
       });
     })
@@ -54,9 +55,9 @@ const Start = ({ navigation }) => {
       })
       .then((response) => {
         console.log(response.data);
-        setUser({...response.data});
+        setUser({ ...response.data });
         setArticleStartIdx(5)
-        
+
         AsyncStorage.setItem('testToken', JSON.stringify(response.data), () => {
           console.log('테스트 저장 완료')
         });

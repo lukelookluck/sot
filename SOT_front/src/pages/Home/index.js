@@ -50,6 +50,7 @@ export default function Home({ navigation }) {
 
   // 즐찾 게시판 리스트 불러오기
   function refreshFavBoardList() {
+    console.log('user', user, articleStartIdx)
     axios
       .get(`${serverUrl}/board/fav?userId=${user.id}`, {
         // headers: {
@@ -66,12 +67,14 @@ export default function Home({ navigation }) {
       })
       .catch((error) => {
         console.log('why???');
-        console.log(error);
+        console.log('123123123', error);
       });
   }
 
   // 전체 게시글 불러오기
   function refreshWholeArticleList() {
+    console.log(articleStartIdx)
+
     axios
       .get(`${serverUrl}/scroll/board/all?amount=${articleStartIdx}&schoolId=${user.schoolId}&startIdx=${articleStartIdx - 5}`, {
         // headers: {
