@@ -19,6 +19,13 @@ import ReplyList from '../../components/ReplyList';
 
 export default function (props) {
   const {serverUrl, user, setUser} = useContext(CommonContext);
+  useEffect(() => {
+    getArticleInfo();
+  }, []);
+
+  if (props.rFCmt === true) {
+    getArticleInfo()
+  }
 
   function getTime(myTime) {
     let theTime = null;
@@ -56,11 +63,27 @@ export default function (props) {
     return theTime;
   }
 
-  // let comments = null;
-  // if (props.comments.length > 0) {
-  const comments = (props.comments || []).map((comment) => {
-    const [like, setLike] = useState(comment.isLiked);
-    const [likeCnt, setLikeCnt] = useState(comment.likesCnt);
+  const [bC,setBC] = useState(props.comments)
+
+  function getArticleInfo() {
+    axios
+      .get(
+        `${serverUrl}/board/${props.article.boardId}/${props.article.id}?userId=${user.id}`,
+      )
+      .then((res) => {
+        props.setRFCmt(false)
+        setBC([]);
+        setBC(res.data.comments);
+      })
+      .catch((err) => {
+        // console.log(err.data);
+      });
+  }
+
+
+
+
+  const comments = bC.map((comment, idx) => {
 
     function likeComment(data) {
       axios
@@ -68,12 +91,19 @@ export default function (props) {
           `${serverUrl}/board/${props.boardId}/${data.articleId}/${data.id}/like?userId=${user.id}`,
         )
         .then((res) => {
-          if (like === true) {
-            setLike(false);
-            setLikeCnt(likeCnt - 1);
+          if (comment.isLiked === true) {
+            // setLike(false);
+            // setLikeCnt(likeCnt - 1);
+            bC[idx] = {...bC[idx], isLiked: !bC[idx].isLiked, likesCnt: bC[idx].likesCnt -1}
+            setBC([])
+            setBC(bC)
+
           } else {
-            setLike(true);
-            setLikeCnt(likeCnt + 1);
+            // setLike(true);
+            // setLikeCnt(likeCnt + 1);
+            bC[idx] = {...bC[idx], isLiked: !bC[idx].isLiked, likesCnt: bC[idx].likesCnt +1}
+            setBC([])
+            setBC(bC)
           }
         })
         .catch((err) => {
@@ -122,10 +152,10 @@ export default function (props) {
               </Text>
               <Text style={{fontSize: 13}}>{comment.content}</Text>
               <View style={{flexDirection: 'row', paddingVertical: 5}}>
-                {(likeCnt > 0 && (
+                {(comment.likesCnt > 0 && (
                   <Text
                     style={{marginRight: 10, fontSize: 12, color: '#5e5e5e'}}>
-                    좋아요 {likeCnt}개
+                    좋아요 {comment.likesCnt}개
                   </Text>
                 )) || <Text></Text>}
                 <Text style={{fontSize: 12, color: '#5e5e5e'}}>
@@ -145,7 +175,7 @@ export default function (props) {
               </View>
             </View>
           </View>
-          {(like === false && (
+          {(comment.isLiked === false && (
             <TouchableHighlight
               style={{
                 borderRadius: 20,

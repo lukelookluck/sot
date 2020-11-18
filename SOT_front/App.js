@@ -1,5 +1,5 @@
-import React, {Component, useContext, useState} from 'react';
-import {View, TouchableOpacity} from 'react-native';
+import React, { Component, useContext, useState } from 'react';
+import { View, TouchableOpacity } from 'react-native';
 import Start from './src/pages/Start';
 import SignUp from './src/pages/SignUp';
 import Home from './src/pages/Home';
@@ -13,15 +13,15 @@ import ReqNewBoard from './src/pages/ReqNewBoard';
 import MyPage from './src/pages/MyPage';
 import MyArticle from './src/pages/MyArticle';
 import LikeArticle from './src/pages/LikeArticle';
-import {NavigationContainer} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {CommonContext} from './src/context/CommonContext';
-import {useLocalStorageSetState} from './src/common/CommonHooks';
+import { CommonContext } from './src/context/CommonContext';
+import { useLocalStorageSetState } from './src/common/CommonHooks';
 import Search from './src/pages/Search';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -30,7 +30,7 @@ const Stack = createStackNavigator();
 
 // stack navitation 정리
 function MyStack() {
-  const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
+  const { serverUrl, user, setUser, fav, setFav } = useContext(CommonContext);
 
   // 게시판 북마크 등록
   const addBookmark = (b_id, u_id) => {
@@ -87,7 +87,7 @@ function MyStack() {
       : (<>
       <Stack.Screen
         name="Start"
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
         component={Start}
       />
       <Stack.Screen
@@ -122,7 +122,7 @@ function MyStack() {
       />
       <Stack.Screen
         name="Board"
-        options={({route}) => ({
+        options={({ route }) => ({
           title: route.params.name,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           headerShown: true,
@@ -143,7 +143,7 @@ function MyStack() {
                 }>
                 <Icon
                   name={fav ? 'bookmark' : 'bookmark-outline'}
-                  style={{fontSize: 23, color: 'white', marginRight: 15}}
+                  style={{ fontSize: 23, color: 'white', marginRight: 15 }}
                 />
               </TouchableOpacity>
             </View>
@@ -166,7 +166,7 @@ function MyStack() {
       />
       <Stack.Screen
         name="ArticleDisplay"
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           title: '',
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           headerShown: true,
@@ -249,8 +249,8 @@ const Tab = createBottomTabNavigator();
 
 const TabsScreen = () => (
   <Tab.Navigator
-    screenOptions={({route}) => ({
-      tabBarIcon: ({focused, color, size}) => {
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ focused, color, size }) => {
         if (route.name === '홈') {
           return (
             <Icon
@@ -281,7 +281,7 @@ const TabsScreen = () => (
     tabBarOptions={{
       activeTintColor: 'tomato',
       inactiveTintColor: 'gray',
-      style: {height: 56.5, paddingBottom: 5},
+      style: { height: 56.5, paddingBottom: 5 },
     }}>
     <Tab.Screen name="홈" component={Home} />
     <Tab.Screen name="게임" component={Game} />
@@ -308,6 +308,7 @@ export default function App() {
   const HOST = '192.168.100.72:8090';
   const serverUrl = `http://${HOST}`;
   const [fav, setFav] = useLocalStorageSetState(false, 'fav');
+  const [articleStartIdx, setArticleStartIdx] = useLocalStorageSetState(false, 'fav');
 
   AsyncStorage.getItem('testToken', (err, result) => {
     const UserInfo = JSON.parse(result);
@@ -324,6 +325,8 @@ export default function App() {
         setUser,
         fav,
         setFav,
+        articleStartIdx,
+        setArticleStartIdx,
       }}>
       <NavigationContainer>
         <MyStack />

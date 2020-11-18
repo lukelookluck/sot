@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,10 +13,10 @@ import Header from '../../components/Header';
 import PartBoard from '../../components/PartBoard/Box';
 import FavBoardList from '../../components/FavBoardList';
 
-import {CommonContext} from '../../context/CommonContext';
+import { CommonContext } from '../../context/CommonContext';
 
-export default function Home({navigation}) {
-  const {serverUrl, user, setUser} = useContext(CommonContext);
+export default function Home({ navigation }) {
+  const { serverUrl, user, setUser, articleStartIdx, setArticleStartIdx } = useContext(CommonContext);
 
   const [temp, setTemp] = useState(null);
   const [tempId, setTempId] = useState(null);
@@ -32,8 +32,6 @@ export default function Home({navigation}) {
   const [certainArticleList, setCertainArticleList] = useState([]);
 
   useEffect(() => {
-    refreshFavBoardList();
-    refreshWholeArticleList();
     navigation.addListener('blur', () => {
       setTemp(null);
       setTempId(null);
@@ -45,6 +43,10 @@ export default function Home({navigation}) {
       refreshWholeArticleList();
     });
   }, []);
+
+  function moreArticles() {
+    refreshWholeArticleList()
+  }
 
   // 즐찾 게시판 리스트 불러오기
   function refreshFavBoardList() {
@@ -71,7 +73,7 @@ export default function Home({navigation}) {
   // 전체 게시글 불러오기
   function refreshWholeArticleList() {
     axios
-      .get(`${serverUrl}/board/all`, {
+      .get(`${serverUrl}/scroll/board/all?amount=${articleStartIdx}&schoolId=${user.schoolId}&startIdx=${articleStartIdx - 5}`, {
         // headers: {
         //     Authorization: `JWT ${user.token}`,
         //   },
@@ -80,10 +82,10 @@ export default function Home({navigation}) {
         },
       })
       .then((res) => {
-        // console.log('adasdas222')
-
+        console.log(articleStartIdx)
+        console.log(res.data)
+        setArticleStartIdx(articleStartIdx + 5)
         setwholeArticleList([]);
-        // console.log("전체 새로고침", res.data);
         setwholeArticleList(res.data);
         setMyloading(true);
       })
@@ -132,32 +134,32 @@ export default function Home({navigation}) {
   return (
     <View>
       {(temp === null,
-      pressed === false && (
-        <Header
-          name={user.schoolName}
-          pressed={pressed}
-          navigation={navigation}
-        />
-      )) || (
-        <Header
-          name={temp}
-          setClick={setClick}
-          pressed={pressed}
-          setTemp={setTemp}
-          setPressed={setPressed}
-          setMyloading={setMyloading}
-          navigation={navigation}
-          refreshWholeArticleList={refreshWholeArticleList}
-        />
-      )}
+        pressed === false && (
+          <Header
+            name={user.schoolName}
+            pressed={pressed}
+            navigation={navigation}
+          />
+        )) || (
+          <Header
+            name={temp}
+            setClick={setClick}
+            pressed={pressed}
+            setTemp={setTemp}
+            setPressed={setPressed}
+            setMyloading={setMyloading}
+            navigation={navigation}
+            refreshWholeArticleList={refreshWholeArticleList}
+          />
+        )}
 
       {/* 무한스크롤 = Flatlist 인듯, 따라서 ScrollView를 Flatlist로 바꿔야함 */}
       <ScrollView
-        style={{marginBottom: 50}}
+        style={{ marginBottom: 50 }}
         showsHorizontalScrollIndicator={false}>
         {(myLoading2 === true && (
           <ScrollView
-            style={{borderBottomWidth: 1, borderColor: '#dbdbdb'}}
+            style={{ borderBottomWidth: 1, borderColor: '#dbdbdb' }}
             horizontal={true}
             showsHorizontalScrollIndicator={false}>
             <FavBoardList
@@ -168,13 +170,13 @@ export default function Home({navigation}) {
             />
           </ScrollView>
         )) || (
-          <View style={{marginTop: 10, flex: 1, alignItems: 'center'}}>
-            <Image
-              source={require('../../components/PartBoard/Box/spiner.gif')}
-              style={{width: 50, height: 50}}
-            />
-          </View>
-        )}
+            <View style={{ marginTop: 10, flex: 1, alignItems: 'center' }}>
+              <Image
+                source={require('../../components/PartBoard/Box/spiner.gif')}
+                style={{ width: 50, height: 50 }}
+              />
+            </View>
+          )}
 
         <View>
           {/* <PartBoard
@@ -202,9 +204,11 @@ export default function Home({navigation}) {
             wholeArticleList={wholeArticleList}
             certainArticleList={certainArticleList}
             navigation={navigation}
+            refreshWholeArticleList={refreshWholeArticleList}
           />
           {/* <PartBoard PartName="즐겨찾는 게시판" /> */}
         </View>
+
       </ScrollView>
     </View>
   );

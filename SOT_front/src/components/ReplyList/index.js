@@ -110,10 +110,10 @@ export default function (props) {
     }
     return theTime;
   }
+  
+  const [bR, setBR] = useState(props.comment)
 
-  const replies = (props.comment || []).map((reply, idx) => {
-    const [like, setLike] = useState(reply.isLiked);
-    const [likeCnt, setLikeCnt] = useState(reply.likesCnt);
+  const replies = bR.map((reply, idx) => {
 
     function likeComment(data) {
       axios
@@ -121,12 +121,19 @@ export default function (props) {
           `${serverUrl}/board/${props.boardId}/${data.articleId}/${data.id}/like?userId=${user.id}`,
         )
         .then((res) => {
-          if (like === true) {
-            setLike(!like);
-            setLikeCnt(likeCnt - 1);
+          if (reply.isLiked === true) {
+            // setLike(false);
+            // setLikeCnt(likeCnt - 1);
+            bR[idx] = {...bR[idx], isLiked: !bR[idx].isLiked, likesCnt: bR[idx].likesCnt -1}
+            setBR([])
+            setBR(bR)
+
           } else {
-            setLike(!like);
-            setLikeCnt(likeCnt + 1);
+            // setLike(true);
+            // setLikeCnt(likeCnt + 1);
+            bR[idx] = {...bR[idx], isLiked: !bR[idx].isLiked, likesCnt: bR[idx].likesCnt +1}
+            setBR([])
+            setBR(bR)
           }
         })
         .catch((err) => {
@@ -175,10 +182,10 @@ export default function (props) {
                 </Text>
                 <Text style={{fontSize: 13}}>{reply.content}</Text>
                 <View style={{flexDirection: 'row', paddingVertical: 5}}>
-                  {likeCnt > 0 && (
+                  {reply.likesCnt > 0 && (
                     <Text
                       style={{marginRight: 10, fontSize: 12, color: '#5e5e5e'}}>
-                      좋아요 {likeCnt}개
+                      좋아요 {reply.likesCnt}개
                     </Text>
                   )}
                   <Text style={{fontSize: 12, color: '#5e5e5e'}}>
@@ -187,7 +194,7 @@ export default function (props) {
                 </View>
               </View>
             </View>
-            {(like === false && (
+            {(reply.isLiked === false && (
               <TouchableHighlight
                 style={{
                   borderRadius: 20,
