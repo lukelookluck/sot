@@ -80,7 +80,7 @@ function MyStack() {
         options={{ headerShown: false }}
         component={TabsScreen}
       /> */}
-      {user.token !== null
+      {user.token !== undefined
         && (<>
           <Stack.Screen
             name="Main"
@@ -334,7 +334,7 @@ export default function App() {
 
       }
     })
-
+    console.log('user', user.token)
   }, [])
 
 

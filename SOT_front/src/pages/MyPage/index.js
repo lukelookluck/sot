@@ -18,6 +18,7 @@ const MyPage = ({ navigation }) => {
 
   const goLogout = () => {
     AsyncStorage.clear();
+    setUser(false)
     alert('로그아웃 되었습니다');
     navigation.navigate('Start');
   };

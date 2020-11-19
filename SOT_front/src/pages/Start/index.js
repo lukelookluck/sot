@@ -15,7 +15,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 // 시작화면
 const Start = ({ navigation }) => {
-  const { serverUrl, user, setUser, articleStartIdx, setArticleStartIdx } = useContext(CommonContext);
+  const { serverUrl, user, setUser, articleStartIdx, setArticleStartIdx, asyncLoading, setAsyncloading } = useContext(CommonContext);
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
 
@@ -53,11 +53,14 @@ const Start = ({ navigation }) => {
       })
       .then((response) => {
         console.log(response.data);
-        setUser({ ...response.data });
-        setArticleStartIdx(5);
+        setUser(response.data);
 
         AsyncStorage.setItem('testToken', JSON.stringify(response.data), () => {
           console.log('테스트 저장 완료');
+          setAsyncloading(true);
+          setAsyncloading(false);
+          setEmail('');
+          setPw('');
         });
 
         navigation.navigate('Main'); // 로그인 성공시 메인화면으로
