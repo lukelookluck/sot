@@ -62,8 +62,11 @@ const Start = ({ navigation }) => {
           setEmail('');
           setPw('');
         });
-
-        navigation.navigate('Main'); // 로그인 성공시 메인화면으로
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Main' }],
+        });
+        // navigation.navigate('Main'); // 로그인 성공시 메인화면으로
       })
       .catch((error) => {
         alert('이메일과 비밀번호를 확인해주세요!');
