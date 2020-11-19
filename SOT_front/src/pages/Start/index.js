@@ -7,6 +7,7 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  BackHandler
 } from 'react-native';
 import 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -19,19 +20,16 @@ const Start = ({ navigation }) => {
   const [pw, setPw] = useState('');
 
   useEffect(() => {
-
-    navigation.addListener('focus', () => {
-      AsyncStorage.getItem('testToken', (err, result) => {
-        const UserInfo = JSON.parse(result);
-        if (result !== null) {
-          setUser(UserInfo);
-          // navigation.navigate('Main');
-          console.log('닉네임 : ' + UserInfo.nickname);
-          console.log('토큰 : ' + UserInfo.token);
-
-        }
-      });
+    AsyncStorage.getItem('testToken', (err, result) => {
+      const UserInfo = JSON.parse(result);
+      if (result !== null) {
+        setUser(UserInfo);
+        console.log('닉네임 : ' + UserInfo.nickname);
+        console.log('토큰 : ' + UserInfo.token);
+        navigation.navigate('Main');
+      }
     })
+
   }, []);
 
   const emailHandler = (text) => {

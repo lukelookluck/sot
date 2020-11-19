@@ -318,6 +318,25 @@ export default function App() {
   const serverUrl = `http://${HOST}`;
   const [fav, setFav] = useLocalStorageSetState(false, 'fav');
   const [articleStartIdx, setArticleStartIdx] = useState(5);
+  const [asyncLoading, setAsyncloading] = useState(false);
+
+  useEffect(() => {
+    console.log('asyncLoading 시작전')
+    setArticleStartIdx(5);
+
+    AsyncStorage.getItem('testToken').then((result) => {
+      const UserInfo = JSON.parse(result);
+      if (result !== null) {
+        setUser(UserInfo);
+        console.log('asyncLoading 트루임')
+        setAsyncloading(true);
+        setAsyncloading(false)
+
+      }
+    })
+
+  }, [])
+
 
   return (
     <CommonContext.Provider
@@ -329,6 +348,9 @@ export default function App() {
         setFav,
         articleStartIdx,
         setArticleStartIdx,
+        asyncLoading,
+        setAsyncloading,
+
       }}>
       <NavigationContainer>
         <MyStack />

@@ -16,7 +16,7 @@ import FavBoardList from '../../components/FavBoardList';
 import { CommonContext } from '../../context/CommonContext';
 
 export default function Home({ navigation }) {
-  const { serverUrl, user, setUser, articleStartIdx, setArticleStartIdx } = useContext(CommonContext);
+  const { serverUrl, user, setUser, articleStartIdx, setArticleStartIdx, asyncLoading, setAsyncloading } = useContext(CommonContext);
 
   const [temp, setTemp] = useState(null);
   const [tempId, setTempId] = useState(null);
@@ -31,6 +31,12 @@ export default function Home({ navigation }) {
   // 특정게시글
   const [certainArticleList, setCertainArticleList] = useState([]);
 
+  if (asyncLoading === true) {
+    console.log('asyncLoading 트루 받음')
+    refreshFavBoardList();
+    refreshWholeArticleList();
+  }
+
   useEffect(() => {
     navigation.addListener('blur', () => {
       setTemp(null);
@@ -39,19 +45,23 @@ export default function Home({ navigation }) {
       setMyloading(false);
     });
     navigation.addListener('focus', () => {
+      console.log(user)
       refreshFavBoardList();
       refreshWholeArticleList();
     });
   }, []);
 
+
+
   function moreArticles() {
+
+    // console.log(articleStartIdx, articleStartIdx - 5)
+
     refreshWholeArticleList()
   }
 
   // 즐찾 게시판 리스트 불러오기
   function refreshFavBoardList() {
-    console.log('user', user, articleStartIdx)
-
     axios
       .get(`${serverUrl}/board/fav?userId=${user.id}`, {
         // headers: {
@@ -62,6 +72,7 @@ export default function Home({ navigation }) {
         // },
       })
       .then((response) => {
+        // console.log('123123123', response);
         setBoardList([]);
         setBoardList(response.data);
         setMyloading2(true);
@@ -73,12 +84,15 @@ export default function Home({ navigation }) {
       });
   }
 
+  const [a, setA] = useState([]);
+
+
   // 전체 게시글 불러오기
   function refreshWholeArticleList() {
-    // console.log(articleStartIdx)
+    console.log("uesr", user)
 
     axios
-      .get(`${serverUrl}/scroll/board/all?amount=${articleStartIdx}&schoolId=${user.schoolId}&startIdx=${articleStartIdx - 5}`, {
+      .get(`${serverUrl}/scroll/board/all?amount=5&schoolId=2331&startIdx=${articleStartIdx - 5}`, {
         // headers: {
         //     Authorization: `JWT ${user.token}`,
         //   },
@@ -87,11 +101,16 @@ export default function Home({ navigation }) {
         },
       })
       .then((res) => {
-        console.log(articleStartIdx)
-        console.log(res.data)
         setArticleStartIdx(articleStartIdx + 5)
-        setwholeArticleList([]);
-        setwholeArticleList(res.data);
+
+        console.log(articleStartIdx, articleStartIdx - 5)
+        console.log(res.data)
+        // setwholeArticleList([]);
+        setwholeArticleList(wholeArticleList.concat(res.data));
+        console.log('wholeArticleList', wholeArticleList)
+        console.log('a?A?AA?', a)
+        setA(a.concat(res.data))
+        console.log('asdasd', a)
         setMyloading(true);
       })
       .catch((err) => {
@@ -210,6 +229,9 @@ export default function Home({ navigation }) {
             certainArticleList={certainArticleList}
             navigation={navigation}
             refreshWholeArticleList={refreshWholeArticleList}
+            moreArticles={moreArticles}
+            setArticleStartIdx={setArticleStartIdx}
+            articleStartIdx={articleStartIdx}
           />
           {/* <PartBoard PartName="즐겨찾는 게시판" /> */}
         </View>

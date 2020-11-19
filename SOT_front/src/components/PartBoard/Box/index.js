@@ -89,7 +89,11 @@ export default function PartBoard(props) {
                       />
                     </View>
                   ))}
-                  <TouchableHighlight onPress={() => moreArticles()}
+                  <TouchableHighlight onPress={() => {
+                    // setArticleStartIdx(articleStartIdx + 5)
+
+                    props.moreArticles()
+                  }}
                     underlayColor="#dfdfdf">
                     <View
                       style={{
