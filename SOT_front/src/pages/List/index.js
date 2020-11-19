@@ -33,6 +33,8 @@ const List = ({ navigation, route }) => {
   }, []);
 
   function refreshList() {
+    console.log("uesr", user)
+
     axios.get(`${serverUrl}/boards?id=${user.schoolId}&userId=${user.id}`, {
       // headers: {
       //   Authorization: `JWT ${user.token}`,

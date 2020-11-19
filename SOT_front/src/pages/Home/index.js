@@ -21,7 +21,7 @@ export default function Home({ navigation }) {
   const [temp, setTemp] = useState(null);
   const [tempId, setTempId] = useState(null);
   const [pressed, setPressed] = useState(false);
-  const [myLoading, setMyloading] = useState(false);
+  const [myLoading, setMyloading] = useState(true);
   const [myLoading2, setMyloading2] = useState(false);
 
   const [boardList, setBoardList] = useState([]);
@@ -34,7 +34,7 @@ export default function Home({ navigation }) {
   if (asyncLoading === true) {
     console.log('asyncLoading 트루 받음')
     refreshFavBoardList();
-    refreshWholeArticleList();
+    refreshWholeArticleList(articleStartIdx);
   }
 
   useEffect(() => {
@@ -42,26 +42,26 @@ export default function Home({ navigation }) {
       setTemp(null);
       setTempId(null);
       setPressed(false);
-      setMyloading(false);
+      // setMyloading(false);
     });
     navigation.addListener('focus', () => {
-      console.log(user)
-      refreshFavBoardList();
-      refreshWholeArticleList();
+      // console.log(user)
+      // refreshFavBoardList();
+      // refreshWholeArticleList();
     });
   }, []);
 
 
 
-  function moreArticles() {
-
-    // console.log(articleStartIdx, articleStartIdx - 5)
-
-    refreshWholeArticleList()
+  function moreArticles(data) {
+    setArticleStartIdx(data)
+    refreshWholeArticleList(data)
   }
 
   // 즐찾 게시판 리스트 불러오기
   function refreshFavBoardList() {
+    console.log("uesr", user)
+
     axios
       .get(`${serverUrl}/board/fav?userId=${user.id}`, {
         // headers: {
@@ -88,11 +88,11 @@ export default function Home({ navigation }) {
 
 
   // 전체 게시글 불러오기
-  function refreshWholeArticleList() {
-    console.log("uesr", user)
+  function refreshWholeArticleList(data) {
+    console.log("uesr", data)
 
     axios
-      .get(`${serverUrl}/scroll/board/all?amount=5&schoolId=${user.schoolId}&startIdx=${articleStartIdx - 5}`, {
+      .get(`${serverUrl}/scroll/board/all?amount=5&schoolId=${user.schoolId}&startIdx=${data - 5}`, {
         // headers: {
         //     Authorization: `JWT ${user.token}`,
         //   },
@@ -101,7 +101,6 @@ export default function Home({ navigation }) {
         },
       })
       .then((res) => {
-        setArticleStartIdx(articleStartIdx + 5)
 
         console.log(articleStartIdx, articleStartIdx - 5)
         console.log(res.data)
@@ -120,6 +119,8 @@ export default function Home({ navigation }) {
 
   // 특정 게시판 게시글 불러오기
   function refreshCertainArticleList(data) {
+    console.log("uesr", user)
+
     axios
       .get(`${serverUrl}/board/${data.id}/?userId=${user.id}`, {
         // headers: {
