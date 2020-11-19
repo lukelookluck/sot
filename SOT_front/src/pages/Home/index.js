@@ -92,7 +92,7 @@ export default function Home({ navigation }) {
     console.log("uesr", user)
 
     axios
-      .get(`${serverUrl}/scroll/board/all?amount=5&schoolId=2331&startIdx=${articleStartIdx - 5}`, {
+      .get(`${serverUrl}/scroll/board/all?amount=5&schoolId=${user.schoolId}&startIdx=${articleStartIdx - 5}`, {
         // headers: {
         //     Authorization: `JWT ${user.token}`,
         //   },
