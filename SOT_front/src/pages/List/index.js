@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import {Text, View, FlatList, StyleSheet} from 'react-native';
+import { Text, View, FlatList, StyleSheet } from 'react-native';
 import { CommonContext } from "../../context/CommonContext";
 
 const styles = StyleSheet.create({
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 });
 
 // 게시판 목록
-const List = ({navigation, route}) => {
+const List = ({ navigation, route }) => {
 
   const [boardList, setBoardList] = useState([]);
   const { serverUrl, user, setUser, fav, setFav } = useContext(CommonContext);
@@ -33,13 +33,13 @@ const List = ({navigation, route}) => {
   }, []);
 
   function refreshList() {
-    axios.get(`${serverUrl}/boards`, {
+    axios.get(`${serverUrl}/boards?id=${user.schoolId}&userId=${user.id}`, {
       // headers: {
       //   Authorization: `JWT ${user.token}`,
       // },
-      params: {
-        id : user.schoolId
-      },
+      // params: {
+      //   id : user.schoolId
+      // },
     })
       .then((response) => {
         setBoardList([]);
@@ -68,7 +68,7 @@ const List = ({navigation, route}) => {
         console.log(error);
       });
 
-    navigation.navigate('Board', {name: b_name, id: b_id, u_id: user.id, isRe: 'no'});
+    navigation.navigate('Board', { name: b_name, id: b_id, u_id: user.id, isRe: 'no' });
   };
 
   const goReqNewBoard = () => {
@@ -77,10 +77,12 @@ const List = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <View style={{backgroundColor: '#ff8000', paddingLeft: 15, borderBottomWidth: 1,
-        borderBottomColor: '#df380f', height: 56, justifyContent: 'center'}}>
-        <Text style={{fontSize: 12, color: 'white'}}>SOT</Text>
-        <Text style={{color: 'white', fontWeight: '700', fontSize: 18}}>
+      <View style={{
+        backgroundColor: '#ff8000', paddingLeft: 15, borderBottomWidth: 1,
+        borderBottomColor: '#df380f', height: 56, justifyContent: 'center'
+      }}>
+        <Text style={{ fontSize: 12, color: 'white' }}>SOT</Text>
+        <Text style={{ color: 'white', fontWeight: '700', fontSize: 18 }}>
           {user.schoolName}
         </Text>
       </View>
@@ -92,7 +94,7 @@ const List = ({navigation, route}) => {
             <Text style={styles.item} onPress={() => goReqNewBoard()}>게시판 신청하기</Text>
           </View>
         }
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <View style={styles.text_box}>
             <Text style={styles.item} onPress={() => goBoard(item.name, item.id)}>{item.name}</Text>
           </View>

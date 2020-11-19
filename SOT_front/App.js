@@ -1,4 +1,4 @@
-import React, { Component, useContext, useState } from 'react';
+import React, { Component, useEffect, useContext, useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import Start from './src/pages/Start';
 import SignUp from './src/pages/SignUp';
@@ -39,7 +39,7 @@ function MyStack() {
         userId: u_id,
       })
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         setFav(true);
       })
       .catch(function (error) {
@@ -52,7 +52,7 @@ function MyStack() {
     axios
       .delete(`${serverUrl}/board/${b_id}/fav?userId=${u_id}`)
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         setFav(false);
       })
       .catch(function (error) {
@@ -70,9 +70,18 @@ function MyStack() {
 
   return (
     <Stack.Navigator>
+      {/* <Stack.Screen
+        name="Start"
+        options={{ headerShown: false }}
+        component={Start}
+      />
+      <Stack.Screen
+        name="Main"
+        options={{ headerShown: false }}
+        component={TabsScreen}
+      /> */}
       {user.token !== null
-        ? (<>
-
+        && (<>
           <Stack.Screen
             name="Main"
             options={{ headerShown: false }}
@@ -84,7 +93,7 @@ function MyStack() {
             component={Start}
           />
         </>)
-        : (<>
+        || (<>
           <Stack.Screen
             name="Start"
             options={{ headerShown: false }}
@@ -305,15 +314,10 @@ export default function App() {
     'user',
   );
 
-  const HOST = '192.168.100.72:8090';
+  const HOST = 'k3d208.p.ssafy.io';
   const serverUrl = `http://${HOST}`;
   const [fav, setFav] = useLocalStorageSetState(false, 'fav');
-  const [articleStartIdx, setArticleStartIdx] = useLocalStorageSetState(false, 'articleStartIdx');
-
-  AsyncStorage.getItem('testToken', (err, result) => {
-    const UserInfo = JSON.parse(result);
-    return setUser(UserInfo);
-  });
+  const [articleStartIdx, setArticleStartIdx] = useState(5);
 
   return (
     <CommonContext.Provider
