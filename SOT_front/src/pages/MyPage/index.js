@@ -18,9 +18,20 @@ const MyPage = ({ navigation }) => {
 
   const goLogout = () => {
     AsyncStorage.clear();
-    setUser(false)
+    setUser({
+      token: '',
+      user: {
+        id: '',
+        email: '',
+        nickname: '',
+        password: '',
+        schoolId: '',
+        schoolName: '',
+      },
+    },
+      'user')
     alert('로그아웃 되었습니다');
-    navigation.navigate('Start');
+    // navigation.navigate('Start');
   };
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useContext, useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import Start from './src/pages/Start';
 import SignUp from './src/pages/SignUp';
 import Home from './src/pages/Home';
@@ -70,42 +70,13 @@ function MyStack() {
 
   return (
     <Stack.Navigator>
-      {/* <Stack.Screen
-        name="Start"
-        options={{ headerShown: false }}
-        component={Start}
-      />
+
+
       <Stack.Screen
         name="Main"
         options={{ headerShown: false }}
         component={TabsScreen}
-      /> */}
-      {user.token !== undefined
-        && (<>
-          <Stack.Screen
-            name="Main"
-            options={{ headerShown: false }}
-            component={TabsScreen}
-          />
-          <Stack.Screen
-            name="Start"
-            options={{ headerShown: false }}
-            component={Start}
-          />
-        </>)
-        || (<>
-          <Stack.Screen
-            name="Start"
-            options={{ headerShown: false }}
-            component={Start}
-          />
-          <Stack.Screen
-            name="Main"
-            options={{ headerShown: false }}
-            component={TabsScreen}
-          />
-        </>)}
-
+      />
       <Stack.Screen
         name="회원가입"
         options={{
@@ -299,7 +270,7 @@ const TabsScreen = () => (
 );
 
 export default function App() {
-  const [user, setUser] = useLocalStorageSetState(
+  const [user, setUser] = useState(
     {
       token: '',
       user: {
@@ -319,6 +290,8 @@ export default function App() {
   const [fav, setFav] = useLocalStorageSetState(false, 'fav');
   const [articleStartIdx, setArticleStartIdx] = useState(5);
   const [asyncLoading, setAsyncloading] = useState(false);
+  const [tempLoading, setTemploading] = useState(false);
+
 
   useEffect(() => {
     console.log('asyncLoading 시작전')
@@ -326,12 +299,12 @@ export default function App() {
 
     AsyncStorage.getItem('testToken').then((result) => {
       const UserInfo = JSON.parse(result);
+      setTemploading(true)
       if (result !== null) {
         setUser(UserInfo);
         console.log('asyncLoading 트루임')
         setAsyncloading(true);
         setAsyncloading(false)
-
       }
     })
     console.log('user', user.token)
@@ -353,7 +326,18 @@ export default function App() {
 
       }}>
       <NavigationContainer>
-        <MyStack />
+        {tempLoading === true && (
+          user.token === ''
+          && (<>
+            <Start />
+
+
+          </>) || (
+            <MyStack />
+
+          )
+
+        )}
       </NavigationContainer>
     </CommonContext.Provider>
   );

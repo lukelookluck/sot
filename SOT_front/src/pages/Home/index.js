@@ -46,7 +46,7 @@ export default function Home({ navigation }) {
     });
     navigation.addListener('focus', () => {
       // console.log(user)
-      // refreshFavBoardList();
+      refreshFavBoardList();
       // refreshWholeArticleList();
     });
   }, []);

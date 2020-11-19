@@ -19,18 +19,18 @@ const Start = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
 
-  useEffect(() => {
-    AsyncStorage.getItem('testToken', (err, result) => {
-      const UserInfo = JSON.parse(result);
-      if (result !== null) {
-        setUser(UserInfo);
-        console.log('닉네임 : ' + UserInfo.nickname);
-        console.log('토큰 : ' + UserInfo.token);
-        navigation.navigate('Main');
-      }
-    })
+  // useEffect(() => {
+  //   AsyncStorage.getItem('testToken', (err, result) => {
+  //     const UserInfo = JSON.parse(result);
+  //     if (result !== null) {
+  //       setUser(UserInfo);
+  //       console.log('닉네임 : ' + UserInfo.nickname);
+  //       console.log('토큰 : ' + UserInfo.token);
+  //       navigation.navigate('Main');
+  //     }
+  //   })
 
-  }, []);
+  // }, []);
 
   const emailHandler = (text) => {
     setEmail(text);
@@ -63,7 +63,7 @@ const Start = ({ navigation }) => {
           setPw('');
         });
 
-        navigation.navigate('Main'); // 로그인 성공시 메인화면으로
+        // navigation.navigate('Main'); // 로그인 성공시 메인화면으로
       })
       .catch((error) => {
         alert('이메일과 비밀번호를 확인해주세요!');
