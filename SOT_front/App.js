@@ -1,4 +1,4 @@
-import React, { Component, useContext, useState } from 'react';
+import React, { Component, useContext, useEffect, useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import Start from './src/pages/Start';
 import SignUp from './src/pages/SignUp';
@@ -70,7 +70,7 @@ function MyStack() {
 
   return (
     <Stack.Navigator>
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Start"
         options={{ headerShown: false }}
         component={Start}
@@ -79,8 +79,8 @@ function MyStack() {
         name="Main"
         options={{headerShown: false}}
         component={TabsScreen}
-      />
-      {/* {user.token !== null 
+      /> */}
+      {user.nickname !== null 
       ? (<>
       <Stack.Screen
         name="Main"
@@ -104,7 +104,7 @@ function MyStack() {
         options={{headerShown: false}}
         component={TabsScreen}
       />
-      </>)} */}
+      </>)}
       
       <Stack.Screen
         name="회원가입"
@@ -299,7 +299,7 @@ const TabsScreen = () => (
 );
 
 export default function App() {
-  const [user, setUser] = useLocalStorageSetState(
+  const [user, setUser] = useState(
     {
       token: '',
       user: {
@@ -314,18 +314,24 @@ export default function App() {
     'user',
   );
 
-  const HOST = '192.168.100.72:8090';
+  const HOST = 'k3d208.p.ssafy.io';
   const serverUrl = `http://${HOST}`;
   const [fav, setFav] = useLocalStorageSetState(false, 'fav');
-  const [articleStartIdx, setArticleStartIdx] = useLocalStorageSetState(false, 'fav');
+  const [articleStartIdx, setArticleStartIdx] = useState(5);
 
-  AsyncStorage.getItem('testToken', (err, result) => {
-    const UserInfo = JSON.parse(result);
-    if(result !== null){
-      setUser(UserInfo);
-    }
-  });
+  useEffect(() => {
+    AsyncStorage.getItem('testToken').then((result) => {
+      const UserInfo = JSON.parse(result);
+      if(result !== null){
+        setUser(UserInfo);
+        console.log(user)
+        setArticleStartIdx(5);
+      }
+    })
 
+  }, [])
+  
+  
   return (
     <CommonContext.Provider
       value={{

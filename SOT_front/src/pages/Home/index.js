@@ -32,6 +32,10 @@ export default function Home({ navigation }) {
   const [certainArticleList, setCertainArticleList] = useState([]);
 
   useEffect(() => {
+
+    console.log('과연??');
+    console.log(user.id);
+
     navigation.addListener('blur', () => {
       setTemp(null);
       setTempId(null);
@@ -50,6 +54,7 @@ export default function Home({ navigation }) {
 
   // 즐찾 게시판 리스트 불러오기
   function refreshFavBoardList() {
+    console.log('우저웆어ㅠ유저유저', user)
     axios
       .get(`${serverUrl}/board/fav?userId=${user.id}`, {
         // headers: {
@@ -73,7 +78,7 @@ export default function Home({ navigation }) {
   // 전체 게시글 불러오기
   function refreshWholeArticleList() {
     axios
-      .get(`${serverUrl}/scroll/board/all?amount=${articleStartIdx}&schoolId=${user.schoolId}&startIdx=${articleStartIdx - 5}`, {
+      .get(`${serverUrl}/scroll/board/all?amount=${articleStartIdx}&schoolId=${user.schoolId}&startIdx=0`, {
         // headers: {
         //     Authorization: `JWT ${user.token}`,
         //   },
