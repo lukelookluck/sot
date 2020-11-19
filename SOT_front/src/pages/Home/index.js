@@ -143,7 +143,7 @@ export default function Home({ navigation }) {
       setTemp(null);
       setTempId(null);
       setPressed(false);
-      setMyloading(false);
+      // setMyloading(false);
       refreshWholeArticleList();
     } else {
       setTemp(data.name);
