@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Text, View, FlatList, StyleSheet } from 'react-native';
+import { Text, View, FlatList, StyleSheet, TouchableHighlight } from 'react-native';
 import { CommonContext } from "../../context/CommonContext";
 
 const styles = StyleSheet.create({
@@ -9,12 +9,14 @@ const styles = StyleSheet.create({
   },
   item: {
     fontSize: 20,
-    marginLeft: 15,
   },
   text_box: {
+    paddingHorizontal: 15,
     borderBottomWidth: 0.5,
     borderBottomColor: "gray",
-    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     height: 50,
   }
 });
@@ -26,15 +28,12 @@ const List = ({ navigation, route }) => {
   const { serverUrl, user, setUser, fav, setFav } = useContext(CommonContext);
 
   useEffect(() => {
-    refreshList();
     navigation.addListener('focus', () => {
       refreshList();
     })
   }, []);
 
   function refreshList() {
-    console.log("uesr", user)
-
     axios.get(`${serverUrl}/boards?id=${user.schoolId}&userId=${user.id}`, {
       // headers: {
       //   Authorization: `JWT ${user.token}`,
@@ -92,14 +91,61 @@ const List = ({ navigation, route }) => {
         data={boardList}
         keyExtractor={(item, index) => index.toString()}
         ListFooterComponent={
-          <View style={styles.text_box}>
-            <Text style={styles.item} onPress={() => goReqNewBoard()}>게시판 신청하기</Text>
-          </View>
+          <TouchableHighlight
+            onPress={() => goReqNewBoard()}
+            activeOpacity={0.6}
+            underlayColor="#dfdfdf">
+            <View style={styles.text_box}>
+              <Text style={styles.item} >게시판 신청하기</Text>
+            </View>
+
+          </TouchableHighlight>
         }
         renderItem={({ item }) => (
-          <View style={styles.text_box}>
-            <Text style={styles.item} onPress={() => goBoard(item.name, item.id)}>{item.name}</Text>
-          </View>
+          <TouchableHighlight
+            onPress={() => goBoard(item.name, item.id)}
+            activeOpacity={0.6}
+            underlayColor="#dfdfdf">
+            <View
+              style={styles.text_box}
+            >
+              <Text style={styles.item} >{item.name}</Text>
+              {item.isFaved === true && (
+                <TouchableHighlight
+                  onPress={() => {
+                    console.log('즐찾중누름')
+                  }}
+                  activeOpacity={0.6}
+                  style={{
+                    padding: 10,
+                    borderRadius: 25
+                  }}
+                  underlayColor="#dfdfdf">
+                  <Text style={{
+                    color: 'red',
+                  }}>즐찾ing..</Text>
+                </TouchableHighlight>
+
+              ) || (
+                  <TouchableHighlight
+                    onPress={() => {
+                      console.log('즐찾하기누름')
+                    }}
+                    activeOpacity={0.6}
+                    style={{
+                      padding: 10,
+                      borderRadius: 25
+                    }}
+                    underlayColor="#dfdfdf">
+                    <Text style={{
+                      color: 'black',
+                    }}>즐찾하기</Text>
+                  </TouchableHighlight>
+                )}
+            </View>
+
+          </TouchableHighlight>
+
         )}></FlatList>
     </View>
   );

@@ -21,7 +21,7 @@ export default function Home({ navigation }) {
   const [temp, setTemp] = useState(null);
   const [tempId, setTempId] = useState(null);
   const [pressed, setPressed] = useState(false);
-  const [myLoading, setMyloading] = useState(true);
+  const [myLoading, setMyloading] = useState(false);
   const [myLoading2, setMyloading2] = useState(false);
 
   const [boardList, setBoardList] = useState([]);
