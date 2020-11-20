@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import axios from 'axios';
 import {
   View,
@@ -9,24 +9,36 @@ import {
   ScrollView,
 } from 'react-native';
 import 'react-native-gesture-handler';
-import { CommonContext } from '../../context/CommonContext';
+import {CommonContext} from '../../context/CommonContext';
 import SingleArticle from '../../components/PartBoard/SingleArticle';
 
 // 게시글 목록
-const Board = ({ navigation, route }) => {
-  const { serverUrl, user, setUser, fav, setFav } = useContext(CommonContext);
+const Board = ({navigation, route}) => {
+  const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
   const [postList, setPostList] = useState([]);
-  const [msg, setMsg] = useState('no');
-  const [myLoading, setMyLoading] = useState(true)
-  console.log(fav)
-
+  const [myLoading, setMyLoading] = useState(true);
 
   useEffect(() => {
-    refreshList();
     navigation.addListener('focus', () => {
       refreshList();
+      isFav();
     });
   }, []);
+
+  function isFav() {
+    axios
+      .get(`${serverUrl}/board/${route.params.id}/isfaved?userId=${user.id}`, {
+        // headers: {
+        //   Authorization: `JWT ${user.token}`,
+        // },
+      })
+      .then((response) => {
+        setFav(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   const gotoWrite = () => {
     navigation.navigate('WritePost', {
@@ -43,7 +55,7 @@ const Board = ({ navigation, route }) => {
         // },
       })
       .then((response) => {
-        setMyLoading(false)
+        setMyLoading(false);
         setPostList([]);
         console.log(response.data);
         setPostList(response.data);
@@ -51,16 +63,6 @@ const Board = ({ navigation, route }) => {
       .catch((error) => {
         console.log(error);
       });
-  }
-
-  function noLoad() {
-    console.log(route.params.isRe);
-  }
-
-  function reLoad() {
-    refreshList();
-    route.params.isRe = 'no';
-    console.log(route.params.isRe);
   }
 
   return (
@@ -71,35 +73,33 @@ const Board = ({ navigation, route }) => {
           route.params.isRe === 'yes' &&
           reLoad()) ||
           noLoad()} */}
-        {myLoading === true && (
-          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        {(myLoading === true && (
+          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             <Image
               source={require('../../components/PartBoard/Box/spiner.gif')}
-              style={{ width: 100, height: 100 }}
+              style={{width: 100, height: 100}}
             />
           </View>
-        )
-          || (
-            postList.length === 0 ? (
+        )) ||
+          (postList.length === 0 ? (
+            <View
+              style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+              <Text style={{fontSize: 25, marginTop: 70}}>
+                게시글이 없습니다
+              </Text>
+            </View>
+          ) : (
+            postList.map((item, index) => (
               <View
-                style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                <Text style={{ fontSize: 25, marginTop: 70 }}>게시글이 없습니다</Text>
+                key={index}
+                style={{borderBottomWidth: 0.5, borderBottomColor: 'gray'}}>
+                <SingleArticle
+                  idx={index}
+                  article={item}
+                  navigation={navigation}></SingleArticle>
               </View>
-            ) : (
-                postList.map((item, index) => (
-                  <View
-                    key={index}
-                    style={{ borderBottomWidth: 0.5, borderBottomColor: 'gray' }}>
-                    <SingleArticle
-                      idx={index}
-                      article={item}
-                      navigation={navigation}></SingleArticle>
-                  </View>
-                ))
-              )
-          )}
-
-
+            ))
+          ))}
       </ScrollView>
 
       <View
@@ -111,7 +111,7 @@ const Board = ({ navigation, route }) => {
           alignItems: 'center',
         }}>
         <TouchableOpacity style={styles.writeBtn} onPress={gotoWrite}>
-          <Text style={{ color: 'white', fontSize: 16, paddingHorizontal: 15 }}>
+          <Text style={{color: 'white', fontSize: 16, paddingHorizontal: 15}}>
             글 작성
           </Text>
         </TouchableOpacity>

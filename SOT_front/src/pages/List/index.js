@@ -1,7 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import axios from 'axios';
-import { Text, View, FlatList, StyleSheet, TouchableHighlight } from 'react-native';
-import { CommonContext } from "../../context/CommonContext";
+import {
+  Text,
+  View,
+  FlatList,
+  StyleSheet,
+  TouchableHighlight,
+} from 'react-native';
+import {CommonContext} from '../../context/CommonContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,38 +19,45 @@ const styles = StyleSheet.create({
   text_box: {
     paddingHorizontal: 15,
     borderBottomWidth: 0.5,
-    borderBottomColor: "gray",
+    borderBottomColor: 'gray',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     height: 50,
-  }
+  },
 });
 
 // 게시판 목록
-const List = ({ navigation, route }) => {
-
+const List = ({navigation, route}) => {
   const [boardList, setBoardList] = useState([]);
-  const { serverUrl, user, setUser, fav, setFav } = useContext(CommonContext);
+  const {
+    serverUrl,
+    user,
+    setUser,
+    fav,
+    setFav,
+    myLoading2,
+    setMyloading2,
+  } = useContext(CommonContext);
 
   useEffect(() => {
     navigation.addListener('focus', () => {
       refreshList();
-    })
+    });
   }, []);
 
   function refreshList() {
-    axios.get(`${serverUrl}/boards?id=${user.schoolId}&userId=${user.id}`, {
-      // headers: {
-      //   Authorization: `JWT ${user.token}`,
-      // },
-      // params: {
-      //   id : user.schoolId
-      // },
-    })
+    axios
+      .get(`${serverUrl}/boards?id=${user.schoolId}&userId=${user.id}`, {
+        // headers: {
+        //   Authorization: `JWT ${user.token}`,
+        // },
+        // params: {
+        //   id : user.schoolId
+        // },
+      })
       .then((response) => {
         setBoardList([]);
-        console.log(response.data);
         setBoardList(response.data);
       })
       .catch((error) => {
@@ -52,7 +65,32 @@ const List = ({ navigation, route }) => {
       });
   }
 
-  const goBoard = (b_name, b_id) => {
+  function addBookmark(b_id, myBool) {
+    setMyloading2(false);
+    if (myBool === true) {
+      axios
+        .delete(`${serverUrl}/board/${b_id}/fav?userId=${user.id}`)
+        .then((res) => {
+          refreshList();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios
+        .post(`${serverUrl}/board/${b_id}/fav/`, {
+          userId: user.id,
+        })
+        .then((res) => {
+          refreshList();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+
+  function goBoard(b_name, b_id) {
     console.log(user.id);
 
     axios
@@ -69,21 +107,31 @@ const List = ({ navigation, route }) => {
         console.log(error);
       });
 
-    navigation.navigate('Board', { name: b_name, id: b_id, u_id: user.id, isRe: 'no' });
-  };
+    navigation.navigate('Board', {
+      name: b_name,
+      id: b_id,
+      u_id: user.id,
+      isRe: 'no',
+    });
+  }
 
-  const goReqNewBoard = () => {
+  function goReqNewBoard() {
     navigation.navigate('ReqNewBoard');
-  };
+  }
 
   return (
     <View style={styles.container}>
-      <View style={{
-        backgroundColor: '#ff8000', paddingLeft: 15, borderBottomWidth: 1,
-        borderBottomColor: '#df380f', height: 56, justifyContent: 'center'
-      }}>
-        <Text style={{ fontSize: 12, color: 'white' }}>SOT</Text>
-        <Text style={{ color: 'white', fontWeight: '700', fontSize: 18 }}>
+      <View
+        style={{
+          backgroundColor: '#ff8000',
+          paddingLeft: 15,
+          borderBottomWidth: 1,
+          borderBottomColor: '#df380f',
+          height: 56,
+          justifyContent: 'center',
+        }}>
+        <Text style={{fontSize: 12, color: 'white'}}>SOT</Text>
+        <Text style={{color: 'white', fontWeight: '700', fontSize: 18}}>
           {user.schoolName}
         </Text>
       </View>
@@ -96,56 +144,56 @@ const List = ({ navigation, route }) => {
             activeOpacity={0.6}
             underlayColor="#dfdfdf">
             <View style={styles.text_box}>
-              <Text style={styles.item} >게시판 신청하기</Text>
+              <Text style={styles.item}>게시판 신청하기</Text>
             </View>
-
           </TouchableHighlight>
         }
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <TouchableHighlight
             onPress={() => goBoard(item.name, item.id)}
             activeOpacity={0.6}
             underlayColor="#dfdfdf">
-            <View
-              style={styles.text_box}
-            >
-              <Text style={styles.item} >{item.name}</Text>
-              {item.isFaved === true && (
+            <View style={styles.text_box}>
+              <Text style={styles.item}>{item.name}</Text>
+              {(item.isFaved === true && (
                 <TouchableHighlight
                   onPress={() => {
-                    console.log('즐찾중누름')
+                    addBookmark(item.id, true);
                   }}
                   activeOpacity={0.6}
                   style={{
                     padding: 10,
-                    borderRadius: 25
+                    borderRadius: 25,
                   }}
                   underlayColor="#dfdfdf">
-                  <Text style={{
-                    color: 'red',
-                  }}>즐찾ing..</Text>
-                </TouchableHighlight>
-
-              ) || (
-                  <TouchableHighlight
-                    onPress={() => {
-                      console.log('즐찾하기누름')
-                    }}
-                    activeOpacity={0.6}
+                  <Text
                     style={{
-                      padding: 10,
-                      borderRadius: 25
-                    }}
-                    underlayColor="#dfdfdf">
-                    <Text style={{
+                      color: 'red',
+                    }}>
+                    즐찾ing..
+                  </Text>
+                </TouchableHighlight>
+              )) || (
+                <TouchableHighlight
+                  onPress={() => {
+                    addBookmark(item.id, false);
+                  }}
+                  activeOpacity={0.6}
+                  style={{
+                    padding: 10,
+                    borderRadius: 25,
+                  }}
+                  underlayColor="#dfdfdf">
+                  <Text
+                    style={{
                       color: 'black',
-                    }}>즐찾하기</Text>
-                  </TouchableHighlight>
-                )}
+                    }}>
+                    즐찾하기
+                  </Text>
+                </TouchableHighlight>
+              )}
             </View>
-
           </TouchableHighlight>
-
         )}></FlatList>
     </View>
   );
