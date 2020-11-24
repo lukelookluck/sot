@@ -1,21 +1,36 @@
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-import {CommonContext} from '../../context/CommonContext';
+import { CommonContext } from '../../context/CommonContext';
 import {
   View,
   Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  BackHandler
 } from 'react-native';
 import 'react-native-gesture-handler';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import AsyncStorage from '@react-native-community/async-storage';
 
 // 시작화면
-const Start = ({navigation}) => {
-  const {serverUrl, user, setUser} = useContext(CommonContext);
+const Start = ({ navigation }) => {
+  const { serverUrl, user, setUser, articleStartIdx, setArticleStartIdx, asyncLoading, setAsyncloading } = useContext(CommonContext);
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
+
+  // useEffect(() => {
+  //   AsyncStorage.getItem('testToken', (err, result) => {
+  //     const UserInfo = JSON.parse(result);
+  //     if (result !== null) {
+  //       setUser(UserInfo);
+  //       console.log('닉네임 : ' + UserInfo.nickname);
+  //       console.log('토큰 : ' + UserInfo.token);
+  //       navigation.navigate('Main');
+  //     }
+  //   })
+
+  // }, []);
 
   const emailHandler = (text) => {
     setEmail(text);
@@ -38,8 +53,34 @@ const Start = ({navigation}) => {
       })
       .then((response) => {
         console.log(response.data);
-        setUser({...response.data});
-        navigation.navigate('Main'); // 로그인 성공시 메인화면으로
+        setUser(response.data);
+
+        AsyncStorage.setItem('testToken', JSON.stringify(response.data), () => {
+          console.log('테스트 저장 완료');
+          setAsyncloading(true);
+          setAsyncloading(false);
+          setEmail('');
+          setPw('');
+        });
+
+        // 이거 주석 처리함
+        // 이거 주석 처리함
+        // 이거 주석 처리함
+        // 이거 주석 처리함
+        // 이거 주석 처리함
+        // 이거 주석 처리함
+        // navigation.reset({
+        //   index: 0,
+        //   routes: [{ name: 'Main' }],
+        // });
+        // 이거 주석 처리함
+        // 이거 주석 처리함
+        // 이거 주석 처리함
+        // 이거 주석 처리함
+        // 이거 주석 처리함
+        // 이거 주석 처리함
+
+
       })
       .catch((error) => {
         alert('이메일과 비밀번호를 확인해주세요!');
@@ -54,7 +95,7 @@ const Start = ({navigation}) => {
       style={styles.page}
       scrollEnabled={true}
       contentContainerStyle={styles.screen}
-      // keyboardShouldPersistTaps={'always'}
+      keyboardShouldPersistTaps={'handled'}
     >
       <View>
         <View style={styles.loginbox}>
@@ -78,7 +119,7 @@ const Start = ({navigation}) => {
             <TouchableOpacity
               style={styles.btn}
               onPress={() =>
-                navigation.navigate('회원가입', {s_name: '', s_id: ''})
+                navigation.navigate('회원가입', { s_name: '', s_id: '' })
               }>
               <Text style={styles.btntext}>회원가입</Text>
             </TouchableOpacity>
@@ -110,7 +151,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Lemonada-SemiBold',
     textShadowColor: '#F14E23',
     textShadowRadius: 1,
-    textShadowOffset: {width: 3, height: 3},
+    textShadowOffset: { width: 3, height: 3 },
   },
   loginbox: {
     justifyContent: 'center',

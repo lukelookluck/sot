@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   StyleSheet,
@@ -13,29 +13,25 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 
-
 export default function (props) {
-  const favBoardList = props.boardList.map((data, idx) => {
-
-    const [bg, setBg] = useState(false)
+  const favBoardList = props.favBoardList.map((data, idx) => {
+    const [bg, setBg] = useState(false);
 
     function boardClick() {
       if (props.click === idx) {
-        props.setClick(null)
-        setBg(true)
+        props.setClick(null);
+        setBg(true);
       } else {
-        props.setClick(idx)
-        setBg(true)
-
+        props.setClick(idx);
+        setBg(true);
       }
-
     }
     return (
-      <View key={data.id} >
+      <View key={data.id}>
         <TouchableHighlight
           onPress={(e) => {
             props.initHeader(data);
-            boardClick()
+            boardClick();
           }}
           activeOpacity={0.6}
           underlayColor="#dfdfdf">
@@ -44,11 +40,12 @@ export default function (props) {
               padding: 7,
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: props.click === idx && bg === true ? '#FACA0F' : null
+              backgroundColor:
+                props.click === idx && bg === true ? '#FACA0F' : null,
             }}>
             <LinearGradient
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 1}}
               colors={['#ff8000', '#ffff57']}
               style={{
                 borderRadius: 30,
@@ -64,7 +61,8 @@ export default function (props) {
                   borderRadius: 30,
                   // paddingVertical: 10,
                   backgroundColor: 'white',
-                }} />
+                }}
+              />
             </LinearGradient>
             {(data.name.length > 7 && (
               <Text
@@ -74,26 +72,22 @@ export default function (props) {
                 {data.name.substring(0, 6) + '..'}
               </Text>
             )) || (
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontWeight: props.click === idx && bg === true ? '700' : '400'
-                  }}>
-                  {data.name}
-                </Text>
-              )}
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontWeight:
+                    props.click === idx && bg === true ? '700' : '400',
+                }}>
+                {data.name}
+              </Text>
+            )}
           </View>
         </TouchableHighlight>
       </View>
     );
   });
 
-
-
-
   return (
-    <View style={{ flexDirection: 'row', paddingLeft: 10, }}>
-      {favBoardList}
-    </View>
-  )
+    <View style={{flexDirection: 'row', paddingLeft: 10}}>{favBoardList}</View>
+  );
 }

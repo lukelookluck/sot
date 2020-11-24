@@ -1,5 +1,5 @@
-import React, {Component, useContext, useState} from 'react';
-import {View, TouchableOpacity} from 'react-native';
+import React, {Component, useEffect, useContext, useState} from 'react';
+import {View, TouchableOpacity, Text} from 'react-native';
 import Start from './src/pages/Start';
 import SignUp from './src/pages/SignUp';
 import Home from './src/pages/Home';
@@ -23,8 +23,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {CommonContext} from './src/context/CommonContext';
 import {useLocalStorageSetState} from './src/common/CommonHooks';
 import Search from './src/pages/Search';
-
 import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Stack = createStackNavigator();
 
@@ -38,12 +38,11 @@ function MyStack() {
       .post(`${serverUrl}/board/${b_id}/fav/`, {
         userId: u_id,
       })
-      .then(function (response) {
-        console.log(response.data);
+      .then((res) => {
         setFav(true);
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -51,12 +50,11 @@ function MyStack() {
   const deleteBookmark = (b_id, u_id) => {
     axios
       .delete(`${serverUrl}/board/${b_id}/fav?userId=${u_id}`)
-      .then(function (response) {
-        console.log(response.data);
+      .then((res) => {
         setFav(false);
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -71,9 +69,9 @@ function MyStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Start"
+        name="Main"
         options={{headerShown: false}}
-        component={Start}
+        component={TabsScreen}
       />
       <Stack.Screen
         name="회원가입"
@@ -97,11 +95,6 @@ function MyStack() {
           },
         }}
         component={SchoolSearch}
-      />
-      <Stack.Screen
-        name="Main"
-        options={{headerShown: false}}
-        component={TabsScreen}
       />
       <Stack.Screen
         name="Board"
@@ -264,6 +257,7 @@ const TabsScreen = () => (
     tabBarOptions={{
       activeTintColor: 'tomato',
       inactiveTintColor: 'gray',
+      style: {height: 56.5, paddingBottom: 5},
     }}>
     <Tab.Screen name="홈" component={Home} />
     <Tab.Screen name="게임" component={Game} />
@@ -272,7 +266,7 @@ const TabsScreen = () => (
 );
 
 export default function App() {
-  const [user, setUser] = useLocalStorageSetState(
+  const [user, setUser] = useState(
     {
       token: '',
       user: {
@@ -287,9 +281,28 @@ export default function App() {
     'user',
   );
 
-  const HOST = '118.45.110.147:8090';
+  const HOST = 'k3d208.p.ssafy.io';
   const serverUrl = `http://${HOST}`;
   const [fav, setFav] = useLocalStorageSetState(false, 'fav');
+  const [articleStartIdx, setArticleStartIdx] = useState(10);
+  const [asyncLoading, setAsyncloading] = useState(false);
+  const [tempLoading, setTemploading] = useState(false);
+  const [myLoading2, setMyloading2] = useState(false);
+
+  useEffect(() => {
+    console.log('asyncLoading 시작전');
+    AsyncStorage.getItem('testToken').then((result) => {
+      const UserInfo = JSON.parse(result);
+      setTemploading(true);
+      if (result !== null) {
+        setUser(UserInfo);
+        console.log('asyncLoading 트루임');
+        setAsyncloading(true);
+        setAsyncloading(false);
+      }
+    });
+    console.log('user', user.token);
+  }, []);
 
   return (
     <CommonContext.Provider
@@ -299,9 +312,20 @@ export default function App() {
         setUser,
         fav,
         setFav,
+        articleStartIdx,
+        setArticleStartIdx,
+        asyncLoading,
+        setAsyncloading,
+        myLoading2,
+        setMyloading2,
       }}>
       <NavigationContainer>
-        <MyStack />
+        {tempLoading === true &&
+          ((user.token === '' && (
+            <>
+              <Start />
+            </>
+          )) || <MyStack />)}
       </NavigationContainer>
     </CommonContext.Provider>
   );
