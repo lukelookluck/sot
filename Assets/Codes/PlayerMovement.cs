@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private Animator anim;
-    private Camera camera;
+    private Camera playerCamera;
     
     private Vector3 destination;
     private int layerMask;
@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        camera = Camera.main;
+        playerCamera = Camera.main;
         layerMask = 1 << LayerMask.NameToLayer("Ground");
         anim = gameObject.GetComponentInChildren<Animator>();
         rb = gameObject.GetComponent<Rigidbody>();
@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButton(1))
         {
             RaycastHit hit;
-            if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out hit, 100f, layerMask))
+            if (Physics.Raycast(playerCamera.ScreenPointToRay(Input.mousePosition), out hit, 100f, layerMask))
             {
                 SetDestination(hit.point);
             }

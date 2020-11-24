@@ -477,7 +477,7 @@ GameObject:
   - component: {fileID: 1966341481}
   - component: {fileID: 1966341480}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Health Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -551,6 +551,7 @@ GameObject:
   - component: {fileID: 1993913045}
   - component: {fileID: 1993913044}
   - component: {fileID: 1993913043}
+  - component: {fileID: 1993913046}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -575,7 +576,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: -120, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.02, y: 0}
   m_SizeDelta: {x: 1800, y: 330}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1993913043
@@ -638,6 +639,19 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1993913046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993913041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e55f8cd699904934ca1c5ce021df62bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCamera: {fileID: 8061863052572089484}
 --- !u!1 &2074758502
 GameObject:
   m_ObjectHideFlags: 0
@@ -1069,7 +1083,7 @@ GameObject:
   - component: {fileID: 7996799186241624255}
   - component: {fileID: 8061863052572089484}
   m_Layer: 9
-  m_Name: Player_Camera
+  m_Name: Player Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1087,9 +1101,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b11342f70390a14698b8df8be40821f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoomIn: 5
-  ZoomOut: 20
-  distance: 16
 --- !u!1 &8061908282604798489
 GameObject:
   m_ObjectHideFlags: 0
@@ -1540,7 +1551,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8061863052572089483}
   m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
-  m_LocalPosition: {x: 0, y: 15, z: -9}
+  m_LocalPosition: {x: 0, y: 17, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1303237589}

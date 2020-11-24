@@ -4,36 +4,23 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    public float zoomIn = 5f;
-    public float ZoomOut = 20f;
-    public float distance;
+    private Camera playerCamera;
 
-    // Start is called before the first frame update
     void Start()
     {
-        
+        playerCamera = gameObject.GetComponent<Camera>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        float scroll = Input.GetAxis("Mouse ScrollWheel") * 1000f * Time.deltaTime;
+        Zoom();
+    }
 
-        if (distance <= zoomIn && scroll > 0)
-        {
-            distance = zoomIn;
-        }
-        else if (distance >= ZoomOut && scroll < 0)
-        {
-            distance = ZoomOut;
-        }
-        else
-        {
-            distance -= scroll;
-        }
-
-
-        this.transform.position = GetComponentInParent<PlayerMovement>().transform.position + distance * new Vector3(0, Mathf.Sqrt(3), -1) / 2 + new Vector3(0, 0, 0.6f);
-        this.transform.rotation = Quaternion.Euler(new Vector3(60, 0, 0));
+    public void Zoom()
+    {
+        var scroll = Input.mouseScrollDelta;
+        playerCamera.fieldOfView = Mathf.Clamp(playerCamera.fieldOfView - scroll.y * 3f, 10f, 60f);
     }
 }
+
