@@ -15,6 +15,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import SingleArticle from '../../components/PartBoard/SingleArticle';
 
 import {CommonContext} from '../../context/CommonContext';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default function ({navigation, route}) {
   const {serverUrl, user, setUser} = useContext(CommonContext);
@@ -52,7 +53,12 @@ export default function ({navigation, route}) {
           console.log(res.data);
           setSearchedList(res.data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          if (err.response.status === 401) {
+            AsyncStorage.clear();
+            alert('잘못된 요청입니다.');
+          }
+        });
     }
   }
 

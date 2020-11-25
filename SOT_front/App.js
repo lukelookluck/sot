@@ -1,5 +1,5 @@
-import React, {Component, useContext, useState} from 'react';
-import {View, TouchableOpacity} from 'react-native';
+import React, {Component, useEffect, useContext, useState} from 'react';
+import {View, TouchableOpacity, Text} from 'react-native';
 import Start from './src/pages/Start';
 import SignUp from './src/pages/SignUp';
 import Home from './src/pages/Home';
@@ -23,50 +23,13 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {CommonContext} from './src/context/CommonContext';
 import {useLocalStorageSetState} from './src/common/CommonHooks';
 import Search from './src/pages/Search';
-
 import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Stack = createStackNavigator();
 
-// stack navitation 정리
-function MyStack() {
+function MyStack2() {
   const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
-
-  // 게시판 북마크 등록
-  const addBookmark = (b_id, u_id) => {
-    axios
-      .post(`${serverUrl}/board/${b_id}/fav/`, {
-        userId: u_id,
-      })
-      .then(function (response) {
-        console.log(response.data);
-        setFav(true);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
-  // 게시판 북마크 삭제
-  const deleteBookmark = (b_id, u_id) => {
-    axios
-      .delete(`${serverUrl}/board/${b_id}/fav?userId=${u_id}`)
-      .then(function (response) {
-        console.log(response.data);
-        setFav(false);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
-  const whatBook = (isfav, b_id, u_id) => {
-    if (isfav) {
-      deleteBookmark(b_id, u_id);
-    } else {
-      addBookmark(b_id, u_id);
-    }
-  };
 
   return (
     <Stack.Navigator>
@@ -75,6 +38,7 @@ function MyStack() {
         options={{headerShown: false}}
         component={Start}
       />
+
       <Stack.Screen
         name="회원가입"
         options={{
@@ -98,10 +62,90 @@ function MyStack() {
         }}
         component={SchoolSearch}
       />
+    </Stack.Navigator>
+  );
+}
+
+// stack navitation 정리
+function MyStack() {
+  const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
+
+  // 게시판 북마크 등록
+  const addBookmark = (b_id, u_id) => {
+    axios
+      .post(`${serverUrl}/board/${b_id}/fav/`, {
+        headers: {
+          Authorization: user.token,
+        },
+        userId: u_id,
+      })
+      .then((res) => {
+        setFav(true);
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
+      });
+  };
+
+  // 게시판 북마크 삭제
+  const deleteBookmark = (b_id, u_id) => {
+    axios
+      .delete(`${serverUrl}/board/${b_id}/fav?userId=${u_id}`, {
+        headers: {
+          Authorization: user.token,
+        },
+      })
+      .then((res) => {
+        setFav(false);
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
+      });
+  };
+
+  const whatBook = (isfav, b_id, u_id) => {
+    if (isfav) {
+      deleteBookmark(b_id, u_id);
+    } else {
+      addBookmark(b_id, u_id);
+    }
+  };
+
+  return (
+    <Stack.Navigator>
       <Stack.Screen
         name="Main"
         options={{headerShown: false}}
         component={TabsScreen}
+      />
+      <Stack.Screen
+        name="회원가입"
+        options={{
+          headerShown: true,
+          headerTintColor: 'white',
+          headerStyle: {
+            backgroundColor: '#FACA0F',
+          },
+        }}
+        component={SignUp}
+      />
+      <Stack.Screen
+        name="schoolsearch"
+        options={{
+          title: '학교명 검색',
+          headerShown: true,
+          headerTintColor: 'white',
+          headerStyle: {
+            backgroundColor: '#FACA0F',
+          },
+        }}
+        component={SchoolSearch}
       />
       <Stack.Screen
         name="Board"
@@ -264,6 +308,7 @@ const TabsScreen = () => (
     tabBarOptions={{
       activeTintColor: 'tomato',
       inactiveTintColor: 'gray',
+      style: {height: 56.5, paddingBottom: 5},
     }}>
     <Tab.Screen name="홈" component={Home} />
     <Tab.Screen name="게임" component={Game} />
@@ -272,7 +317,7 @@ const TabsScreen = () => (
 );
 
 export default function App() {
-  const [user, setUser] = useLocalStorageSetState(
+  const [user, setUser] = useState(
     {
       token: '',
       user: {
@@ -287,9 +332,28 @@ export default function App() {
     'user',
   );
 
-  const HOST = '118.45.110.147:8090';
+  const HOST = 'k3d208.p.ssafy.io';
   const serverUrl = `http://${HOST}`;
   const [fav, setFav] = useLocalStorageSetState(false, 'fav');
+  const [articleStartIdx, setArticleStartIdx] = useState(10);
+  const [asyncLoading, setAsyncloading] = useState(false);
+  const [tempLoading, setTemploading] = useState(false);
+  const [myLoading2, setMyloading2] = useState(false);
+
+  useEffect(() => {
+    console.log('asyncLoading 시작전');
+    AsyncStorage.getItem('testToken').then((result) => {
+      const UserInfo = JSON.parse(result);
+      setTemploading(true);
+      if (result !== null) {
+        setUser(UserInfo);
+        console.log('asyncLoading 트루임');
+        setAsyncloading(true);
+        setAsyncloading(false);
+      }
+    });
+    console.log('user', user.token);
+  }, []);
 
   return (
     <CommonContext.Provider
@@ -299,9 +363,20 @@ export default function App() {
         setUser,
         fav,
         setFav,
+        articleStartIdx,
+        setArticleStartIdx,
+        asyncLoading,
+        setAsyncloading,
+        myLoading2,
+        setMyloading2,
       }}>
       <NavigationContainer>
-        <MyStack />
+        {tempLoading === true &&
+          ((user.token === '' && (
+            <>
+              <MyStack2 />
+            </>
+          )) || <MyStack />)}
       </NavigationContainer>
     </CommonContext.Provider>
   );

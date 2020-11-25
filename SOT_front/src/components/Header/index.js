@@ -8,7 +8,7 @@ export default function Header(props) {
 
   const onPress = () => {
     props.setPressed(false);
-    props.setMyloading(false);
+    // props.setMyloading(false);
     props.setTemp(null);
     props.refreshWholeArticleList();
     props.setClick(null);

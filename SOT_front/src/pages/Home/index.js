@@ -14,91 +14,129 @@ import PartBoard from '../../components/PartBoard/Box';
 import FavBoardList from '../../components/FavBoardList';
 
 import {CommonContext} from '../../context/CommonContext';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default function Home({navigation}) {
-  const {serverUrl, user, setUser} = useContext(CommonContext);
+  const {
+    serverUrl,
+    user,
+    setUser,
+    articleStartIdx,
+    setArticleStartIdx,
+    asyncLoading,
+    setAsyncloading,
+    myLoading2,
+    setMyloading2,
+  } = useContext(CommonContext);
 
   const [temp, setTemp] = useState(null);
   const [tempId, setTempId] = useState(null);
   const [pressed, setPressed] = useState(false);
   const [myLoading, setMyloading] = useState(false);
-  const [myLoading2, setMyloading2] = useState(false);
+  const [moreLoading, setMoreloading] = useState(true);
 
-  const [boardList, setBoardList] = useState([]);
+  const [favBoardList, setFavBoardList] = useState([]);
 
   // 전체게시글
   const [wholeArticleList, setwholeArticleList] = useState([]);
   // 특정게시글
   const [certainArticleList, setCertainArticleList] = useState([]);
 
-  useEffect(() => {
+  if (asyncLoading === true) {
+    console.log('asyncLoading 트루 받음');
     refreshFavBoardList();
-    refreshWholeArticleList();
+    refreshWholeArticleList(articleStartIdx);
+  }
+
+  useEffect(() => {
     navigation.addListener('blur', () => {
       setTemp(null);
       setTempId(null);
       setPressed(false);
-      setMyloading(false);
+      setClick(null);
+      // setMyloading(false);
     });
     navigation.addListener('focus', () => {
+      // console.log(user)
+      // setMyloading(true);
       refreshFavBoardList();
-      refreshWholeArticleList();
+      // refreshWholeArticleList();
     });
   }, []);
+
+  function moreArticles(data) {
+    setArticleStartIdx(data);
+    refreshWholeArticleList(data);
+  }
 
   // 즐찾 게시판 리스트 불러오기
   function refreshFavBoardList() {
     axios
       .get(`${serverUrl}/board/fav?userId=${user.id}`, {
-        // headers: {
-        //   Authorization: `JWT ${user.token}`,
-        // },
+        headers: {
+          Authorization: user.token,
+        },
         // params: {
         //   id: user.schoolId, // user의 schoolId 받아서 넣기
         // },
       })
       .then((response) => {
-        setBoardList([]);
-        setBoardList(response.data);
+        // console.log('123123123', response);
+        setFavBoardList([]);
+        setFavBoardList(response.data);
         setMyloading2(true);
       })
       .catch((error) => {
-        console.log('why???');
-        console.log(error);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 
   // 전체 게시글 불러오기
-  function refreshWholeArticleList() {
+  function refreshWholeArticleList(data) {
     axios
-      .get(`${serverUrl}/board/all`, {
-        // headers: {
-        //     Authorization: `JWT ${user.token}`,
-        //   },
-        params: {
-          schoolId: user.schoolId, // user의 schoolId 받아서 넣기
+      .get(
+        `${serverUrl}/scroll/board/all?amount=10&schoolId=${
+          user.schoolId
+        }&startIdx=${data - 10}`,
+        {
+          headers: {
+            Authorization: user.token,
+          },
+          params: {
+            schoolId: user.schoolId, // user의 schoolId 받아서 넣기
+          },
         },
-      })
+      )
       .then((res) => {
-        // console.log('adasdas222')
-
-        setwholeArticleList([]);
-        // console.log("전체 새로고침", res.data);
-        setwholeArticleList(res.data);
+        // setwholeArticleList([]);
+        setwholeArticleList(wholeArticleList.concat(res.data));
         setMyloading(true);
+        if (res.data.length === 0) {
+          setMoreloading(null);
+        } else {
+          setMoreloading(true);
+        }
       })
       .catch((err) => {
-        console.log(err.data);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 
   // 특정 게시판 게시글 불러오기
   function refreshCertainArticleList(data) {
+    console.log('uesr', user);
+
     axios
       .get(`${serverUrl}/board/${data.id}/?userId=${user.id}`, {
-        // headers: {
-        //     Authorization: `JWT ${user.token}`,
-        //   },
+        headers: {
+          Authorization: user.token,
+        },
       })
       .then((res) => {
         // console.log(res.data)
@@ -106,7 +144,10 @@ export default function Home({navigation}) {
         setMyloading(true);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 
@@ -116,7 +157,7 @@ export default function Home({navigation}) {
       setTemp(null);
       setTempId(null);
       setPressed(false);
-      setMyloading(false);
+      // setMyloading(false);
       refreshWholeArticleList();
     } else {
       setTemp(data.name);
@@ -127,7 +168,7 @@ export default function Home({navigation}) {
     }
   }
 
-  const [click, setClick] = useState(null);
+  const [click, setClick] = useState(false);
 
   return (
     <View>
@@ -153,7 +194,7 @@ export default function Home({navigation}) {
 
       {/* 무한스크롤 = Flatlist 인듯, 따라서 ScrollView를 Flatlist로 바꿔야함 */}
       <ScrollView
-        style={{marginBottom: 50}}
+        style={{marginBottom: 60}}
         showsHorizontalScrollIndicator={false}>
         {(myLoading2 === true && (
           <ScrollView
@@ -164,7 +205,7 @@ export default function Home({navigation}) {
               click={click}
               setClick={setClick}
               initHeader={initHeader}
-              boardList={boardList}
+              favBoardList={favBoardList}
             />
           </ScrollView>
         )) || (
@@ -197,11 +238,18 @@ export default function Home({navigation}) {
             PartName={temp}
             BoardId={tempId}
             pressed={pressed}
+            setClick={setClick}
             myLoading={myLoading}
             setMyloading={setMyloading}
             wholeArticleList={wholeArticleList}
             certainArticleList={certainArticleList}
             navigation={navigation}
+            refreshWholeArticleList={refreshWholeArticleList}
+            moreArticles={moreArticles}
+            setArticleStartIdx={setArticleStartIdx}
+            articleStartIdx={articleStartIdx}
+            moreLoading={moreLoading}
+            setMoreloading={setMoreloading}
           />
           {/* <PartBoard PartName="즐겨찾는 게시판" /> */}
         </View>

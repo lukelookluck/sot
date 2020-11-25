@@ -1,7 +1,7 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useRef, useContext} from 'react';
 import {
   Text,
-  StyleSheet,
+  Image,
   ScrollView,
   TextInput,
   View,
@@ -16,10 +16,15 @@ import Modal from 'react-native-modal';
 
 import {CommonContext} from '../../context/CommonContext';
 import CommentList from '../../components/CommentList';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default function ({navigation, route}) {
   const {serverUrl, user, setUser} = useContext(CommonContext);
   const [article, setArticle] = useState(route.params.article);
+
+  const [rFCmt, setRFCmt] = useState(false);
+  const [myLoading, setMyLoading] = useState(true);
+
   useEffect(() => {
     getArticleInfo();
   }, []);
@@ -29,13 +34,22 @@ export default function ({navigation, route}) {
     axios
       .get(
         `${serverUrl}/board/${route.params.article.boardId}/${route.params.article.id}?userId=${user.id}`,
+        {
+          headers: {
+            Authorization: user.token,
+          },
+        },
       )
       .then((res) => {
+        setMyLoading(false);
         setArticle([]);
         setArticle(res.data);
       })
       .catch((err) => {
-        // console.log(err.data);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 
@@ -51,6 +65,9 @@ export default function ({navigation, route}) {
         {
           text: '네',
           onPress: () => {
+            setTimeout(() => {
+              textInput.current.focus();
+            }, 200);
             setModalVisible(true);
             setIsReply(true);
             setReplyId(data.id);
@@ -106,8 +123,14 @@ export default function ({navigation, route}) {
       axios
         .post(
           `${serverUrl}/board/${article.boardId}/${article.id}/${replyId}/?content=${textInput2}&userId=${user.id}`,
+          {
+            headers: {
+              Authorization: user.token,
+            },
+          },
         )
         .then((res) => {
+          setRFCmt(true);
           setModalVisible(false);
           setIsReply(false);
           setTextInput2(null);
@@ -115,22 +138,34 @@ export default function ({navigation, route}) {
           getArticleInfo();
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 401) {
+            AsyncStorage.clear();
+            alert('잘못된 요청입니다.');
+          }
         });
       return;
     }
     axios
       .post(
         `${serverUrl}/board/${article.boardId}/${article.id}/?content=${textInput2}&userId=${user.id}`,
+        {
+          headers: {
+            Authorization: user.token,
+          },
+        },
       )
       .then((res) => {
+        setRFCmt(true);
         setModalVisible(false);
         setIsReply(false);
         setTextInput2(null);
         getArticleInfo();
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 
@@ -139,6 +174,11 @@ export default function ({navigation, route}) {
     axios
       .post(
         `${serverUrl}/board/${article.boardId}/${data.id}/like?userId=${user.id}`,
+        {
+          headers: {
+            Authorization: user.token,
+          },
+        },
       )
       .then((res) => {
         // console.log(res)
@@ -157,7 +197,10 @@ export default function ({navigation, route}) {
         }
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 
@@ -177,9 +220,18 @@ export default function ({navigation, route}) {
             navigation.goBack();
             // console.log(data)
             axios
-              .delete(`${serverUrl}/board/${data.boardId}/${data.id}`)
+              .delete(`${serverUrl}/board/${data.boardId}/${data.id}`, {
+                headers: {
+                  Authorization: user.token,
+                },
+              })
               .then((res) => {})
-              .catch((err) => {});
+              .catch((err) => {
+                if (err.response.status === 401) {
+                  AsyncStorage.clear();
+                  alert('잘못된 요청입니다.');
+                }
+              });
           },
         },
       ],
@@ -187,6 +239,7 @@ export default function ({navigation, route}) {
     );
   }
 
+  // 게시글 수정
   function reviseArticle(data) {
     console.log(data);
     setModalVisible2(false);
@@ -200,15 +253,64 @@ export default function ({navigation, route}) {
     });
   }
 
+  // 댓글 삭제
+  const [myComment, setMyComment] = useState(null);
+  function deleteComment(data) {
+    Alert.alert(
+      '삭제 확인',
+      '해당 댓글이 삭제됩니다.',
+      [
+        {
+          text: '취소',
+          onPress: () => {
+            setMyComment(null);
+          },
+        },
+        {
+          text: '삭제',
+          onPress: () => {
+            setRFCmt(true);
+            axios
+              .delete(
+                `${serverUrl}/board/${article.boardId}/${data.articleId}/${data.id}`,
+                {
+                  headers: {
+                    Authorization: user.token,
+                  },
+                },
+              )
+              .then((res) => {
+                getArticleInfo();
+                Alert.alert('댓글이 삭제되었습니다.', '', [{text: '확인'}], {
+                  cancelable: true,
+                });
+              })
+              .catch((err) => {
+                if (err.response.status === 401) {
+                  AsyncStorage.clear();
+                  alert('잘못된 요청입니다.');
+                }
+              });
+            setMyComment(null);
+          },
+        },
+      ],
+      {cancelable: true},
+    );
+  }
+
   // 댓글작성폼 관련
   const [modalVisible, setModalVisible] = useState(false);
   const [isReply, setIsReply] = useState(false);
   const [replyId, setReplyId] = useState(null);
   const [textInput2, setTextInput2] = useState(null);
-  let textInput = '';
+  // let textInput = '';
+  const textInput = useRef(null);
 
   // 게시글 수정/삭제 모달 관련
   const [modalVisible2, setModalVisible2] = useState(false);
+
+  const [modalVisible3, setModalVisible3] = useState(false);
 
   return (
     <ScrollView keyboardShouldPersistTaps={'always'}>
@@ -260,7 +362,7 @@ export default function ({navigation, route}) {
             }}
             animationIn="slideInUp"
             animationInTiming={500}
-            animationOut="fadeOut"
+            animationOut="slideOutDown"
             animationOutTiming={500}
             isVisible={modalVisible2}
             useNativeDriver={true}
@@ -391,26 +493,27 @@ export default function ({navigation, route}) {
                   }}
                 />
               </TouchableHighlight>
-            )) || (
-              <TouchableHighlight
-                style={{
-                  borderRadius: 20,
-                }}
-                onPress={() => likeArticle(article)}
-                underlayColor="#dfdfdf">
-                <Icon
-                  name="heart"
-                  color="#ff8000"
+            )) ||
+              (article.isLiked === true && (
+                <TouchableHighlight
                   style={{
-                    fontSize: 22.5,
-                    paddingVertical: 5,
-                    paddingHorizontal: 6,
-                    // backgroundColor: 'white',
                     borderRadius: 20,
                   }}
-                />
-              </TouchableHighlight>
-            )}
+                  onPress={() => likeArticle(article)}
+                  underlayColor="#dfdfdf">
+                  <Icon
+                    name="heart"
+                    color="#ff8000"
+                    style={{
+                      fontSize: 22.5,
+                      paddingVertical: 5,
+                      paddingHorizontal: 6,
+                      // backgroundColor: 'white',
+                      borderRadius: 20,
+                    }}
+                  />
+                </TouchableHighlight>
+              ))}
             <Text
               style={{
                 fontSize: 18,
@@ -429,7 +532,7 @@ export default function ({navigation, route}) {
               style={{
                 borderRadius: 20,
               }}
-              onPress={() => onPress()}
+              onPress={() => {}}
               underlayColor="#dfdfdf">
               <Icon
                 name="chatbubbles-outline"
@@ -491,6 +594,9 @@ export default function ({navigation, route}) {
               <Text
                 onPress={() => {
                   setModalVisible(true);
+                  setTimeout(() => {
+                    textInput.current.focus();
+                  }, 200);
                 }}
                 style={{
                   flex: 1,
@@ -506,20 +612,22 @@ export default function ({navigation, route}) {
               }}
               animationIn="slideInUp"
               animationInTiming={500}
-              animationOut="fadeOut"
+              animationOut="slideOutDown"
               animationOutTiming={500}
               isVisible={modalVisible}
               useNativeDriver={true}
               // hideModalContentWhileAnimating={true}
               onModalShow={() => {
-                textInput.focus();
+                // textInput.focus();
               }}
               onBackdropPress={() => {
+                textInput.current.blur();
                 setModalVisible(false);
                 setIsReply(false);
                 setTextInput2(null);
               }}
               onBackButtonPress={() => {
+                textInput.current.blur();
                 setModalVisible(false);
                 setIsReply(false);
                 setTextInput2(null);
@@ -544,6 +652,7 @@ export default function ({navigation, route}) {
                     <TouchableOpacity
                       activeOpacity={1}
                       onPress={() => {
+                        textInput.current.blur();
                         setIsReply(false);
                         setModalVisible(false);
                         setTextInput2(null);
@@ -570,9 +679,7 @@ export default function ({navigation, route}) {
                     <TextInput
                       multiline={true}
                       placeholder="댓글 작성하기.."
-                      ref={(input) => {
-                        textInput = input;
-                      }}
+                      ref={textInput}
                       style={{flex: 1, color: 'black', fontSize: 15}}
                       onChangeText={(text) => {
                         setTextInput2(text);
@@ -583,10 +690,11 @@ export default function ({navigation, route}) {
                     <TextInput
                       multiline={true}
                       placeholder="답글 작성하기.."
-                      ref={(input) => {
-                        textInput = input;
-                      }}
-                      style={{flex: 1, color: 'red', fontSize: 15}}
+                      ref={textInput}
+                      // ref={(input) => {
+                      //   textInput = input;
+                      // }}
+                      style={{flex: 1, color: 'black', fontSize: 15}}
                       onChangeText={(text) => {
                         setTextInput2(text);
                       }}
@@ -616,14 +724,130 @@ export default function ({navigation, route}) {
                 </View>
               </View>
             </Modal>
+            <Modal
+              style={{
+                margin: 30,
+              }}
+              animationIn="flipInX"
+              animationInTiming={500}
+              animationOut="flipOutX"
+              animationOutTiming={500}
+              isVisible={modalVisible3}
+              useNativeDriver={true}
+              // hideModalContentWhileAnimating={true}
+              // onModalShow={() => {
+              //   textInput.focus();
+              // }}
+              onBackdropPress={() => {
+                setModalVisible3(false);
+              }}
+              onBackButtonPress={() => {
+                setModalVisible3(false);
+              }}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  // backgroundColor: 'rgba(52, 52, 52, 0.5)',
+                }}>
+                <View
+                  style={{
+                    backgroundColor: 'white',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                  }}>
+                  {/* <TouchableHighlight
+                    onPress={() => {
+                      // reviseArticle(article);
+                    }}
+                    underlayColor="#dfdfdf"
+                    style={{
+                      backgroundColor: 'white',
+                      paddingVertical: 15,
+                      flexDirection: 'row',
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        flex: 1,
+                      }}>
+                      <Icon
+                        name="build"
+                        color="#ff8000"
+                        style={{
+                          fontSize: 27.5,
+                          marginVertical: 5,
+                          marginLeft: 10,
+                          marginRight: 25,
+                          borderRadius: 20,
+                        }}
+                      />
+                      <Text style={{fontSize: 19.5, color: 'black'}}>
+                        댓글 수정
+                      </Text>
+                    </View>
+                  </TouchableHighlight> */}
+                  <TouchableHighlight
+                    onPress={() => {
+                      // deleteArticle(article);
+                      setModalVisible3(false);
+                      deleteComment(myComment);
+                    }}
+                    underlayColor="#dfdfdf"
+                    style={{
+                      backgroundColor: 'white',
+                      paddingVertical: 15,
+                      flexDirection: 'row',
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        flex: 1,
+                      }}>
+                      <Icon
+                        name="trash"
+                        color="#ff8000"
+                        style={{
+                          fontSize: 27.5,
+                          marginVertical: 5,
+                          marginLeft: 10,
+                          marginRight: 25,
+                          borderRadius: 20,
+                        }}
+                      />
+                      <Text style={{fontSize: 19.5, color: 'black'}}>
+                        댓글 삭제
+                      </Text>
+                    </View>
+                  </TouchableHighlight>
+                </View>
+              </View>
+            </Modal>
           </View>
         </View>
         {/* 댓글목록 파트 */}
-        <CommentList
-          comments={comments}
-          boardId={article.boardId}
-          writeReply={writeReply}
-        />
+        {(myLoading === true && (
+          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            <Image
+              source={require('../../components/PartBoard/Box/spiner.gif')}
+              style={{width: 100, height: 100}}
+            />
+          </View>
+        )) || (
+          <CommentList
+            article={article}
+            comments={comments}
+            boardId={article.boardId}
+            writeReply={writeReply}
+            modalVisible3={modalVisible3}
+            setModalVisible3={setModalVisible3}
+            setMyComment={setMyComment}
+            rFCmt={rFCmt}
+            setRFCmt={setRFCmt}
+          />
+        )}
       </View>
     </ScrollView>
   );

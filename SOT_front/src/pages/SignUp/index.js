@@ -14,7 +14,6 @@ import {CommonContext} from '../../context/CommonContext';
 
 // 회원가입
 const SignUp = ({navigation, route}) => {
-
   const [userId, setUserId] = useState('');
   const [userNick, setUserNick] = useState('');
   const [userPw, setUserPw] = useState('');
@@ -43,7 +42,6 @@ const SignUp = ({navigation, route}) => {
   };
 
   const signUpHandler = () => {
-
     axios
       .post(`${serverUrl}/user/`, {
         email: userId,
@@ -81,7 +79,11 @@ const SignUp = ({navigation, route}) => {
             </View>
           ) : (
             <View style={styles.s_input}>
-              <Input onChangeText={userSchoolIdHandler} placeholder={route.params.s_name} disabled={true} disabledInputStyle={{opacity: 1}}></Input>
+              <Input
+                onChangeText={userSchoolIdHandler}
+                placeholder={route.params.s_name}
+                disabled={true}
+                disabledInputStyle={{opacity: 1}}></Input>
             </View>
           )}
 
