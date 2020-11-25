@@ -18,9 +18,6 @@ const SchoolSearch = ({navigation}) => {
 
     axios
       .get(`${serverUrl}/search`, {
-        headers: {
-          Authorization: user.token,
-        },
         params: {
           keyword: text,
         },

@@ -28,6 +28,44 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 const Stack = createStackNavigator();
 
+function MyStack2() {
+  const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
+
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Start"
+        options={{headerShown: false}}
+        component={Start}
+      />
+
+      <Stack.Screen
+        name="회원가입"
+        options={{
+          headerShown: true,
+          headerTintColor: 'white',
+          headerStyle: {
+            backgroundColor: '#FACA0F',
+          },
+        }}
+        component={SignUp}
+      />
+      <Stack.Screen
+        name="schoolsearch"
+        options={{
+          title: '학교명 검색',
+          headerShown: true,
+          headerTintColor: 'white',
+          headerStyle: {
+            backgroundColor: '#FACA0F',
+          },
+        }}
+        component={SchoolSearch}
+      />
+    </Stack.Navigator>
+  );
+}
+
 // stack navitation 정리
 function MyStack() {
   const {serverUrl, user, setUser, fav, setFav} = useContext(CommonContext);
@@ -336,7 +374,7 @@ export default function App() {
         {tempLoading === true &&
           ((user.token === '' && (
             <>
-              <Start />
+              <MyStack2 />
             </>
           )) || <MyStack />)}
       </NavigationContainer>

@@ -113,7 +113,6 @@ export default function Home({navigation}) {
       .then((res) => {
         // setwholeArticleList([]);
         setwholeArticleList(wholeArticleList.concat(res.data));
-        console.log('wholeArticleList', res.data);
         setMyloading(true);
         if (res.data.length === 0) {
           setMoreloading(null);
