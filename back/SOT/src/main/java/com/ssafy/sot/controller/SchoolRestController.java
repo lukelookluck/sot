@@ -437,7 +437,8 @@ public class SchoolRestController {
 		if(token == null) {
 			return -1;
 		}
-		return jwtUtil.getUserPK(token.substring("Bearer ".length()));
+//		return jwtUtil.getUserPK(token.substring("Bearer ".length()));
+		return jwtUtil.getUserPK(token);
 	}
 	
 }
