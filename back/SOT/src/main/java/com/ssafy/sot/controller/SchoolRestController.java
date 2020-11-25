@@ -364,8 +364,13 @@ public class SchoolRestController {
 	public Object likeComment(@PathVariable("boardId") int boardId,
 							@PathVariable("articleId") int articleId,
 							@PathVariable("commentId") int commentId,
+							HttpServletRequest request,
 							@RequestParam("userId") int userId) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1 || pkId != userId) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(likeService.likeComment(commentId, userId), HttpStatus.OK);			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -378,8 +383,13 @@ public class SchoolRestController {
 	public Object cancelLikeComment(@PathVariable("boardId") int boardId,
 							@PathVariable("articleId") int articleId,
 							@PathVariable("commentId") int commentId,
+							HttpServletRequest request,
 							@RequestParam("userId") int userId) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1 || pkId != userId) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(likeService.cancelLikeComment(commentId, userId), HttpStatus.OK);			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -391,9 +401,13 @@ public class SchoolRestController {
 	@PostMapping("/board/{boardId}/{articleId}/like")
 	public Object likeArticle(@PathVariable("boardId") int boardId,
 							@PathVariable("articleId") int articleId,
-//							HttpServletRequest request,
+							HttpServletRequest request,
 							@RequestParam("userId") int userId) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1 || pkId != userId) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(likeService.likeArticle(articleId, userId), HttpStatus.OK);			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -405,21 +419,19 @@ public class SchoolRestController {
 	@DeleteMapping("/board/{boardId}/{articleId}/like")
 	public Object cancelLikeArticle(@PathVariable("boardId") int boardId,
 							@PathVariable("articleId") int articleId,
-//							HttpServletRequest request,
+							HttpServletRequest request,
 							@RequestParam("userId") int userId) {
-		
-//		int userId = getUserPK(request);
-//		if(userId == -1) {
-//			return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
-//		}
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1 || pkId != userId) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(likeService.cancelLikeArticle(articleId, userId), HttpStatus.OK);			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-	
 	private int getUserPK(HttpServletRequest request) {
 		String token = request.getHeader("Authorization");
 		if(token == null) {
