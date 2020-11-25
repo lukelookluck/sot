@@ -14,6 +14,7 @@ import PartBoard from '../../components/PartBoard/Box';
 import FavBoardList from '../../components/FavBoardList';
 
 import {CommonContext} from '../../context/CommonContext';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default function Home({navigation}) {
   const {
@@ -70,13 +71,11 @@ export default function Home({navigation}) {
 
   // 즐찾 게시판 리스트 불러오기
   function refreshFavBoardList() {
-    console.log('uesr', user);
-
     axios
       .get(`${serverUrl}/board/fav?userId=${user.id}`, {
-        // headers: {
-        //   Authorization: `JWT ${user.token}`,
-        // },
+        headers: {
+          Authorization: user.token,
+        },
         // params: {
         //   id: user.schoolId, // user의 schoolId 받아서 넣기
         // },
@@ -88,24 +87,24 @@ export default function Home({navigation}) {
         setMyloading2(true);
       })
       .catch((error) => {
-        console.log('why???');
-        console.log('123123123', error);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 
   // 전체 게시글 불러오기
   function refreshWholeArticleList(data) {
-    console.log('uesr', data);
-
     axios
       .get(
         `${serverUrl}/scroll/board/all?amount=10&schoolId=${
           user.schoolId
         }&startIdx=${data - 10}`,
         {
-          // headers: {
-          //     Authorization: `JWT ${user.token}`,
-          //   },
+          headers: {
+            Authorization: user.token,
+          },
           params: {
             schoolId: user.schoolId, // user의 schoolId 받아서 넣기
           },
@@ -123,7 +122,10 @@ export default function Home({navigation}) {
         }
       })
       .catch((err) => {
-        console.log(err.data);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 
@@ -133,9 +135,9 @@ export default function Home({navigation}) {
 
     axios
       .get(`${serverUrl}/board/${data.id}/?userId=${user.id}`, {
-        // headers: {
-        //     Authorization: `JWT ${user.token}`,
-        //   },
+        headers: {
+          Authorization: user.token,
+        },
       })
       .then((res) => {
         // console.log(res.data)
@@ -143,7 +145,10 @@ export default function Home({navigation}) {
         setMyloading(true);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 

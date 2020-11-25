@@ -16,6 +16,7 @@ import axios from 'axios';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {CommonContext} from '../../context/CommonContext';
 import ReplyList from '../../components/ReplyList';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default function (props) {
   const {serverUrl, user, setUser} = useContext(CommonContext);
@@ -24,7 +25,7 @@ export default function (props) {
   }, []);
 
   if (props.rFCmt === true) {
-    getArticleInfo()
+    getArticleInfo();
   }
 
   function getTime(myTime) {
@@ -63,51 +64,70 @@ export default function (props) {
     return theTime;
   }
 
-  const [bC,setBC] = useState(props.comments)
+  const [bC, setBC] = useState(props.comments);
 
   function getArticleInfo() {
     axios
       .get(
         `${serverUrl}/board/${props.article.boardId}/${props.article.id}?userId=${user.id}`,
+        {
+          headers: {
+            Authorization: user.token,
+          },
+        },
       )
       .then((res) => {
-        props.setRFCmt(false)
+        props.setRFCmt(false);
         setBC([]);
         setBC(res.data.comments);
       })
       .catch((err) => {
-        // console.log(err.data);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 
-
-
-
   const comments = bC.map((comment, idx) => {
-
     function likeComment(data) {
       axios
         .post(
           `${serverUrl}/board/${props.boardId}/${data.articleId}/${data.id}/like?userId=${user.id}`,
+          {
+            headers: {
+              Authorization: user.token,
+            },
+          },
         )
         .then((res) => {
           if (comment.isLiked === true) {
             // setLike(false);
             // setLikeCnt(likeCnt - 1);
-            bC[idx] = {...bC[idx], isLiked: !bC[idx].isLiked, likesCnt: bC[idx].likesCnt -1}
-            setBC([])
-            setBC(bC)
-
+            bC[idx] = {
+              ...bC[idx],
+              isLiked: !bC[idx].isLiked,
+              likesCnt: bC[idx].likesCnt - 1,
+            };
+            setBC([]);
+            setBC(bC);
           } else {
             // setLike(true);
             // setLikeCnt(likeCnt + 1);
-            bC[idx] = {...bC[idx], isLiked: !bC[idx].isLiked, likesCnt: bC[idx].likesCnt +1}
-            setBC([])
-            setBC(bC)
+            bC[idx] = {
+              ...bC[idx],
+              isLiked: !bC[idx].isLiked,
+              likesCnt: bC[idx].likesCnt + 1,
+            };
+            setBC([]);
+            setBC(bC);
           }
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 401) {
+            AsyncStorage.clear();
+            alert('잘못된 요청입니다.');
+          }
         });
     }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   ScrollView,
@@ -14,10 +14,11 @@ import axios from 'axios';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SingleArticle from '../../components/PartBoard/SingleArticle';
 
-import { CommonContext } from '../../context/CommonContext';
+import {CommonContext} from '../../context/CommonContext';
+import AsyncStorage from '@react-native-community/async-storage';
 
-export default function ({ navigation, route }) {
-  const { serverUrl, user, setUser } = useContext(CommonContext);
+export default function ({navigation, route}) {
+  const {serverUrl, user, setUser} = useContext(CommonContext);
   const [searchTextInput, setSearchTextInput] = useState('');
   let textInput = '';
   const [loading, serLoading] = useState(false);
@@ -37,7 +38,7 @@ export default function ({ navigation, route }) {
             },
           },
         ],
-        { cancelable: true },
+        {cancelable: true},
       );
     } else {
       setSearchedList([]);
@@ -52,7 +53,12 @@ export default function ({ navigation, route }) {
           console.log(res.data);
           setSearchedList(res.data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          if (err.response.status === 401) {
+            AsyncStorage.clear();
+            alert('잘못된 요청입니다.');
+          }
+        });
     }
   }
 
@@ -75,19 +81,19 @@ export default function ({ navigation, route }) {
             paddingLeft: 6.5,
           }}>
           <TouchableHighlight
-            style={{ padding: 3.5, borderRadius: 25 }}
+            style={{padding: 3.5, borderRadius: 25}}
             onPress={() => navigation.goBack()}
             underlayColor="#dfdfdf">
             <Icon
               name="arrow-back-circle-outline"
-              style={{ color: 'white' }}
+              style={{color: 'white'}}
               size={32.5}
             />
           </TouchableHighlight>
           <TextInput
             placeholder="검색하기.."
             placeholderTextColor="white"
-            style={{ flex: 1, color: 'white', fontSize: 16 }}
+            style={{flex: 1, color: 'white', fontSize: 16}}
             autoFocus={true}
             returnKeyType="search"
             ref={(input) => {
@@ -102,7 +108,7 @@ export default function ({ navigation, route }) {
           {searchTextInput.length > 0 && (
             <Icon
               name="close-outline"
-              style={{ color: 'white', padding: 10 }}
+              style={{color: 'white', padding: 10}}
               size={27.5}
               onPress={() => {
                 textInput.clear();
@@ -133,7 +139,7 @@ export default function ({ navigation, route }) {
           </Text>
           <Image
             source={require('../../components/PartBoard/Box/spiner.gif')}
-            style={{ width: 30, height: 30 }}
+            style={{width: 30, height: 30}}
           />
         </View>
       )) ||
@@ -141,7 +147,7 @@ export default function ({ navigation, route }) {
           searchedList.map((item, index) => (
             <View
               key={index}
-              style={{ borderBottomWidth: 0.5, borderBottomColor: 'gray' }}>
+              style={{borderBottomWidth: 0.5, borderBottomColor: 'gray'}}>
               <SingleArticle
                 idx={index}
                 article={item}
@@ -165,11 +171,11 @@ export default function ({ navigation, route }) {
               }}>
               <Icon
                 name="search-outline"
-                style={{ color: '#858585', paddingVertical: 10 }}
+                style={{color: '#858585', paddingVertical: 10}}
                 size={100}
               />
               <Text
-                style={{ color: '#858585', textAlign: 'center', fontSize: 20 }}>
+                style={{color: '#858585', textAlign: 'center', fontSize: 20}}>
                 게시글을 검색ㅎr세요
               </Text>
             </View>
@@ -191,11 +197,11 @@ export default function ({ navigation, route }) {
               }}>
               <Icon
                 name="sad-outline"
-                style={{ color: '#858585', paddingVertical: 10 }}
+                style={{color: '#858585', paddingVertical: 10}}
                 size={100}
               />
               <Text
-                style={{ color: '#858585', textAlign: 'center', fontSize: 20 }}>
+                style={{color: '#858585', textAlign: 'center', fontSize: 20}}>
                 검색 결과가 없습니다.
               </Text>
             </View>

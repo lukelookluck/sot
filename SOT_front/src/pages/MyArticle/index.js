@@ -4,6 +4,7 @@ import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import 'react-native-gesture-handler';
 import {CommonContext} from '../../context/CommonContext';
 import SingleArticle from '../../components/PartBoard/SingleArticle';
+import AsyncStorage from '@react-native-community/async-storage';
 
 // 내가 쓴 게시글 목록
 const MyArticle = ({navigation}) => {
@@ -21,16 +22,19 @@ const MyArticle = ({navigation}) => {
     setPostList([]);
     axios
       .get(`${serverUrl}/myarticles?id=${user.id}`, {
-        // headers: {
-        //   Authorization: `JWT ${user.token}`,
-        // },
+        headers: {
+          Authorization: user.token,
+        },
       })
       .then((response) => {
         console.log(response.data);
         setPostList(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 

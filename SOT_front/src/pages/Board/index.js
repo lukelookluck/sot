@@ -11,6 +11,7 @@ import {
 import 'react-native-gesture-handler';
 import {CommonContext} from '../../context/CommonContext';
 import SingleArticle from '../../components/PartBoard/SingleArticle';
+import AsyncStorage from '@react-native-community/async-storage';
 
 // 게시글 목록
 const Board = ({navigation, route}) => {
@@ -28,15 +29,18 @@ const Board = ({navigation, route}) => {
   function isFav() {
     axios
       .get(`${serverUrl}/board/${route.params.id}/isfaved?userId=${user.id}`, {
-        // headers: {
-        //   Authorization: `JWT ${user.token}`,
-        // },
+        headers: {
+          Authorization: user.token,
+        },
       })
       .then((response) => {
         setFav(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 
@@ -50,9 +54,9 @@ const Board = ({navigation, route}) => {
   function refreshList() {
     axios
       .get(`${serverUrl}/board/${route.params.id}`, {
-        // headers: {
-        //   Authorization: `JWT ${user.token}`,
-        // },
+        headers: {
+          Authorization: user.token,
+        },
       })
       .then((response) => {
         setMyLoading(false);
@@ -61,7 +65,10 @@ const Board = ({navigation, route}) => {
         setPostList(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 

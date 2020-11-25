@@ -10,38 +10,44 @@ import {
 } from 'react-native';
 import 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {CommonContext} from "../../context/CommonContext";
+import {CommonContext} from '../../context/CommonContext';
+import AsyncStorage from '@react-native-community/async-storage';
 
 // 게시판 신청 화면
 const ReqNewBoard = ({navigation, route}) => {
-
-  const { serverUrl, user, setUser } = useContext(CommonContext);
+  const {serverUrl, user, setUser} = useContext(CommonContext);
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
   const titleHandler = (text) => {
     setTitle(text);
-  }
+  };
 
   const contentHandler = (text) => {
     setContent(text);
-  }
+  };
 
   const addPost = () => {
-
-    axios.post(`${serverUrl}/board`, {
+    axios
+      .post(`${serverUrl}/board`, {
+        headers: {
+          Authorization: user.token,
+        },
         name: title,
         description: content,
         userId: user.id,
         schoolId: user.schoolId,
-    })
+      })
       .then((response) => {
         console.log(response.data);
-        navigation.navigate("게시판 목록");
+        navigation.navigate('게시판 목록');
       })
       .catch((error) => {
-        console.log(error);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   };
 
@@ -51,11 +57,17 @@ const ReqNewBoard = ({navigation, route}) => {
         scrollEnabled={true}
         contentContainerStyle={styles.screen}>
         <View style={styles.titlebox}>
-          <TextInput placeholder="게시판 이름" onChangeText={titleHandler} value={title}></TextInput>
+          <TextInput
+            placeholder="게시판 이름"
+            onChangeText={titleHandler}
+            value={title}></TextInput>
         </View>
 
         <View style={styles.detailbox}>
-          <TextInput placeholder="신청 사유" onChangeText={contentHandler} value={content}></TextInput>
+          <TextInput
+            placeholder="신청 사유"
+            onChangeText={contentHandler}
+            value={content}></TextInput>
         </View>
 
         <View style={{alignItems: 'center'}}>
@@ -63,14 +75,12 @@ const ReqNewBoard = ({navigation, route}) => {
             <Text style={{fontSize: 18, color: 'white'}}>신청하기</Text>
           </TouchableOpacity>
         </View>
-
       </KeyboardAwareScrollView>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-
   screen: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -79,17 +89,17 @@ const styles = StyleSheet.create({
   titlebox: {
     marginTop: 30,
     marginBottom: 30,
-    width: "90%",
+    width: '90%',
     borderColor: 'gray',
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderWidth: 1,
   },
 
   detailbox: {
     height: 300,
-    width: "90%",
+    width: '90%',
     borderColor: 'gray',
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderWidth: 1,
     marginBottom: 30,
   },
@@ -101,7 +111,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-  }
+  },
 });
 
 export default ReqNewBoard;

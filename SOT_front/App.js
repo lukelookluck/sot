@@ -36,25 +36,38 @@ function MyStack() {
   const addBookmark = (b_id, u_id) => {
     axios
       .post(`${serverUrl}/board/${b_id}/fav/`, {
+        headers: {
+          Authorization: user.token,
+        },
         userId: u_id,
       })
       .then((res) => {
         setFav(true);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   };
 
   // 게시판 북마크 삭제
   const deleteBookmark = (b_id, u_id) => {
     axios
-      .delete(`${serverUrl}/board/${b_id}/fav?userId=${u_id}`)
+      .delete(`${serverUrl}/board/${b_id}/fav?userId=${u_id}`, {
+        headers: {
+          Authorization: user.token,
+        },
+      })
       .then((res) => {
         setFav(false);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   };
 

@@ -14,6 +14,7 @@ import axios from 'axios';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import {CommonContext} from '../../context/CommonContext';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default function (props) {
   const {serverUrl, user, setUser} = useContext(CommonContext);
@@ -110,34 +111,48 @@ export default function (props) {
     }
     return theTime;
   }
-  
-  const [bR, setBR] = useState(props.comment)
+
+  const [bR, setBR] = useState(props.comment);
 
   const replies = bR.map((reply, idx) => {
-
     function likeComment(data) {
       axios
         .post(
           `${serverUrl}/board/${props.boardId}/${data.articleId}/${data.id}/like?userId=${user.id}`,
+          {
+            headers: {
+              Authorization: user.token,
+            },
+          },
         )
         .then((res) => {
           if (reply.isLiked === true) {
             // setLike(false);
             // setLikeCnt(likeCnt - 1);
-            bR[idx] = {...bR[idx], isLiked: !bR[idx].isLiked, likesCnt: bR[idx].likesCnt -1}
-            setBR([])
-            setBR(bR)
-
+            bR[idx] = {
+              ...bR[idx],
+              isLiked: !bR[idx].isLiked,
+              likesCnt: bR[idx].likesCnt - 1,
+            };
+            setBR([]);
+            setBR(bR);
           } else {
             // setLike(true);
             // setLikeCnt(likeCnt + 1);
-            bR[idx] = {...bR[idx], isLiked: !bR[idx].isLiked, likesCnt: bR[idx].likesCnt +1}
-            setBR([])
-            setBR(bR)
+            bR[idx] = {
+              ...bR[idx],
+              isLiked: !bR[idx].isLiked,
+              likesCnt: bR[idx].likesCnt + 1,
+            };
+            setBR([]);
+            setBR(bR);
           }
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 401) {
+            AsyncStorage.clear();
+            alert('잘못된 요청입니다.');
+          }
         });
     }
 

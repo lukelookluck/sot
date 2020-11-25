@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, {useState, useEffect, useRef, useContext} from 'react';
 import {
   Text,
   Image,
@@ -14,15 +14,16 @@ import axios from 'axios';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
 
-import { CommonContext } from '../../context/CommonContext';
+import {CommonContext} from '../../context/CommonContext';
 import CommentList from '../../components/CommentList';
+import AsyncStorage from '@react-native-community/async-storage';
 
-export default function ({ navigation, route }) {
-  const { serverUrl, user, setUser } = useContext(CommonContext);
+export default function ({navigation, route}) {
+  const {serverUrl, user, setUser} = useContext(CommonContext);
   const [article, setArticle] = useState(route.params.article);
 
-  const [rFCmt, setRFCmt] = useState(false)
-  const [myLoading, setMyLoading] = useState(true)
+  const [rFCmt, setRFCmt] = useState(false);
+  const [myLoading, setMyLoading] = useState(true);
 
   useEffect(() => {
     getArticleInfo();
@@ -33,14 +34,22 @@ export default function ({ navigation, route }) {
     axios
       .get(
         `${serverUrl}/board/${route.params.article.boardId}/${route.params.article.id}?userId=${user.id}`,
+        {
+          headers: {
+            Authorization: user.token,
+          },
+        },
       )
       .then((res) => {
-        setMyLoading(false)
+        setMyLoading(false);
         setArticle([]);
         setArticle(res.data);
       })
       .catch((err) => {
-        // console.log(err.data);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 
@@ -65,7 +74,7 @@ export default function ({ navigation, route }) {
           },
         },
       ],
-      { cancelable: true },
+      {cancelable: true},
     );
   }
 
@@ -114,9 +123,14 @@ export default function ({ navigation, route }) {
       axios
         .post(
           `${serverUrl}/board/${article.boardId}/${article.id}/${replyId}/?content=${textInput2}&userId=${user.id}`,
+          {
+            headers: {
+              Authorization: user.token,
+            },
+          },
         )
         .then((res) => {
-          setRFCmt(true)
+          setRFCmt(true);
           setModalVisible(false);
           setIsReply(false);
           setTextInput2(null);
@@ -124,23 +138,34 @@ export default function ({ navigation, route }) {
           getArticleInfo();
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 401) {
+            AsyncStorage.clear();
+            alert('잘못된 요청입니다.');
+          }
         });
       return;
     }
     axios
       .post(
         `${serverUrl}/board/${article.boardId}/${article.id}/?content=${textInput2}&userId=${user.id}`,
+        {
+          headers: {
+            Authorization: user.token,
+          },
+        },
       )
       .then((res) => {
-        setRFCmt(true)
+        setRFCmt(true);
         setModalVisible(false);
         setIsReply(false);
         setTextInput2(null);
         getArticleInfo();
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 
@@ -149,6 +174,11 @@ export default function ({ navigation, route }) {
     axios
       .post(
         `${serverUrl}/board/${article.boardId}/${data.id}/like?userId=${user.id}`,
+        {
+          headers: {
+            Authorization: user.token,
+          },
+        },
       )
       .then((res) => {
         // console.log(res)
@@ -167,7 +197,10 @@ export default function ({ navigation, route }) {
         }
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 
@@ -187,13 +220,22 @@ export default function ({ navigation, route }) {
             navigation.goBack();
             // console.log(data)
             axios
-              .delete(`${serverUrl}/board/${data.boardId}/${data.id}`)
-              .then((res) => { })
-              .catch((err) => { });
+              .delete(`${serverUrl}/board/${data.boardId}/${data.id}`, {
+                headers: {
+                  Authorization: user.token,
+                },
+              })
+              .then((res) => {})
+              .catch((err) => {
+                if (err.response.status === 401) {
+                  AsyncStorage.clear();
+                  alert('잘못된 요청입니다.');
+                }
+              });
           },
         },
       ],
-      { cancelable: true },
+      {cancelable: true},
     );
   }
 
@@ -227,23 +269,33 @@ export default function ({ navigation, route }) {
         {
           text: '삭제',
           onPress: () => {
-            setRFCmt(true)
+            setRFCmt(true);
             axios
               .delete(
                 `${serverUrl}/board/${article.boardId}/${data.articleId}/${data.id}`,
+                {
+                  headers: {
+                    Authorization: user.token,
+                  },
+                },
               )
               .then((res) => {
                 getArticleInfo();
-                Alert.alert('댓글이 삭제되었습니다.', '', [{ text: '확인' }], {
+                Alert.alert('댓글이 삭제되었습니다.', '', [{text: '확인'}], {
                   cancelable: true,
                 });
               })
-              .catch((err) => { });
+              .catch((err) => {
+                if (err.response.status === 401) {
+                  AsyncStorage.clear();
+                  alert('잘못된 요청입니다.');
+                }
+              });
             setMyComment(null);
           },
         },
       ],
-      { cancelable: true },
+      {cancelable: true},
     );
   }
 
@@ -275,13 +327,13 @@ export default function ({ navigation, route }) {
             justifyContent: 'space-between',
             paddingVertical: 5,
           }}>
-          <View style={{ flexDirection: 'row' }}>
-            <Icon name="person-circle" style={{ fontSize: 40 }} />
-            <View style={{ marginLeft: 10, justifyContent: 'center' }}>
-              <Text style={{ fontSize: 15, fontWeight: '700' }}>
+          <View style={{flexDirection: 'row'}}>
+            <Icon name="person-circle" style={{fontSize: 40}} />
+            <View style={{marginLeft: 10, justifyContent: 'center'}}>
+              <Text style={{fontSize: 15, fontWeight: '700'}}>
                 {article.nickname}
               </Text>
-              <Text style={{ fontSize: 13, fontWeight: '500', color: '#5e5e5e' }}>
+              <Text style={{fontSize: 13, fontWeight: '500', color: '#5e5e5e'}}>
                 {getTime(article.created_at)}
               </Text>
             </View>
@@ -363,7 +415,7 @@ export default function ({ navigation, route }) {
                         borderRadius: 20,
                       }}
                     />
-                    <Text style={{ fontSize: 19.5, color: 'black' }}>수정</Text>
+                    <Text style={{fontSize: 19.5, color: 'black'}}>수정</Text>
                   </View>
                 </TouchableHighlight>
                 <TouchableHighlight
@@ -393,7 +445,7 @@ export default function ({ navigation, route }) {
                         borderRadius: 20,
                       }}
                     />
-                    <Text style={{ fontSize: 19.5, color: 'black' }}>삭제</Text>
+                    <Text style={{fontSize: 19.5, color: 'black'}}>삭제</Text>
                   </View>
                 </TouchableHighlight>
               </View>
@@ -401,11 +453,11 @@ export default function ({ navigation, route }) {
           </Modal>
         </View>
         {/* 게시글 중단(제목, 내용) */}
-        <View style={{ paddingVertical: 10 }}>
-          <Text style={{ fontSize: 17.5, fontWeight: '700', marginVertical: 10 }}>
+        <View style={{paddingVertical: 10}}>
+          <Text style={{fontSize: 17.5, fontWeight: '700', marginVertical: 10}}>
             {article.title}
           </Text>
-          <Text style={{ fontSize: 14 }}>{article.content}</Text>
+          <Text style={{fontSize: 14}}>{article.content}</Text>
         </View>
         {/* 게시글 하단(좋아요, 댓글) */}
         <View
@@ -441,26 +493,27 @@ export default function ({ navigation, route }) {
                   }}
                 />
               </TouchableHighlight>
-            )) || article.isLiked === true && (
-              <TouchableHighlight
-                style={{
-                  borderRadius: 20,
-                }}
-                onPress={() => likeArticle(article)}
-                underlayColor="#dfdfdf">
-                <Icon
-                  name="heart"
-                  color="#ff8000"
+            )) ||
+              (article.isLiked === true && (
+                <TouchableHighlight
                   style={{
-                    fontSize: 22.5,
-                    paddingVertical: 5,
-                    paddingHorizontal: 6,
-                    // backgroundColor: 'white',
                     borderRadius: 20,
                   }}
-                />
-              </TouchableHighlight>
-            )}
+                  onPress={() => likeArticle(article)}
+                  underlayColor="#dfdfdf">
+                  <Icon
+                    name="heart"
+                    color="#ff8000"
+                    style={{
+                      fontSize: 22.5,
+                      paddingVertical: 5,
+                      paddingHorizontal: 6,
+                      // backgroundColor: 'white',
+                      borderRadius: 20,
+                    }}
+                  />
+                </TouchableHighlight>
+              ))}
             <Text
               style={{
                 fontSize: 18,
@@ -479,7 +532,7 @@ export default function ({ navigation, route }) {
               style={{
                 borderRadius: 20,
               }}
-              onPress={() => { }}
+              onPress={() => {}}
               underlayColor="#dfdfdf">
               <Icon
                 name="chatbubbles-outline"
@@ -503,8 +556,8 @@ export default function ({ navigation, route }) {
           </View>
         </View>
         {/* 게시글 최하단(댓글) */}
-        <View style={{ paddingVertical: 5 }}>
-          <View style={{ flexDirection: 'row' }}>
+        <View style={{paddingVertical: 5}}>
+          <View style={{flexDirection: 'row'}}>
             <Text
               style={{
                 fontSize: 15,
@@ -512,7 +565,7 @@ export default function ({ navigation, route }) {
               }}>
               댓글
             </Text>
-            <Text style={{ fontSize: 15, marginHorizontal: 7 }}>
+            <Text style={{fontSize: 15, marginHorizontal: 7}}>
               {article.commentsCnt}
             </Text>
           </View>
@@ -527,10 +580,10 @@ export default function ({ navigation, route }) {
             borderBottomWidth: 2,
             borderBottomColor: '#dbdbdb',
           }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Icon
               name="person-circle"
-              style={{ fontSize: 40, color: '#ff8000' }}
+              style={{fontSize: 40, color: '#ff8000'}}
             />
             <View
               style={{
@@ -593,7 +646,7 @@ export default function ({ navigation, route }) {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    <Text style={{ fontSize: 14, color: '#414141' }}>
+                    <Text style={{fontSize: 14, color: '#414141'}}>
                       답글 남기는 중...
                     </Text>
                     <TouchableOpacity
@@ -604,7 +657,7 @@ export default function ({ navigation, route }) {
                         setModalVisible(false);
                         setTextInput2(null);
                       }}>
-                      <Text style={{ fontSize: 14, color: '#414141' }}>취소</Text>
+                      <Text style={{fontSize: 14, color: '#414141'}}>취소</Text>
                     </TouchableOpacity>
                   </View>
                 )}
@@ -627,27 +680,27 @@ export default function ({ navigation, route }) {
                       multiline={true}
                       placeholder="댓글 작성하기.."
                       ref={textInput}
-                      style={{ flex: 1, color: 'black', fontSize: 15 }}
+                      style={{flex: 1, color: 'black', fontSize: 15}}
                       onChangeText={(text) => {
                         setTextInput2(text);
                       }}
                       value={textInput2}
                     />
                   )) || (
-                      <TextInput
-                        multiline={true}
-                        placeholder="답글 작성하기.."
-                        ref={textInput}
-                        // ref={(input) => {
-                        //   textInput = input;
-                        // }}
-                        style={{ flex: 1, color: 'black', fontSize: 15 }}
-                        onChangeText={(text) => {
-                          setTextInput2(text);
-                        }}
-                        value={textInput2}
-                      />
-                    )}
+                    <TextInput
+                      multiline={true}
+                      placeholder="답글 작성하기.."
+                      ref={textInput}
+                      // ref={(input) => {
+                      //   textInput = input;
+                      // }}
+                      style={{flex: 1, color: 'black', fontSize: 15}}
+                      onChangeText={(text) => {
+                        setTextInput2(text);
+                      }}
+                      value={textInput2}
+                    />
+                  )}
                   {(textInput2 && (
                     <TouchableHighlight
                       style={{
@@ -764,7 +817,7 @@ export default function ({ navigation, route }) {
                           borderRadius: 20,
                         }}
                       />
-                      <Text style={{ fontSize: 19.5, color: 'black' }}>
+                      <Text style={{fontSize: 19.5, color: 'black'}}>
                         댓글 삭제
                       </Text>
                     </View>
@@ -775,27 +828,26 @@ export default function ({ navigation, route }) {
           </View>
         </View>
         {/* 댓글목록 파트 */}
-        {myLoading === true && (
-          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        {(myLoading === true && (
+          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             <Image
               source={require('../../components/PartBoard/Box/spiner.gif')}
-              style={{ width: 100, height: 100 }}
+              style={{width: 100, height: 100}}
             />
           </View>
-        ) || (
-            <CommentList
-              article={article}
-              comments={comments}
-              boardId={article.boardId}
-              writeReply={writeReply}
-              modalVisible3={modalVisible3}
-              setModalVisible3={setModalVisible3}
-              setMyComment={setMyComment}
-              rFCmt={rFCmt}
-              setRFCmt={setRFCmt}
-            />
-
-          )}
+        )) || (
+          <CommentList
+            article={article}
+            comments={comments}
+            boardId={article.boardId}
+            writeReply={writeReply}
+            modalVisible3={modalVisible3}
+            setModalVisible3={setModalVisible3}
+            setMyComment={setMyComment}
+            rFCmt={rFCmt}
+            setRFCmt={setRFCmt}
+          />
+        )}
       </View>
     </ScrollView>
   );

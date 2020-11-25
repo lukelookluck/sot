@@ -8,6 +8,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import {CommonContext} from '../../context/CommonContext';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const styles = StyleSheet.create({
   container: {
@@ -49,19 +50,19 @@ const List = ({navigation, route}) => {
   function refreshList() {
     axios
       .get(`${serverUrl}/boards?id=${user.schoolId}&userId=${user.id}`, {
-        // headers: {
-        //   Authorization: `JWT ${user.token}`,
-        // },
-        // params: {
-        //   id : user.schoolId
-        // },
+        headers: {
+          Authorization: user.token,
+        },
       })
       .then((response) => {
         setBoardList([]);
         setBoardList(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
   }
 
@@ -69,23 +70,36 @@ const List = ({navigation, route}) => {
     setMyloading2(false);
     if (myBool === true) {
       axios
-        .delete(`${serverUrl}/board/${b_id}/fav?userId=${user.id}`)
+        .delete(`${serverUrl}/board/${b_id}/fav?userId=${user.id}`, {
+          headers: {
+            Authorization: user.token,
+          },
+        })
         .then((res) => {
           refreshList();
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 401) {
+            AsyncStorage.clear();
+            alert('잘못된 요청입니다.');
+          }
         });
     } else {
       axios
         .post(`${serverUrl}/board/${b_id}/fav/`, {
           userId: user.id,
+          headers: {
+            Authorization: user.token,
+          },
         })
         .then((res) => {
           refreshList();
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 401) {
+            AsyncStorage.clear();
+            alert('잘못된 요청입니다.');
+          }
         });
     }
   }
@@ -95,16 +109,19 @@ const List = ({navigation, route}) => {
 
     axios
       .get(`${serverUrl}/board/${b_id}/isfaved?userId=${user.id}`, {
-        // headers: {
-        //   Authorization: `JWT ${user.token}`,
-        // },
+        headers: {
+          Authorization: user.token,
+        },
       })
       .then((response) => {
         console.log(response.data);
         setFav(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        if (err.response.status === 401) {
+          AsyncStorage.clear();
+          alert('잘못된 요청입니다.');
+        }
       });
 
     navigation.navigate('Board', {
