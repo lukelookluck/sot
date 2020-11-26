@@ -16,16 +16,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.sot.dto.ArticleDTO;
+import com.ssafy.sot.dto.BoardDTO;
 import com.ssafy.sot.dto.BoardNewDTO;
 import com.ssafy.sot.dto.CommentDTO;
 import com.ssafy.sot.dto.ReturnMsg;
 import com.ssafy.sot.dto.SchoolDTO;
+import com.ssafy.sot.dto.UserDTO;
 import com.ssafy.sot.dto.UserIdDTO;
 import com.ssafy.sot.service.ArticleService;
 import com.ssafy.sot.service.BoardService;
 import com.ssafy.sot.service.CommentService;
 import com.ssafy.sot.service.LikeService;
 import com.ssafy.sot.service.SchoolService;
+import com.ssafy.sot.service.UserService;
 import com.ssafy.sot.util.JWTUtil;
 
 import io.swagger.annotations.ApiOperation;
@@ -48,6 +51,9 @@ public class SchoolRestController {
 	
 	@Autowired
 	LikeService likeService;
+	
+	@Autowired
+	UserService userService;
 	
 	@Autowired
 	JWTUtil jwtUtil;
@@ -113,8 +119,17 @@ public class SchoolRestController {
 	
 	@ApiOperation(value = "전체 게시글 검색 (제목만)")
 	@GetMapping("/searchtitle")
-	public Object searchTitle(@RequestParam(value="keyword") String keyword, @RequestParam(value="schoolId") int schoolId) {
+	public Object searchTitle(@RequestParam(value="keyword") String keyword, @RequestParam(value="schoolId") int schoolId,
+			HttpServletRequest request) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			UserDTO user = userService.search(pkId);
+			if(user.getSchoolId() != schoolId) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			if(keyword == null || keyword == "") {
 				return new ResponseEntity<>(null, HttpStatus.OK);
 			}
@@ -127,8 +142,17 @@ public class SchoolRestController {
 
 	@ApiOperation(value = "전체 게시글 검색 (제목 + 내용)")
 	@GetMapping("/searchtitlecontent")
-	public Object searchTitleOrContent(@RequestParam(value="keyword") String keyword, @RequestParam(value="schoolId") int schoolId) {
+	public Object searchTitleOrContent(@RequestParam(value="keyword") String keyword, @RequestParam(value="schoolId") int schoolId,
+			HttpServletRequest request) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			UserDTO user = userService.search(pkId);
+			if(user.getSchoolId() != schoolId) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			if(keyword == null || keyword == "") {
 				return new ResponseEntity<>(null, HttpStatus.OK);
 			}
@@ -141,8 +165,13 @@ public class SchoolRestController {
 
 	@ApiOperation(value = "학교id로 게시판 목록 가져오기")
 	@GetMapping("/boards")
-	public Object boardList(@RequestParam(value="id") int id, @RequestParam(value="userId") int userId) {
+	public Object boardList(@RequestParam(value="id") int id, @RequestParam(value="userId") int userId,
+			HttpServletRequest request) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1 || pkId != userId) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(boardService.showSchoolBoards(id, userId), HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -152,9 +181,16 @@ public class SchoolRestController {
 	
 	@ApiOperation(value = "새로운 게시판 생성")
 	@PostMapping("/board")
-	public Object createNewBoard(@RequestBody BoardNewDTO boardNewDTO) {
-		// 일단 관리자 동의 없이 새 게시판 생성
+	public Object createNewBoard(@RequestBody BoardNewDTO boardNewDTO, HttpServletRequest request) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			UserDTO user = userService.search(pkId);
+			if(boardNewDTO.getSchoolId() != user.getSchoolId()) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(boardService.createNewBoard(boardNewDTO), HttpStatus.OK);			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -164,8 +200,12 @@ public class SchoolRestController {
 	
 	@ApiOperation(value = "즐겨찾기한 게시판 목록 가져오기")
 	@GetMapping("/board/fav")
-	public Object showBoardFavs(@RequestParam int userId) {
+	public Object showBoardFavs(@RequestParam int userId, HttpServletRequest request) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1 || pkId != userId) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(boardService.showFavBoards(userId), HttpStatus.OK);			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -175,8 +215,16 @@ public class SchoolRestController {
 	
 	@ApiOperation(value = "전체 게시글 가져오기")
 	@GetMapping("/board/all")
-	public Object allArticles(@RequestParam("schoolId") int schoolId) {
+	public Object allArticles(@RequestParam("schoolId") int schoolId, HttpServletRequest request) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			UserDTO user = userService.search(pkId);
+			if(user.getSchoolId() != schoolId) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(articleService.showAllArticles(schoolId), HttpStatus.OK);			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -186,8 +234,16 @@ public class SchoolRestController {
 	
 	@ApiOperation(value = "전체 베스트 게시글 가져오기")
 	@GetMapping("/board/all/best")
-	public Object allBestArticles(@RequestParam("schoolId") int schoolId) {
+	public Object allBestArticles(@RequestParam("schoolId") int schoolId, HttpServletRequest request) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			UserDTO user = userService.search(pkId);
+			if(user.getSchoolId() != schoolId) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(articleService.showAllBestArticles(schoolId), HttpStatus.OK);			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -197,8 +253,20 @@ public class SchoolRestController {
 	
 	@ApiOperation(value = "특정 게시판 베스트 게시글 가져오기")
 	@GetMapping("/board/{boardId}/best")
-	public Object boardBestArticles(@PathVariable("boardId") int boardId) {
+	public Object boardBestArticles(@PathVariable("boardId") int boardId, HttpServletRequest request) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			UserDTO user = userService.search(pkId);
+			BoardDTO board = boardService.showBoardInfo(boardId);
+			if(board == null) {
+				return new ResponseEntity<>("존재하지 않는 게시판입니다.", HttpStatus.NOT_FOUND);
+			}
+			if(board.getSchoolId() != user.getSchoolId()) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(articleService.showBestArticles(boardId), HttpStatus.OK);			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -208,9 +276,21 @@ public class SchoolRestController {
 	
 	@ApiOperation(value = "게시판 즐겨찾기")
 	@PostMapping("/board/{boardId}/fav")
-	public Object favBoard(@PathVariable("boardId") int boardId, @RequestBody UserIdDTO userId) {
+	public Object favBoard(@PathVariable("boardId") int boardId, @RequestBody UserIdDTO userId, HttpServletRequest request) {
 		try {
 			int id = userId.getUserId();
+			int pkId = getUserPK(request);
+			if(pkId == -1 || pkId != id) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			UserDTO user = userService.search(pkId);
+			BoardDTO board = boardService.showBoardInfo(boardId);
+			if(board == null) {
+				return new ResponseEntity<>("존재하지 않는 게시판입니다.", HttpStatus.NOT_FOUND);
+			}
+			if(board.getSchoolId() != user.getSchoolId()) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(boardService.favBoard(boardId, id), HttpStatus.OK);			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -234,6 +314,18 @@ public class SchoolRestController {
 	@GetMapping("/board/{boardId}")
 	public Object articleList(@PathVariable("boardId") int boardId, HttpServletRequest request) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			UserDTO user = userService.search(pkId);
+			BoardDTO board = boardService.showBoardInfo(boardId);
+			if(board == null) {
+				return new ResponseEntity<>("존재하지 않는 게시판입니다.", HttpStatus.NOT_FOUND);
+			}
+			if(board.getSchoolId() != user.getSchoolId()) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(articleService.showArticles(boardId), HttpStatus.OK);			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -256,8 +348,21 @@ public class SchoolRestController {
 	@GetMapping("/board/{boardId}/{articleId}")
 	public Object showArticle(@PathVariable("boardId") int boardId,
 								@PathVariable("articleId") int articleId,
-								@RequestParam("userId") int userId) {
+								@RequestParam("userId") int userId,
+								HttpServletRequest request) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1 || pkId != userId) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			UserDTO user = userService.search(pkId);
+			BoardDTO board = boardService.showBoardInfo(boardId);
+			if(board == null) {
+				return new ResponseEntity<>("존재하지 않는 게시판입니다.", HttpStatus.NOT_FOUND);
+			}
+			if(board.getSchoolId() != user.getSchoolId()) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(articleService.showArticle(articleId, userId), HttpStatus.OK);			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -267,8 +372,20 @@ public class SchoolRestController {
 	
 	@ApiOperation(value = "게시글 생성, 필요값: title, content, boardId,")
 	@PostMapping("/board/{boardId}")
-	public Object writeArticle(@PathVariable("boardId") int boardId, @RequestBody ArticleDTO articleDTO) {
+	public Object writeArticle(@PathVariable("boardId") int boardId, @RequestBody ArticleDTO articleDTO, HttpServletRequest request) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			UserDTO user = userService.search(pkId);
+			BoardDTO board = boardService.showBoardInfo(boardId);
+			if(board == null) {
+				return new ResponseEntity<>("존재하지 않는 게시판입니다.", HttpStatus.NOT_FOUND);
+			}
+			if(board.getSchoolId() != user.getSchoolId()) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			articleDTO.setBoardId(boardId);
 			return new ResponseEntity<>(articleService.createArticle(articleDTO), HttpStatus.CREATED);			
 		} catch(Exception e) {
@@ -280,8 +397,22 @@ public class SchoolRestController {
 	@ApiOperation(value = "게시글 수정, (created_at, updated_at 같은 것들은 무시하고 필수값만 넣으면 됨)")
 	@PutMapping("/board/{boardId}/{articleId}")
 	public Object modifyArticle(@PathVariable("boardId") int boardId,
-								@PathVariable("articleId") int articleId, @RequestBody ArticleDTO articleDTO) {
+								@PathVariable("articleId") int articleId,
+								@RequestBody ArticleDTO articleDTO,
+								HttpServletRequest request) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			UserDTO user = userService.search(pkId);
+			BoardDTO board = boardService.showBoardInfo(boardId);
+			if(board == null) {
+				return new ResponseEntity<>("존재하지 않는 게시판입니다.", HttpStatus.NOT_FOUND);
+			}
+			if(board.getSchoolId() != user.getSchoolId()) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			articleDTO.setBoardId(boardId);
 			articleDTO.setId(articleId);
 			return new ResponseEntity<>(articleService.updateArticle(articleDTO), HttpStatus.CREATED);			
@@ -294,8 +425,21 @@ public class SchoolRestController {
 	@ApiOperation(value = "게시글 삭제")
 	@DeleteMapping("/board/{boardId}/{articleId}")
 	public Object deleteArticle(@PathVariable("boardId") int boardId,
-								@PathVariable("articleId") int articleId) {
+								@PathVariable("articleId") int articleId,
+								HttpServletRequest request) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			UserDTO user = userService.search(pkId);
+			BoardDTO board = boardService.showBoardInfo(boardId);
+			if(board == null) {
+				return new ResponseEntity<>("존재하지 않는 게시판입니다.", HttpStatus.NOT_FOUND);
+			}
+			if(board.getSchoolId() != user.getSchoolId()) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(articleService.deleteArticle(articleId), HttpStatus.OK);			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -306,8 +450,22 @@ public class SchoolRestController {
 	@ApiOperation(value = "댓글 작성, (created_at, updated_at 같은 것들은 무시하고 필수값만 넣으면 됨)")
 	@PostMapping("/board/{boardId}/{articleId}")
 	public Object createComment(@PathVariable("boardId") int boardId,
-								@PathVariable("articleId") int articleId, CommentDTO commentDTO) {
+								@PathVariable("articleId") int articleId,
+								CommentDTO commentDTO,
+								HttpServletRequest request) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			UserDTO user = userService.search(pkId);
+			BoardDTO board = boardService.showBoardInfo(boardId);
+			if(board == null) {
+				return new ResponseEntity<>("존재하지 않는 게시판입니다.", HttpStatus.NOT_FOUND);
+			}
+			if(board.getSchoolId() != user.getSchoolId() || commentDTO.getUserId() != pkId) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			commentDTO.setArticleId(articleId);
 			return new ResponseEntity<>(commentService.createComment(commentDTO), HttpStatus.OK);			
 		} catch(Exception e) {
@@ -320,8 +478,22 @@ public class SchoolRestController {
 	@PostMapping("/board/{boardId}/{articleId}/{commentId}")
 	public Object createReplyComment(@PathVariable("boardId") int boardId,
 								@PathVariable("articleId") int articleId,
-								@PathVariable("commentId") int commentId, CommentDTO commentDTO) {
+								@PathVariable("commentId") int commentId,
+								CommentDTO commentDTO,
+								HttpServletRequest request) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			UserDTO user = userService.search(pkId);
+			BoardDTO board = boardService.showBoardInfo(boardId);
+			if(board == null) {
+				return new ResponseEntity<>("존재하지 않는 게시판입니다.", HttpStatus.NOT_FOUND);
+			}
+			if(board.getSchoolId() != user.getSchoolId() || commentDTO.getUserId() != pkId) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			commentDTO.setArticleId(articleId);
 			commentDTO.setParentId(commentId);
 			return new ResponseEntity<>(commentService.createReplyComment(commentDTO), HttpStatus.OK);			
@@ -335,8 +507,21 @@ public class SchoolRestController {
 	@PutMapping("/board/{boardId}/{articleId}/{commentId}")
 	public Object updateComment(@PathVariable("boardId") int boardId,
 								@PathVariable("articleId") int articleId,
-								@PathVariable("commentId") int commentId, CommentDTO commentDTO) { 
+								@PathVariable("commentId") int commentId,
+								CommentDTO commentDTO,
+								HttpServletRequest request) { 
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			CommentDTO comment = commentService.showComment(commentId);
+			if(comment == null) {
+				return new ResponseEntity<>("댓글이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
+			if(comment.getUserId() != pkId || commentDTO.getUserId() != pkId) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			commentDTO.setArticleId(articleId);
 			commentDTO.setId(commentId);
 			return new ResponseEntity<>(commentService.updateComment(commentDTO), HttpStatus.OK);			
@@ -350,8 +535,20 @@ public class SchoolRestController {
 	@DeleteMapping("/board/{boardId}/{articleId}/{commentId}")
 	public Object deleteComment(@PathVariable("boardId") int boardId,
 								@PathVariable("articleId") int articleId,
-								@PathVariable("commentId") int commentId) {
+								@PathVariable("commentId") int commentId,
+								HttpServletRequest request) {
 		try {
+			int pkId = getUserPK(request);
+			if(pkId == -1) {
+				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			CommentDTO comment = commentService.showComment(commentId);
+			if(comment == null) {
+				return new ResponseEntity<>("댓글이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
+			if(comment.getUserId() != pkId) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(commentService.deleteComment(commentId), HttpStatus.OK);			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -390,6 +587,14 @@ public class SchoolRestController {
 			if(pkId == -1 || pkId != userId) {
 				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
 			}
+			UserDTO user = userService.search(pkId);
+			BoardDTO board = boardService.showBoardInfo(boardId);
+			if(board == null) {
+				return new ResponseEntity<>("존재하지 않는 게시판입니다.", HttpStatus.NOT_FOUND);
+			}
+			if(board.getSchoolId() != user.getSchoolId()) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(likeService.cancelLikeComment(commentId, userId), HttpStatus.OK);			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -408,6 +613,14 @@ public class SchoolRestController {
 			if(pkId == -1 || pkId != userId) {
 				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
 			}
+			UserDTO user = userService.search(pkId);
+			BoardDTO board = boardService.showBoardInfo(boardId);
+			if(board == null) {
+				return new ResponseEntity<>("존재하지 않는 게시판입니다.", HttpStatus.NOT_FOUND);
+			}
+			if(board.getSchoolId() != user.getSchoolId()) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>(likeService.likeArticle(articleId, userId), HttpStatus.OK);			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -425,6 +638,14 @@ public class SchoolRestController {
 			int pkId = getUserPK(request);
 			if(pkId == -1 || pkId != userId) {
 				return new ResponseEntity<>("잘못된 접근입니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
+			}
+			UserDTO user = userService.search(pkId);
+			BoardDTO board = boardService.showBoardInfo(boardId);
+			if(board == null) {
+				return new ResponseEntity<>("존재하지 않는 게시판입니다.", HttpStatus.NOT_FOUND);
+			}
+			if(board.getSchoolId() != user.getSchoolId()) {
+				return new ResponseEntity<>("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
 			}
 			return new ResponseEntity<>(likeService.cancelLikeArticle(articleId, userId), HttpStatus.OK);			
 		} catch(Exception e) {

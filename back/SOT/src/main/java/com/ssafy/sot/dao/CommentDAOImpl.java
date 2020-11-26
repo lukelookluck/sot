@@ -44,5 +44,10 @@ public class CommentDAOImpl implements CommentDAO {
 		return sqlSession.selectList("comment.showReplyComments", parentId);
 	}
 
+	@Override
+	public CommentDTO selectCommentById(int id) {
+		return sqlSession.selectOne("comment.showCommentById", id);
+	}
+
 
 }

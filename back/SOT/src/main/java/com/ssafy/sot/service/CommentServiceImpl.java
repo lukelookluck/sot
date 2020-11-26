@@ -32,4 +32,9 @@ public class CommentServiceImpl implements CommentService {
 		return commentDAO.insertReplyComment(commentDTO) == 1;
 	}
 
+	@Override
+	public CommentDTO showComment(int id) {
+		return commentDAO.selectCommentById(id);
+	}
+
 }

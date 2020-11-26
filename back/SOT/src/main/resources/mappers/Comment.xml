@@ -22,6 +22,17 @@
 		and parent_id is null
 	</select>
 	
+	<select id="showCommentById" resultType="CommentDTO">
+		select id,
+			content,
+			user_id as userId,
+			created_at,
+			updated_at,
+			parent_id as parentId
+		from comment
+		where id = #{id}
+	</select>
+	
 	<select id="showReplyComments" resultType="CommentDTO">
 		select comment.id,
 			comment.content,

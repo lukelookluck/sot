@@ -12,5 +12,6 @@ public interface CommentDAO {
 	int insertReplyComment(CommentDTO commentDTO);
 	int updateComment(CommentDTO commentDTO);
 	int deleteComment(int id);
+	CommentDTO selectCommentById(int id);
 	
 }

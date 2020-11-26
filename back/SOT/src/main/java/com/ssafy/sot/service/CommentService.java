@@ -8,5 +8,6 @@ public interface CommentService {
 	public boolean updateComment(CommentDTO commentDTO);
 	public boolean deleteComment(int id);
 	public boolean createReplyComment(CommentDTO commentDTO);
+	CommentDTO showComment(int id);
 
 }

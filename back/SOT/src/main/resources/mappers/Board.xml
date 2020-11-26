@@ -11,6 +11,12 @@
 		where school_id = #{schoolId}
 	</select>
 	
+	<select id="selectBoardById" resultType="BoardDTO">
+		select id, name, school_id as schoolId
+		from board
+		where board_id = #{boardId}
+	</select>
+	
 	<insert id="insertNewBoard" >
 		insert into board(name, school_id)
 		values(#{name}, #{schoolId})

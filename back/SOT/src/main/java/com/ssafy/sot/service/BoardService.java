@@ -15,5 +15,6 @@ public interface BoardService {
 	boolean unfavBoard(int boardId, int userId);
 	boolean isFaved(int boardId, int userId);
 	boolean deleteBoard(int id);
+	BoardDTO showBoardInfo(int id);
 
 }

@@ -78,4 +78,9 @@ public class BoardServiceImpl implements BoardService {
 		return boardDAO.deleteBaord(id) == 1;
 	}
 
+	@Override
+	public BoardDTO showBoardInfo(int id) {
+		return boardDAO.selectBoardById(id);
+	}
+
 }
