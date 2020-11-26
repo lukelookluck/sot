@@ -23,6 +23,13 @@ public class PlayerMovement : MonoBehaviour
     public bool isMove;
     public float moveAcc;
 
+    public enum State
+    {
+        Idle, Casting, Freeze, Dead
+    }
+    public State state = State.Idle;
+
+
     private void Awake()
     {
         playerCamera = Camera.main;
@@ -33,9 +40,28 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        GetInput();
-        Move();
-        Turn();
+        if (state == State.Idle)
+        {
+            // Movement
+            GetInput();
+            Move();
+            Turn();
+            // Able to Casting
+        }
+        else if (state == State.Casting)
+        {
+            // No Movement
+            // Memorize last command
+        }
+        else if (state == State.Freeze)
+        {
+            // No Movement
+            // Memorize last command
+        }
+        else if (state == State.Dead)
+        {
+
+        }
     }
 
     private void GetInput()
