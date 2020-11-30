@@ -755,6 +755,7 @@ GameObject:
   - component: {fileID: 1303237590}
   - component: {fileID: 1303237591}
   - component: {fileID: 1303237592}
+  - component: {fileID: 1303237593}
   m_Layer: 9
   m_Name: Player Holder
   m_TagString: Untagged
@@ -828,6 +829,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
+--- !u!114 &1303237593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303237588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2eb83ec655d71b498b43c9ebccd8066, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useTarget: 0
+  use2D: 0
+  cameraShake: 0
+  effectName: {fileID: 0}
+  rotateToMouse: {fileID: 0}
+  firePoint: {fileID: 0}
+  cameras: {fileID: 0}
+  target: {fileID: 0}
+  VFXs: []
 --- !u!1 &1716822877
 GameObject:
   m_ObjectHideFlags: 0
@@ -989,7 +1011,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1851091004}
-  - component: {fileID: 1851091003}
   m_Layer: 0
   m_Name: Scene
   m_TagString: Untagged
@@ -997,27 +1018,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1851091003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1851091002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2eb83ec655d71b498b43c9ebccd8066, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useTarget: 0
-  use2D: 0
-  cameraShake: 0
-  effectName: {fileID: 0}
-  rotateToMouse: {fileID: 0}
-  firePoint: {fileID: 0}
-  cameras: {fileID: 0}
-  target: {fileID: 0}
-  VFXs: []
 --- !u!4 &1851091004
 Transform:
   m_ObjectHideFlags: 0
